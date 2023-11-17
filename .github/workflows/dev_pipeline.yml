@@ -35,4 +35,6 @@ jobs:
           cd client
           docker-compose up --build --no-recreate -d
           docker-compose up -d
+          docker exec -it vite_docker sh -c "npm i && npm run dev"
+
          
