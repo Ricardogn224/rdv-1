@@ -50,4 +50,4 @@ jobs:
       - name: Install dependencies
         run: |
           cd server
-          docker compose up -d --env-file .env.local
+          docker compose up -d
