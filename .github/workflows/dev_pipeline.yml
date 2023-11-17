@@ -39,7 +39,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
+      - name: Load .env.local file
+        run: |
+            cd server
+            echo "Loading environment variables from .env.local"
+            set -a
+            [ -f ".env.local" ] && . ".env.local"
+            set +a
+
       - name: Install dependencies
         run: |
           cd server
-          docker compose up -d
+          docker compose up -d --env-file .env.local
