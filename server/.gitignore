@@ -1,6 +1,5 @@
 
 ###> symfony/framework-bundle ###
-/.env.local
 /.env.local.php
 /.env.*.local
 /.env.local
@@ -9,6 +8,8 @@
 /public/bundles/
 /var/
 /vendor/
+/config/jwt/private.pem
+/config/jwt/public.pem
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
