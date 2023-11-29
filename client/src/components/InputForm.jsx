@@ -42,6 +42,28 @@ const InputForm = () => {
         document.getElementById("errorpassword").innerHTML = "";
     }
 
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: valueEmail,
+          password: valuePassword,
+        }),
+      });
+
+      if (response.ok) {
+        // Gérer le succès de la connexion
+        console.log('Connexion réussie!');
+      } else {
+        // Gérer l'échec de la connexion
+        console.error('Échec de la connexion.');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la connexion:', error);
+    }
 
   };
 
