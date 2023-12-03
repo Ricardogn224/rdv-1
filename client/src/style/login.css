@@ -49,7 +49,15 @@ main{
     align-items: center;
 }
 
-main .login{
+#login{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main .login,
+main .register{
     width: 30%;
     background-color: #EBFDFF;
     border-radius: 6px;
@@ -60,7 +68,8 @@ main .login{
     padding: 2rem;
 }
 
-main .login h2{
+main .login h2,
+main .register h2{
     font-size: 20px;
     font-weight: 700;
     color: #1B6B93;
@@ -94,7 +103,7 @@ main .login form input::placeholder{
     letter-spacing: 0px;
 }
 
-main .login form input[type="submit"]{
+main .login form button[type="submit"]{
     width: 100%;
     height: 40px;
     border: none;
@@ -108,12 +117,13 @@ main .login form input[type="submit"]{
     transition: .5s;
 }
 
-main .login form input[type="submit"]:hover{
+main .login form button[type="submit"]:hover{
     background-color: #4FC0D0;
     transition: .5s;
 }
 
-main .login  a{
+main .login a,
+main .register a{
     font-size: 15px;
     font-weight: 500;
     color: #1B6B93;

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="src/style/login.css" rel="stylesheet">
+    <script type="module" src="src/form.jsx"></script>
+
 </head>
 <body>
 
@@ -16,18 +18,10 @@
     </header>
     
     <main>
-        <div class="login">
-            <h2>J'ai déjà un compte</h2>
-            <form action="/" method="post">
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Mot de passe">
-                <input type="submit" value="Se connecter">
-                <a href="">Mot de passe oublié ?</a>
-            </form>
-        </div>
+        <div id="login"></div>
 
 
-        <div class="login">
+        <div class="register">
             <h2>Vous êtes nouveau sur Médecin sur rdv ?</h2>
             <a href="/register">Créer un compte</a>
         </div>
