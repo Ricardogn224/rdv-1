@@ -18,10 +18,10 @@ use Doctrine\ORM\Mapping as ORM;
     denormalizationContext: ['groups' => ['establishment:write']],
     normalizationContext: ['groups' => ['establishment:read']],
     operations: [
-        new GetCollection(),
+        new GetCollection(security: 'is_granted("VIEWALL", object)',),
         new Post(),
-        new Get(),
-        new Patch(denormalizationContext: ['groups' => ['establishment:write:update']]),
+        new Get(security: 'is_granted("VIEW", object)',),
+        new Patch(denormalizationContext: ['groups' => ['establishment:write:update']], security: 'is_granted("EDIT", object)',),
     ],
 )]
 #[ORM\Table(name: '`establishment`')]
@@ -33,14 +33,15 @@ class Establishment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:read', 'provider:read', 'employee:read'])]
+    #[Groups(['provision:read', 'provider:read', 'employee:read', 'establishment:write', 'establishment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[Groups(['establishment:write', 'establishment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
-    #[Groups(['provider:read', 'establishment:read'])]
+    #[Groups(['establishment:read'])]
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     private ?Provider $provider = null;
 

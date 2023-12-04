@@ -32,10 +32,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['user:write']],
     normalizationContext: ['groups' => ['user:read']],
     operations: [
-        new GetCollection(),
+        new GetCollection(security: 'is_granted("VIEWALL", object)',),
         new Post(),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']]),
+        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update']], security: 'is_granted("EDIT", object)',),
     ],
 )]
 #[ORM\Table(name: '`user`')]
@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:write:update'])]
     #[Assert\Length(min: 2)]
     #[ORM\Column(length: 255)]
     private string $name = '';

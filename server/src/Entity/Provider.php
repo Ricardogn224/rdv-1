@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;
+use App\ValueObject\RequestUserProviderLink;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,10 +22,10 @@ use Doctrine\ORM\Mapping as ORM;
     denormalizationContext: ['groups' => ['provider:write']],
     normalizationContext: ['groups' => ['provider:read']],
     operations: [
-        new GetCollection(),
+        new GetCollection(security: 'is_granted("VIEWALL", object)',),
         new Post(),
-        new Get(),
-        new Patch(denormalizationContext: ['groups' => ['provider:write:update']]),
+        new Get(security: 'is_granted("VIEW", object)',),
+        new Patch(denormalizationContext: ['groups' => ['provider:write:update']], security: 'is_granted("EDIT", object)',),
     ],
 )]
 #[ORM\Table(name: '`provider`')]
@@ -36,20 +37,20 @@ class Provider
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provider:read', 'provider:write:update', 'provider:write', 'establishment:read'])]
+    #[Groups(['provider:read', 'provider:write', 'establishment:read'])]
     #[Assert\Length(min: 2)]
     #[ORM\Column(length: 255)]
     private ?string $kbis = null;
 
     #[Groups(['provider:read'])]
     #[ORM\Column(nullable: true)]
-    private ?bool $active = null;
+    private ?bool $active = false;
 
     #[Groups(['provider:read'])]
     #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
     private Collection $establishments;
 
-    #[Groups(['provider:read'])]
+    #[Groups(['provider:read', 'establishment:read'])]
     #[ORM\OneToOne(inversedBy: 'provider', cascade: ['persist', 'remove'])]
     private ?User $user_provider = null;
 
