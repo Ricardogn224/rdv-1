@@ -17,6 +17,8 @@ function SearchForm() {
         value={searchTerm1}
         onChange={(e) => setSearchTerm1(e.target.value)}
       />
+
+
       <input
         type="text"
         placeholder="Où ? (ville, adresse...)"
@@ -29,3 +31,4 @@ function SearchForm() {
 }
 
 export default SearchForm;
+
