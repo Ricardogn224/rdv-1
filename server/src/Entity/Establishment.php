@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
     denormalizationContext: ['groups' => ['establishment:write']],
     normalizationContext: ['groups' => ['establishment:read']],
     operations: [
-        new GetCollection(security: 'is_granted("VIEWALL", object)',),
+        new GetCollection(),
         new Post(),
         new Get(security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['establishment:write:update']], security: 'is_granted("EDIT", object)',),
@@ -28,12 +28,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity()]
 class Establishment
 {
+    #[Groups(['provision:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:read', 'provider:read', 'employee:read', 'establishment:write', 'establishment:read'])]
+    #[Groups(['employee:write', 'provision:write', 'provision:read', 'provider:read', 'employee:read', 'establishment:write', 'establishment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -45,17 +46,16 @@ class Establishment
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     private ?Provider $provider = null;
 
-    #[Groups(['establishment:read'])]
-    #[ORM\ManyToMany(targetEntity: Provision::class, mappedBy: 'establishments')]
-    private Collection $provisions;
-
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Employee::class)]
     private Collection $employees;
 
+    #[ORM\OneToMany(mappedBy: 'Establishment', targetEntity: Provision::class)]
+    private Collection $provisions;
+
     public function __construct()
     {
-        $this->provisions = new ArrayCollection();
         $this->employees = new ArrayCollection();
+        $this->provisions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,33 +100,6 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Provision>
-     */
-    public function getProvisions(): Collection
-    {
-        return $this->provisions;
-    }
-
-    public function addProvision(Provision $provision): static
-    {
-        if (!$this->provisions->contains($provision)) {
-            $this->provisions->add($provision);
-            $provision->addEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProvision(Provision $provision): static
-    {
-        if ($this->provisions->removeElement($provision)) {
-            $provision->removeEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Employee>
      */
     public function getEmployees(): Collection
@@ -150,6 +123,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($employee->getEstablishment() === $this) {
                 $employee->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Provision>
+     */
+    public function getProvisions(): Collection
+    {
+        return $this->provisions;
+    }
+
+    public function addProvision(Provision $provision): static
+    {
+        if (!$this->provisions->contains($provision)) {
+            $this->provisions->add($provision);
+            $provision->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProvision(Provision $provision): static
+    {
+        if ($this->provisions->removeElement($provision)) {
+            // set the owning side to null (unless already changed)
+            if ($provision->getEstablishment() === $this) {
+                $provision->setEstablishment(null);
             }
         }
 

@@ -36,13 +36,21 @@ class Employee
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['employee:read'])]
-    #[ORM\ManyToOne(inversedBy: 'employees')]
+    #[Groups(['employee:read', 'employee:write'])]
+    #[ORM\ManyToOne(inversedBy: 'employees', cascade: ['persist'])]
     private ?Establishment $establishment = null;
 
-    #[Groups(['employee:read'])]
+    #[Groups(['employee:read', 'provisionEmployee:read', 'provisionEmployee:write'])]
     #[ORM\OneToOne(inversedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?User $user_employee = null;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: ProvisionEmployee::class)]
+    private Collection $provisionEmployees;
+
+    public function __construct()
+    {
+        $this->provisionEmployees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +77,36 @@ class Employee
     public function setUserEmployee(?User $user_employee): static
     {
         $this->user_employee = $user_employee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProvisionEmployee>
+     */
+    public function getProvisionEmployees(): Collection
+    {
+        return $this->provisionEmployees;
+    }
+
+    public function addProvisionEmployee(ProvisionEmployee $provisionEmployee): static
+    {
+        if (!$this->provisionEmployees->contains($provisionEmployee)) {
+            $this->provisionEmployees->add($provisionEmployee);
+            $provisionEmployee->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProvisionEmployee(ProvisionEmployee $provisionEmployee): static
+    {
+        if ($this->provisionEmployees->removeElement($provisionEmployee)) {
+            // set the owning side to null (unless already changed)
+            if ($provisionEmployee->getEmployee() === $this) {
+                $provisionEmployee->setEmployee(null);
+            }
+        }
 
         return $this;
     }

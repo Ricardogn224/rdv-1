@@ -33,17 +33,20 @@ class Provision
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['establishment:read'])]
+    #[Groups(['provision:write', 'establishment:read', 'provisionEmployee:write', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['provision:read'])]
-    #[ORM\ManyToMany(targetEntity: Establishment::class, inversedBy: 'provisions')]
-    private Collection $establishments;
+    #[Groups(['provision:write', 'provision:read'])]
+    #[ORM\ManyToOne(inversedBy: 'provisions', cascade: ['persist'])]
+    private ?Establishment $Establishment = null;
+
+    #[ORM\OneToMany(mappedBy: 'provision', targetEntity: ProvisionEmployee::class)]
+    private Collection $employeeProvisions;
 
     public function __construct()
     {
-        $this->establishments = new ArrayCollection();
+        $this->employeeProvisions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,27 +66,46 @@ class Provision
         return $this;
     }
 
-    /**
-     * @return Collection<int, Establishment>
-     */
-    public function getEstablishments(): Collection
+    public function getEstablishment(): ?Establishment
     {
-        return $this->establishments;
+        return $this->Establishment;
     }
 
-    public function addEstablishment(Establishment $establishment): static
+    public function setEstablishment(?Establishment $Establishment): static
     {
-        if (!$this->establishments->contains($establishment)) {
-            $this->establishments->add($establishment);
+        $this->Establishment = $Establishment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProvisionEmployee>
+     */
+    public function getEmployeeProvisions(): Collection
+    {
+        return $this->employeeProvisions;
+    }
+
+    public function addEmployeeProvision(ProvisionEmployee $employeeProvision): static
+    {
+        if (!$this->employeeProvisions->contains($employeeProvision)) {
+            $this->employeeProvisions->add($employeeProvision);
+            $employeeProvision->setProvision($this);
         }
 
         return $this;
     }
 
-    public function removeEstablishment(Establishment $establishment): static
+    public function removeEmployeeProvision(ProvisionEmployee $employeeProvision): static
     {
-        $this->establishments->removeElement($establishment);
+        if ($this->employeeProvisions->removeElement($employeeProvision)) {
+            // set the owning side to null (unless already changed)
+            if ($employeeProvision->getProvision() === $this) {
+                $employeeProvision->setProvision(null);
+            }
+        }
 
         return $this;
     }
+
 }
