@@ -39,7 +39,6 @@ function Register() {
       password: '',
       confirmPassword: '',
       telephone: '',
-      kbis: '',
       gender: '',
     });
   };
@@ -137,13 +136,7 @@ function Register() {
             id="telephone"
             placeholder="numéro de téléphone"
           />
-          <input
-            className="field"
-            type="text"
-            name="kbis"
-            id="kbis"
-            placeholder="Veuillez entrer votre KBIS"
-          />
+          
         </div>
 
         <div className="flex-center">

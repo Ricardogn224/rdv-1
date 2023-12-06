@@ -4,7 +4,6 @@ import App from './App.jsx'
 import Register from './components/Register.jsx'
 import User_login from './components/User_login.jsx'
 import Register_pro from './components/Register_pro.jsx'
-import './index.css'
 
 import {
   createBrowserRouter,
