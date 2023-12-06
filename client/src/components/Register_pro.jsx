@@ -52,7 +52,7 @@ function Register_pro() {
                         <h1 class="title"> Vous êtes prestataire ? </h1>
                     </div>
 
-      <form action="" method="post">
+      <form onSubmit={handleSubmit}>
 
         {/* checkboxes */}
         <div className="flex-center">

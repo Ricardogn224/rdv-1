@@ -1,11 +1,12 @@
 import React from 'react'
-import  Navbar_user_log from '../navbar_user_log'
+import  Navbar_user_log from '../Navbar_user_log'
 import SearchForm from '../SearchForm'
 import '../../assets/css/search_page.css'
 import Footer from '../Footer'
 import Map from '../Map'
 import DisponibilityForm from '../DisponibilityForm'
 import MedecinList from '../MedecinList'
+
 function Search_page() {
   return (
     

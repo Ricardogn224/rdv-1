@@ -1,4 +1,5 @@
 import React from 'react'
+import SearchForm from './SearchForm';
 
 function Contenu() {
   return (
@@ -7,7 +8,7 @@ function Contenu() {
             <div>
                 <h1>Gagnez du temps et trouver un rendez-vous avec un professionnel de santé</h1>
                 <p>Gratuit, rapide et sécurisé</p>
-                <div id="search"></div>
+                <SearchForm />
             </div>
         </section>
     
