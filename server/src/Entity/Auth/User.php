@@ -10,8 +10,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
+use App\Entity\Employee;
+use App\Entity\Provider;
 use App\Entity\Shop\Product;
 use App\Filters\CustomSearchFilter;
 use DateTimeImmutable;
@@ -32,8 +35,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Post(),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']]),
+        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update']], security: 'is_granted("EDIT", object)',),
     ],
 )]
 #[ORM\Table(name: '`user`')]
@@ -43,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:write:update'])]
     #[Assert\Length(min: 2)]
     #[ORM\Column(length: 255)]
     private string $name = '';
@@ -62,22 +65,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'provider:read', 'employee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'provider:read', 'employee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
-    #[Groups(['user:write'])]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['user:write', 'user:read'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ApiFilter(DateFilter::class)]
     #[Groups(['user:read'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\OneToOne(mappedBy: 'user_employee', cascade: ['persist', 'remove'])]
+    private ?Employee $employee = null;
+
+    #[ORM\OneToOne(mappedBy: 'user_provider', cascade: ['persist', 'remove'])]
+    private ?Provider $provider = null;
+
+    #[ORM\OneToMany(mappedBy: 'appointmentUser', targetEntity: Appointment::class)]
+    private Collection $appointments;
 
     public function __construct()
     {
@@ -86,6 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->products = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getName(): string
@@ -227,6 +240,80 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?Employee $employee): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($employee === null && $this->employee !== null) {
+            $this->employee->setUserEmployee(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($employee !== null && $employee->getUserEmployee() !== $this) {
+            $employee->setUserEmployee($this);
+        }
+
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    public function getProvider(): ?Provider
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(?Provider $provider): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($provider === null && $this->provider !== null) {
+            $this->provider->setUserProvider(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($provider !== null && $provider->getUserProvider() !== $this) {
+            $provider->setUserProvider($this);
+        }
+
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setAppointmentUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getAppointmentUser() === $this) {
+                $appointment->setAppointmentUser(null);
+            }
+        }
 
         return $this;
     }

@@ -27,6 +27,9 @@ security:
             stateless: true
             jwt: ~
 
+    role_hierarchy:
+        ROLE_USER: []
+
     access_control:
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
 
