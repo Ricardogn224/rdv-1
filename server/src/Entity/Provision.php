@@ -33,7 +33,7 @@ class Provision
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:write', 'establishment:read', 'provisionEmployee:write', 'provisionEmployee:read'])]
+    #[Groups(['provision:write', 'establishment:read', 'provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 

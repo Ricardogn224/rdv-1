@@ -40,7 +40,7 @@ class Employee
     #[ORM\ManyToOne(inversedBy: 'employees', cascade: ['persist'])]
     private ?Establishment $establishment = null;
 
-    #[Groups(['employee:read', 'provisionEmployee:read', 'provisionEmployee:write'])]
+    #[Groups(['employee:read', 'provisionEmployee:read', 'appointment:read'])]
     #[ORM\OneToOne(inversedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?User $user_employee = null;
 

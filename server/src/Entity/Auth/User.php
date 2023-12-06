@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
 use App\Entity\Employee;
@@ -32,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['user:write']],
     normalizationContext: ['groups' => ['user:read']],
     operations: [
-        new GetCollection(security: 'is_granted("VIEWALL", object)',),
+        new GetCollection(),
         new Post(),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], security: 'is_granted("EDIT", object)',),
@@ -72,8 +73,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
-    #[Groups(['user:write'])]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['user:write', 'user:read'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ApiFilter(DateFilter::class)]
@@ -87,6 +88,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user_provider', cascade: ['persist', 'remove'])]
     private ?Provider $provider = null;
 
+    #[ORM\OneToMany(mappedBy: 'appointmentUser', targetEntity: Appointment::class)]
+    private Collection $appointments;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -94,6 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->products = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getName(): string
@@ -279,6 +284,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setAppointmentUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getAppointmentUser() === $this) {
+                $appointment->setAppointmentUser(null);
+            }
+        }
 
         return $this;
     }

@@ -17,7 +17,7 @@ trait Auth
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'provider:read', 'establishment:read', 'employee:read', 'provisionEmployee:read'])]
+    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';

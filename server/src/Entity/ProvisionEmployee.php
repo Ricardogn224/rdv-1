@@ -33,13 +33,21 @@ class ProvisionEmployee
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
     #[ORM\ManyToOne(inversedBy: 'provisionEmployees', cascade: ['persist'])]
     private ?Employee $employee = null;
 
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
     #[ORM\ManyToOne(inversedBy: 'employeeProvisions', cascade: ['persist'])]
     private ?Provision $provision = null;
+
+    #[ORM\OneToMany(mappedBy: 'provisionEmployee', targetEntity: Appointment::class)]
+    private Collection $appointments;
+
+    public function __construct()
+    {
+        $this->appointments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,6 +74,36 @@ class ProvisionEmployee
     public function setProvision(?Provision $provision): static
     {
         $this->provision = $provision;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointment>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointment $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setProvisionEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointment $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getProvisionEmployee() === $this) {
+                $appointment->setProvisionEmployee(null);
+            }
+        }
 
         return $this;
     }
