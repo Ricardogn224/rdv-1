@@ -67,7 +67,7 @@ jobs:
       - name: Deploy code to server
         run: |
           expect -c '
-            spawn scp -r * $env(SSH_USERNAME)@SSH_IP:/home/$env(SSH_USERNAME)/servers -y
+            spawn scp -r * $env(SSH_USERNAME)@SSH_IP:/home/$env(SSH_USERNAME)/server 
             expect "password:" 
             send "$env(SSH_PASSWORD)\r"
             interact
