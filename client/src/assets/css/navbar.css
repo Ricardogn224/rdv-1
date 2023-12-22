@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
 }
 
 header {
@@ -17,20 +17,19 @@ header {
     z-index: 1000;
 }
 
-header a{
+header a {
     text-decoration: none;
-    color: #fff;
     font-weight: 600;
     font-size: 35px;
 }
 
-.groupinput{
+.groupinput {
     display: flex;
     align-items: center;
     flex-direction: row;
 }
 
-.white-btn{
+.white-btn {
     background-color: #fff;
     color: #1B6B93;
     font-size: 18px;
@@ -39,7 +38,7 @@ header a{
     border-radius: 6px;
 }
 
-.connexion{
+.connexion {
     margin-left: 3rem;
     display: flex;
     align-items: center;
@@ -47,7 +46,7 @@ header a{
 
 }
 
-.connexion a{
+.connexion a {
     font-size: 20px;
     color: #fff;
     text-decoration: none;
@@ -55,20 +54,20 @@ header a{
     line-height: 24px;
 }
 
-.connexion .gerer{
+.connexion .gerer {
     font-size: 18px;
     color: #E0E0E0;
     line-height: 22px;
 }
 
-main{
+main {
     display: flex;
     justify-content: center;
     flex-direction: column;
     background-color: #fff;
 }
 
-#section1{
+#section1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -77,7 +76,7 @@ main{
     background-color: #4FC0D0;
 }
 
-#section1 h1{
+#section1 h1 {
     font-size: 55px;
     color: #fff;
     font-weight: 600;
@@ -86,7 +85,7 @@ main{
     margin-bottom: 3rem;
 }
 
-#section1 p{
+#section1 p {
     font-size: 40px;
     color: #fff;
     font-weight: 400;
@@ -94,20 +93,20 @@ main{
     margin-bottom: 3rem;
 }
 
-#search{
+#search {
     width: 100%;
 }
 
-.group-cadre{
+.group-cadre {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
     padding: 3rem 4rem;
-    background: linear-gradient( 180deg, #4FC0D0 0%, #4FC0D0 30%, #fff 30%, #fff 100%);
+    background: linear-gradient(180deg, #4FC0D0 0%, #4FC0D0 30%, #fff 30%, #fff 100%);
 }
 
-.cadre{
+.cadre {
     width: 30%;
     background-color: #E4FEFF;
     border-radius: 12px;
@@ -118,11 +117,11 @@ main{
     flex-direction: column;
 }
 
-.cadre .text{
+.cadre .text {
     align-items: flex-start;
 }
 
-.cadre h2{
+.cadre h2 {
     font-size: 25px;
     color: #000;
     font-weight: 600;
@@ -130,7 +129,7 @@ main{
     margin: 1rem 0;
 }
 
-.cadre p{
+.cadre p {
     font-size: 20px;
     color: #000;
     font-weight: 400;
@@ -138,14 +137,14 @@ main{
     margin-bottom: 1rem;
 }
 
-.cadre a{
+.cadre a {
     font: normal normal 600 20px/24px Montserrat;
     letter-spacing: 0px;
     color: #1B6B93;
     text-decoration: none;
 }
 
-#section2{
+#section2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -154,22 +153,22 @@ main{
     background-color: #fff;
 }
 
-#section2 .texte{
+#section2 .texte {
     width: 60%;
 }
 
-#section2 h2{
+#section2 h2 {
     font: normal normal 600 34px/39px Montserrat;
     letter-spacing: 0;
     margin-bottom: 1rem;
 }
 
-#section2 p{
+#section2 p {
     font: normal normal 400 28px/34px Montserrat;
     letter-spacing: 0;
 }
 
-footer{
+footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -178,21 +177,21 @@ footer{
     background-color: #FCFCFC;
 }
 
-footer h3{
+footer h3 {
     font: normal normal bold 35px/47px Montserrat;
     letter-spacing: 0px;
     color: #4FC0D0;
     margin-bottom: 3rem;
 }
 
-footer h4{
+footer h4 {
     font: normal normal 600 24px/29px Montserrat;
     letter-spacing: 0px;
     color: #1B6B93;
     margin-bottom: 10px;
 }
 
-.speciality{
+.speciality {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -200,13 +199,13 @@ footer h4{
     width: 100%;
 }
 
-.speciality p{
+.speciality p {
     font: normal normal 400 22px/25px Montserrat;
     letter-spacing: 0px;
     color: #000;
 }
 
-.contact{
+.contact {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -214,14 +213,14 @@ footer h4{
     margin-right: 5rem;
 }
 
-.contact h4{
+.contact h4 {
     font: normal normal 600 30px/37px Montserrat;
     letter-spacing: 0px;
     color: #000000;
     margin-bottom: 10px;
 }
 
-.contact a{
+.contact a {
     font-size: 25px;
     line-height: 32px;
     font-weight: 400;
@@ -231,7 +230,7 @@ footer h4{
     margin-bottom: 1rem;
 }
 
-.copy{
+.copy {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -240,165 +239,165 @@ footer h4{
     margin-top: 3rem;
 }
 
-.copy a{
+.copy a {
     text-decoration: underline;
     font: normal normal 600 24px/27px Montserrat;
     letter-spacing: 0px;
     color: #1B6B93;
 }
 
-.copy p{
+.copy p {
     font: normal normal 400 24px/27px Montserrat;
     letter-spacing: 0px;
     color: #000;
 }
 
 @media screen and (max-width: 768px) {
-    header{
+    header {
         padding: 2rem 2rem;
         flex-direction: column;
     }
 
-    header a{
+    header a {
         font-size: 26px;
     }
 
-    .connexion{
+    .connexion {
         margin-left: 10px;
         margin-top: 1rem;
     }
 
-    .connexion a{
+    .connexion a {
         font-size: 16px;
         text-align: center;
     }
 
-    .connexion .gerer{
+    .connexion .gerer {
         font-size: 14px;
     }
 
-    #section1{
+    #section1 {
         flex-direction: column;
         padding: 2rem 2rem;
     }
 
-    #section1 h1{
+    #section1 h1 {
         font-size: 40px;
         line-height: 49px;
         width: 100%;
         margin-bottom: 2rem;
     }
 
-    #section1 p{
+    #section1 p {
         font-size: 30px;
         line-height: 37px;
         margin-bottom: 2rem;
     }
 
-    .group-cadre{
+    .group-cadre {
         flex-direction: column;
         padding: 2rem 2rem;
     }
 
-    .cadre{
+    .cadre {
         width: 100%;
         margin-bottom: 2rem;
     }
 
-    .cadre h2{
+    .cadre h2 {
         font-size: 20px;
         line-height: 24px;
         margin: 1rem 0;
     }
 
-    .cadre p{
+    .cadre p {
         font-size: 16px;
         line-height: 19px;
         margin-bottom: 1rem;
     }
 
-    .cadre a{
+    .cadre a {
         font-size: 16px;
     }
 
-    #section2{
+    #section2 {
         flex-direction: column;
         padding: 2rem 2rem;
     }
 
-    #section2 .texte{
+    #section2 .texte {
         width: 100%;
     }
 
-    #section2 h2{
+    #section2 h2 {
         font-size: 25px;
         line-height: 30px;
         margin-bottom: 1rem;
     }
 
-    #section2 p{
+    #section2 p {
         font-size: 20px;
         line-height: 24px;
     }
 
-    #section2 img{
+    #section2 img {
         width: 100%;
     }
 
-    footer{
+    footer {
         padding: 2rem 2rem;
     }
 
-    footer h3{
+    footer h3 {
         font-size: 25px;
         line-height: 30px;
         margin-bottom: 2rem;
     }
 
-    footer h4{
+    footer h4 {
         font-size: 20px;
         line-height: 24px;
         margin-bottom: 10px;
     }
 
-    footer p{
+    footer p {
         font-size: 16px;
         line-height: 19px;
     }
 
-    .contact{
+    .contact {
         margin-top: 1rem;
         margin-right: 0;
     }
 
-    .contact h4{
+    .contact h4 {
         font-size: 20px;
         line-height: 24px;
         margin-bottom: 10px;
     }
 
-    .contact a{
+    .contact a {
         font-size: 20px;
         line-height: 24px;
         margin-bottom: 1rem;
     }
 
-    .copy{
+    .copy {
         flex-direction: column;
     }
 
-    .copy a{
+    .copy a {
         margin-bottom: 1rem;
         font-size: 20px;
     }
 
-    .copy p{
+    .copy p {
         margin-bottom: 1rem;
         font-size: 20px;
         text-align: center;
     }
 
-    .speciality{
+    .speciality {
         flex-direction: column;
     }
 

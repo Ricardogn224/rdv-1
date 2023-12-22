@@ -22,8 +22,8 @@ function Navbar_user_log() {
           </h1>
         </div>
         <div>
-          <ul class="flex phone_flex-column">
-            <li><a className="btn-action " href="">Vous êtes un professionnel ?</a></li>
+          <ul className="flex phone_nav_options phone_flex-column">
+            <li><a href="/register_pro">Vous êtes un professionnel ?</a></li>
             <li>{username || 'user'}</li> {/* Display the username if available, otherwise 'user' */}
             <li>Se déconnecter</li>
           </ul>

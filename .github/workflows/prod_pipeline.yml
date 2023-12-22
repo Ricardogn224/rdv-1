@@ -58,7 +58,6 @@ jobs:
           cat server/docker-compose.yml
 
 
-
       - name: Install dependencies
         run: |
           cd server
