@@ -25,15 +25,22 @@ function Login() {
               placeholder="Mot de passe"
             />
 
-            <div className="field space-between flex">
-              <div>
-                <input
-                  className="checkbox"
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                />
-                <label htmlFor="remember">Se souvenir de mon identifiant</label>
+            <div className="field flex">
+              <div className='flex space-between'>
+
+                <div className='ml-20'>
+                  <input
+                    className="checkbox"
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                  />
+                </div>
+
+                <div className='space-around flex-center'>
+                  <label htmlFor="remember">Se souvenir de mon identifiant</label>
+                </div>
+
               </div>
             </div>
           </div>

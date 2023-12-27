@@ -54,28 +54,32 @@ function Register_pro() {
 
         <form action="" method="post">
 
-          {/* checkboxes */}
           <div className="flex-center">
-
             <div className="field space-between flex">
-              <div>
+              <div >
                 <input
-                  className="checkbox"
-                  type="checkbox"
+                  className="radio"
+                  type="radio"
                   id="female"
                   name="gender"
+                  value="female"
+                  checked={formValues.gender === 'female'}
+                  onChange={handleInputChange}
                 />
-                <label htmlFor="female">Féminin</label>
+                <label className='flex-center' htmlFor="female ">Féminin</label>
               </div>
 
               <div>
                 <input
-                  className="checkbox"
-                  type="checkbox"
+                  className="radio"
+                  type="radio"
                   id="male"
                   name="gender"
+                  value="male"
+                  checked={formValues.gender === 'male'}
+                  onChange={handleInputChange}
                 />
-                <label htmlFor="male">Masculin</label>
+                <label className='flex-center' htmlFor="male">Masculin</label>
               </div>
             </div>
           </div>

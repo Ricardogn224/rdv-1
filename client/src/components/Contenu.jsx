@@ -1,5 +1,5 @@
 import React from 'react'
-
+import medecinImage from '../assets/medecin.png';
 function Contenu() {
     return (
         <main>
@@ -63,7 +63,7 @@ function Contenu() {
                     <p>Nous nous engageons à protéger les données et la vie privée de nos utilisateurs. Nos utilisateurs bénéficient de technologies de chiffrement avancées. Les données personnelles de nos utilisateurs sont en lieu sûr.</p>
                 </div>
                 <div>
-                    <img src="../assets/medecin.png" alt="medecin" />
+                    <img src={medecinImage} alt="medecin" />
                 </div>
             </div>
         </main>
