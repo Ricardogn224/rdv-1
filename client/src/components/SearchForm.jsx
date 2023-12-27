@@ -1,34 +1,54 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 
 function SearchForm() {
-  const [searchTerm1, setSearchTerm1] = useState("");
-  const [searchTerm2, setSearchTerm2] = useState("");
+  const [doctor, setDoctor] = useState('');
+  const [city, setCity] = useState('');
 
-  const handleSearch = () => {
-    // Vous pouvez gérer la logique de recherche ici en utilisant les valeurs de searchTerm1 et searchTerm2.
-    // Par exemple, vous pouvez les envoyer à une page de résultats.
+  const handleDoctorChange = (event) => {
+    setDoctor(event.target.value);
+  };
+
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Process form submission here, e.g., send data to an API or perform actions
+    console.log('Doctor:', doctor);
+    console.log('City:', city);
+    // You can add your logic here to submit data or perform other actions
   };
 
   return (
-    <form onSubmit={handleSearch}>
-      <input
-        type="text"
-        placeholder="Recherchez un établissement, un nom, une spécialité..."
-        value={searchTerm1}
-        onChange={(e) => setSearchTerm1(e.target.value)}
-      />
-
-
-      <input
-        type="text"
-        placeholder="Où ? (ville, adresse...)"
-        value={searchTerm2}
-        onChange={(e) => setSearchTerm2(e.target.value)}
-      />
-      <button>Rechercher</button>
-    </form>
+    <>
+      <section>
+        <form className="flex-center" onSubmit={handleSubmit}>
+          <div className="flex space-between form-recherche">
+            <div className="field">
+              <input
+                type="text"
+                placeholder="Médecin généraliste"
+                value={doctor}
+                onChange={handleDoctorChange}
+              />
+            </div>
+            <div className="field">
+              <input
+                type="text"
+                placeholder="Ville"
+                value={city}
+                onChange={handleCityChange}
+              />
+            </div>
+            <div className="field">
+              <input type="submit" value="Rechercher" />
+            </div>
+          </div>
+        </form>
+      </section>
+    </>
   );
 }
 
 export default SearchForm;
-

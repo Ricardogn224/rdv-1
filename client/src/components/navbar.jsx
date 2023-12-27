@@ -18,6 +18,8 @@ function Navbar() {
           </a>
         </div>
       </div>
+      
+    
     </header>   
   );
 }

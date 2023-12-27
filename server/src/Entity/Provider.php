@@ -11,7 +11,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;
-use App\ValueObject\RequestUserProviderLink;
+use App\ValueObject\ProviderCreationRequest;
+use App\Controller\CreateProviderWithUserController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,6 +24,12 @@ use Doctrine\ORM\Mapping as ORM;
     normalizationContext: ['groups' => ['provider:read']],
     operations: [
         new GetCollection(security: 'is_granted("VIEWALL", object)',),
+        /*new Post(
+            uriTemplate: '/create_provider_with_user',
+            input: ProviderCreationRequest::class,
+            output: Provider::class,
+            controller: CreateProviderWithUserController::class
+        ),*/
         new Post(),
         new Get(security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['provider:write:update']], security: 'is_granted("EDIT", object)',),
