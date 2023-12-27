@@ -1,142 +1,65 @@
 import React from 'react';
-import { useState } from 'react';
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import {decodeToken} from "react-jwt";
 
 function Login() {
-  const navigate = useNavigate();
-    // Utilisez useState pour suivre les valeurs des champs d'entrée
-    const [valueEmail, setValueEmail] = useState("");
-    const [valuePassword, setValuePassword] = useState("");
-  
-    // Gérez les modifications des champs d'entrée
-    const inputEmail = (e) => {
-    
-      setValueEmail(e.target.value);
-    };
-
-  const inputPassword = (e) => {
-
-    setValuePassword(e.target.value);
-  };
-
-  // Gérez la soumission du formulaire
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-      let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/; // email valide
-      if (!regexEmail.test(valueEmail)) {
-        // afficher un message d'erreur si le champ 1 est vide
-        document.getElementById("erroremail").innerHTML =
-          "Veuillez remplir ce champ";
-        return;
-      } else {
-        document.getElementById("erroremail").innerHTML = "";
-      }
-
-      /*let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
-      if (!regexPassword.test(valuePassword)) {
-        // afficher un message d'erreur si le champ 2 est vide
-        document.getElementById("errorpassword").innerHTML =
-          "Veuillez remplir ce champ";
-        return;
-      } else {
-        document.getElementById("errorpassword").innerHTML = "";
-      }*/
-
-    // let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/; // email valide
-    // let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
-
-
-    try {
-      const response = await fetch("http://localhost:8888/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: valueEmail,
-          password: valuePassword,
-        }),
-      });
-
-      if (response.ok) {
-        
-        const  { token}  = await response.json();
-        // Assuming the token is in a field named 'token' in the response
-        const decodedToken = decodeToken(token);
-        console.log(decodedToken);
-        console.log(decodedToken.username);
-        if (decodedToken) {
-          localStorage.setItem('username', decodedToken.username);
-          navigate("/search_page");
-        }
-      } else {
-        // Gérer l'échec de la connexion
-        console.error('Échec de la connexion.');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
-    }
-
-  };
-
   return (
     <div className="flex-center flex-column">
-    <section className=" flex-column mt-80 form-zone">
-      <div className="flex-center">
-        <h1 className="title">J'ai déjà un compte</h1>
-      </div>
+      <section className=" flex-column mt-80 form-zone">
+        <div className="flex-center">
+          <h1 className="title">J'ai déjà un compte</h1>
+        </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="flex-column flex-center">
-          <input
-            className="field"
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            value={valueEmail} onChange={inputEmail} 
-          />
-          <span id="erroremail"></span>
-          <input
-            className="field"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Mot de passe"
-            value={valuePassword} onChange={inputPassword}
-          />
-          <span id="errorpassword"></span>
+        <form >
+          <div className="flex-column flex-center">
+            <input
+              className="field"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email ou numéro de téléphone"
+            />
+            <input
+              className="field"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Mot de passe"
+            />
 
-          <div className="field space-between flex">
-            <div>
-              <input
-                className="checkbox"
-                type="checkbox"
-                id="remember"
-                name="remember"
-              />
-              <label htmlFor="remember">Se souvenir de mon identifiant</label>
+            <div className="field flex">
+              <div className='flex space-between'>
+
+                <div className='ml-20'>
+                  <input
+                    className="checkbox"
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                  />
+                </div>
+
+                <div className='space-around flex-center'>
+                  <label htmlFor="remember">Se souvenir de mon identifiant</label>
+                </div>
+
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex-center">
-          <button className="btn-submit" type="submit">
-            Se connecter
-          </button>
-        </div>
+          <div className="flex-center">
+            <button className="btn-submit" type="submit">
+              Se connecter
+            </button>
+          </div>
 
-        <div className="flex-center">
-          <a className="field link flex-center" href="">
-            Mot de passe oublié
-          </a>
-        </div>
-      </form>
-    </section>
-  </div>
+          <div className="flex-center">
+            <a className="field link flex-center" href="">
+              Mot de passe oublié
+            </a>
+          </div>
+        </form>
+      </section>
+    </div>
   );
-  
-  };
+}
 
 export default Login;

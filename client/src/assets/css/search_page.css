@@ -26,7 +26,7 @@ body {
     display: flex;
 }
 
-.flex-row{
+.flex-row {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -245,6 +245,7 @@ input {
     border: 1px solid #4FC0D0;
     padding: 10px;
 }
+
 .zone-info-praticien img {
     width: 120px;
     height: 120px;
@@ -274,6 +275,7 @@ p {
     .mt-40 {
         margin-top: 10px;
     }
+
     .flex-column {
         display: flex;
         flex-direction: column;
@@ -316,4 +318,27 @@ p {
         font: normal normal normal 14px Montserrat;
     }
 
+    .phone_flex-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .day {
+        text-align: center;
+        width: 100%;
+        margin-left: 10px;
+        margin-right: 10px;
+        font: normal normal normal 14px Montserrat;
+    }
+
+    .dispo-hour {
+        background: #FF8D3E74 0% 0% no-repeat padding-box;
+        border-radius: 6px;
+        opacity: 1;
+        text-align: center;
+        font: normal normal bold 16px Montserrat;
+        letter-spacing: 0px;
+        color: #000000;
+        opacity: 1;
+    }
 }
