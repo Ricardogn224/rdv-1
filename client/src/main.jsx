@@ -6,6 +6,7 @@ import User_login from './components/User_login.jsx'
 import Register_pro from './components/Register_pro.jsx'
 import Search_page from './components/pages/Search_page.jsx'
 
+
 import {
   createBrowserRouter,
   RouterProvider,
@@ -34,11 +35,12 @@ const router = createBrowserRouter([
     path: "/search_page",
     element: <Search_page />,
   }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-       <RouterProvider router={router} />
+    <RouterProvider router={router} />
 
   </React.StrictMode>,
 )
