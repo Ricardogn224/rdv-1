@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
@@ -35,6 +36,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Post(),
+        new Post(
+            name: 'userProvider', 
+            uriTemplate: '/userProvider',
+            controller: ControllerUserProviderController::class . '::createUserWithProvider',
+        ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], security: 'is_granted("EDIT", object)',),
     ],
