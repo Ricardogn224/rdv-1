@@ -5,3 +5,5 @@ api_platform:
     defaults:
         attributes:
             readable: false
+
+    
