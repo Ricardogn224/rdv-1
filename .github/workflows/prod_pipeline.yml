@@ -70,7 +70,7 @@ jobs:
         run: |
           cd server
           pwd
-<<<<<<< HEAD
+
           sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv/rdv ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
 
