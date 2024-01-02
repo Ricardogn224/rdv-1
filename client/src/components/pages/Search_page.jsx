@@ -12,10 +12,25 @@ function Search_page() {
   const [medecins, setMedecins] = useState([]);
 
   useEffect(() => {
-    // Ici, vous pouvez charger les données JSON et les stocker dans l'état local
-    // Par exemple, si vous chargez les données une fois au chargement de la page :
-    setMedecins(medecinsData);
+    const storedMedecins = JSON.parse(localStorage.getItem('medecinsData'));
+    if (storedMedecins && storedMedecins.length > 0) {
+      setMedecins(storedMedecins);
+    } else {
+      setMedecins(medecinsData);
+      localStorage.setItem('medecinsData', JSON.stringify(medecinsData));
+    }
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedMedecins = JSON.parse(localStorage.getItem('medecinsData'));
+      if (storedMedecins && JSON.stringify(storedMedecins) !== JSON.stringify(medecins)) {
+        setMedecins(storedMedecins);
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [medecins]);
 
   return (
     <>
@@ -29,7 +44,7 @@ function Search_page() {
           <div>
             <DisponibilityForm />
             <div>
-              {medecins.map((medecin, index) => (
+              {Array.isArray(medecins) && medecins.map((medecin, index) => (
                 <MedecinList
                   key={index}
                   nom={medecin.nom}
