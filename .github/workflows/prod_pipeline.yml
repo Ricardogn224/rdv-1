@@ -68,9 +68,7 @@ jobs:
   
       - name: Deploy code to server
         run: |
-          cd server
           pwd
-
           sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv/rdv ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
 
@@ -88,12 +86,6 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /server ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
-
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /server ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
-
-
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv/server && docker-compose up -d" 
 
       - name: Deploy front code
