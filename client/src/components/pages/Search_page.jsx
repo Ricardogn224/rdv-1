@@ -36,28 +36,6 @@ function Search_page() {
     <>
       <Navbar_user_log />
       <SearchForm />
-      <div className='ma-80'>
-        <div className='flex space-between mt-40'>
-          <div className='map'>
-            <Map />
-          </div>
-          <div>
-            <DisponibilityForm />
-            <div>
-              {Array.isArray(medecins) && medecins.map((medecin, index) => (
-                <MedecinList
-                  key={index}
-                  nom={medecin.nom}
-                  poste={medecin.poste}
-                  adresse={medecin.adresse}
-                  consultationVideo={true}
-                  planning={medecin.planning}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
       <Footer />
     </>
   );

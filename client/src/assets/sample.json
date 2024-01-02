@@ -134,9 +134,9 @@
         ]
     },
     {
-        "nom": "Sandrine IRIGOYEN",
+        "nom": "Robert JACQUES",
         "poste": "Chirurgien-dentiste",
-        "adresse": "4 Allée du Dr Lejzer Ludwik Zamenhof, 31100 Toulouse",
+        "adresse": "4 Allée du Dr Lejzer Ludwik Zamenhof, 31100 Bordeaux",
         "planning": [
             {
                 "jour": "LUN",
@@ -201,7 +201,7 @@
         ]
     },
     {
-        "nom": "Jean Dupont",
+        "nom": "Jean MARCEL",
         "poste": "Médecin généraliste",
         "adresse": "15 Rue de la Santé, 75013 Paris",
         "planning": [
@@ -268,8 +268,8 @@
         ]
     },
     {
-        "nom": "Sandrine IRIGOYEN",
-        "poste": "Chirurgien-dentiste",
+        "nom": "Christian MARTIN",
+        "poste": "Chirurgien",
         "adresse": "4 Allée du Dr Lejzer Ludwik Zamenhof, 31100 Toulouse",
         "planning": [
             {

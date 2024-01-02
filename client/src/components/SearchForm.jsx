@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import medecinsData from '../assets/sample.json'; // Mettez le bon chemin
+import medecinsData from '../assets/sample.json';
+import DisponibilityForm from './DisponibilityForm';
+import Map from './Map';
+import MedecinList from './MedecinList';
+
 
 function SearchForm() {
   const [medecins, setMedecins] = useState([]);
@@ -88,15 +92,39 @@ function SearchForm() {
         </form>
       </section>
 
-      {/* Display filtered medecins */}
+      {/* Display filtered medecins 
       <div>
         {filteredMedecins.map((medecin, index) => (
           <div key={index}>
             <p>{medecin.nom}</p>
             <p>{medecin.adresse}</p>
-            {/* Display other information about the doctor */}
+      
           </div>
         ))}
+      </div>*/}
+
+
+      <div className='ma-80'>
+        <div className='flex space-between mt-40'>
+          <div className='map'>
+            <Map />
+          </div>
+          <div>
+            <DisponibilityForm />
+            <div>
+              {filteredMedecins.map((medecin, index) => (
+                <MedecinList
+                  key={index}
+                  nom={medecin.nom}
+                  poste={medecin.poste}
+                  adresse={medecin.adresse}
+                  consultationVideo={true}
+                  planning={medecin.planning}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
