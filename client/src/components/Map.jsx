@@ -23,12 +23,12 @@ function Map() {
   }, []);
 
   return (
-    <div>
-        <div id="map" style={{ height: '400px', width: '100%' }}></div>
+    <div className='map'>
+      <div id="map" style={{ height: '400px', width: '100%' }}></div>
     </div>
   )
-  
-  ;
+
+    ;
 }
 
 export default Map;
