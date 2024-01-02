@@ -89,7 +89,7 @@ jobs:
       - name: Deploy code to server
         run: |
           pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /serveur ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
+          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /server ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
 
           sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /server ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
 
