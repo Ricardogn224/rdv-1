@@ -14,15 +14,15 @@ function Rdv_page() {
                         <p>Mes rendez-vous passés  </p>
                     </div>
 
-                    <div class="encadre ma-20">
+                    <div className="encadre ma-20">
                         <div class="proposition">
                             <img src={medecinImage} alt="" />
-                            <div class="text">
+                            <div className="text">
                                 <h4>Sandrine IRIGOYEN</h4>
                                 <p>Gynécologue obstétricienne</p>
                             </div>
                         </div>
-                        <div class="proposition">
+                        <div className="proposition">
                             <div className='zone-vide '></div>
                             <div class="text">
                                 <h4>Le détail de votre rendez-vous</h4>
@@ -37,17 +37,17 @@ function Rdv_page() {
                         <p>Mes rendez-vous à venir   </p>
                     </div>
 
-                    <div class="encadre ma-20">
-                        <div class="proposition">
+                    <div className="encadre ma-20">
+                        <div className="proposition">
                             <img src={medecinImage} alt="" />
-                            <div class="text">
+                            <div className="text">
                                 <h4>Sandrine IRIGOYEN</h4>
                                 <p>Gynécologue obstétricienne</p>
                             </div>
                         </div>
-                        <div class="proposition">
+                        <div className="proposition">
                             <div className='zone-vide '></div>
-                            <div class="text">
+                            <div className="text">
                                 <h4>Le détail de votre rendez-vous</h4>
                                 <p>Jeudi 10 Août 2023 : 12h40</p>
                             </div>

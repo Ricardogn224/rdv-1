@@ -1,16 +1,16 @@
-name: DEV CI
+name: PROD CI
 
 on:
   push:
     branches:
-      - develop
+      - master
   pull_request:
     branches:
-      - develop
+      - master
 
 jobs:
   install:
-    name: Install
+    name: Install and  run front 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,8 +22,13 @@ jobs:
           nohup npm run dev &
 
   run_back_end:
-    name: run_back_end
+    name: run_back_end en deploy on ssh server 
     runs-on: ubuntu-latest
+    env:
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      SSH_IP: ${{ secrets.SSH_IP }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -47,7 +52,54 @@ jobs:
             [ -f ".env.local" ] && . ".env.local"
             set +a
 
+      - name: Check server directory contents
+        run: |
+          ls -l server
+          cat server/docker-compose.yml
+
+
       - name: Install dependencies
         run: |
           cd server
-          docker compose up -d
+          docker compose up -d 
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+  
+      - name: Deploy code to server
+        run: |
+          cd server
+          pwd
+
+          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv/rdv ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
+
+
+  run_code_on_server:
+    name: run_code_on_server en deploy on ssh server 
+    runs-on: ubuntu-latest
+    needs: run_back_end
+    env:
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      SSH_IP: ${{ secrets.SSH_IP }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy code to server
+        run: |
+          pwd
+          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /serveur ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
+
+          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /server ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server/
+
+
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv/server && docker-compose up -d" 
+
+      - name: Deploy front code
+        run: |
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv/client && docker-compose up -d" 
+      
+        
+
+          
