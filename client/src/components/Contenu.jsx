@@ -12,8 +12,8 @@ function Contenu() {
             </section>
 
 
-            <div class="group-cadre">
-                <div class="cadre">
+            <div className="group-cadre">
+                <div className="cadre">
                     <svg id="Groupe_10" data-name="Groupe 10" xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
                         <path id="Tracé_27" data-name="Tracé 27" d="M52,0A52,52,0,1,1,0,52,52,52,0,0,1,52,0Z" fill="#00af8a" />
                         <g id="medical" transform="translate(27.967 29.35)">
@@ -21,13 +21,13 @@ function Contenu() {
                             <path id="Tracé_6" data-name="Tracé 6" d="M0,0H66.356V66.356H0Z" fill="none" />
                         </g>
                     </svg>
-                    <div class="text">
+                    <div className="text">
                         <h2>Consultez un professionnel de santé</h2>
                         <p>Accédez rapidement aux disponibilités de vos praticiens</p>
                         <a href="">Chercher</a>
                     </div>
                 </div>
-                <div class="cadre">
+                <div className="cadre">
                     <svg id="Groupe_10" data-name="Groupe 10" xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
                         <path id="Tracé_27" data-name="Tracé 27" d="M52,0A52,52,0,1,1,0,52,52,52,0,0,1,52,0Z" fill="#00af8a" />
                         <g id="medical" transform="translate(27.967 29.35)">
@@ -35,13 +35,13 @@ function Contenu() {
                             <path id="Tracé_6" data-name="Tracé 6" d="M0,0H66.356V66.356H0Z" fill="none" />
                         </g>
                     </svg>
-                    <div class="text">
+                    <div className="text">
                         <h2>Prendre RDV</h2>
                         <p>Prenez rdv pour vous ou vos proches directement en ligne pour une téléconsultation ou visite en cabinet.</p>
                         <a href="">Chercher</a>
                     </div>
                 </div>
-                <div class="cadre">
+                <div className="cadre">
                     <svg id="Groupe_10" data-name="Groupe 10" xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
                         <path id="Tracé_27" data-name="Tracé 27" d="M52,0A52,52,0,1,1,0,52,52,52,0,0,1,52,0Z" fill="#00af8a" />
                         <g id="medical" transform="translate(27.967 29.35)">
@@ -49,7 +49,7 @@ function Contenu() {
                             <path id="Tracé_6" data-name="Tracé 6" d="M0,0H66.356V66.356H0Z" fill="none" />
                         </g>
                     </svg>
-                    <div class="text">
+                    <div className="text">
                         <h2>SMS de rappel</h2>
                         <p>Un sms de rappel avec toutes les informations pratiques est envoyé avant le rdv</p>
                         <a href="">Chercher</a>
@@ -58,7 +58,7 @@ function Contenu() {
             </div>
 
             <div id="section2">
-                <div class="texte">
+                <div className="texte">
                     <h2>Vos données sont protégées</h2>
                     <p>Nous nous engageons à protéger les données et la vie privée de nos utilisateurs. Nos utilisateurs bénéficient de technologies de chiffrement avancées. Les données personnelles de nos utilisateurs sont en lieu sûr.</p>
                 </div>

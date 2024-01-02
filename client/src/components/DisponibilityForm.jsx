@@ -1,23 +1,23 @@
 import React from 'react'
 
 function DisponibilityForm() {
-  return (
-   
-    <div class="flex space-between dispo-zone">
-        <div class="dispo">
-            <p>
-                Disponibilités
-            </p>
+    return (
+
+        <div className="flex space-between dispo-zone">
+            <div className="dispo">
+                <p>
+                    Disponibilités
+                </p>
+            </div>
+
+            <div className="dispo">
+                <p>
+                    v
+                </p>
+            </div>
         </div>
 
-        <div class="dispo">
-            <p>
-                v
-            </p>
-        </div>
-    </div>
-    
-  )
+    )
 }
 
 export default DisponibilityForm

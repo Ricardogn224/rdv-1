@@ -18,13 +18,13 @@ function Navbar_user_log() {
       <div className="flex space-between ma-80">
         <div>
           <h1>
-            <a className="logo-link" href="">Médecin sur rdv</a>
+            <a className="logo-link" href="/search_page">Médecin sur rdv</a>
           </h1>
         </div>
         <div>
           <ul className="flex phone_nav_options phone_flex-column">
             <li><a href="/register_pro">Vous êtes un professionnel ?</a></li>
-            <li>{username || 'user'}</li> {/* Display the username if available, otherwise 'user' */}
+            <li><a href="/rdv_page">{username || 'user'} </a></li> {/* Display the username if available, otherwise 'user' */}
             <li>Se déconnecter</li>
           </ul>
         </div>

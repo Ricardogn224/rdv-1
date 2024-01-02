@@ -41,7 +41,7 @@ function MedecinList({ nom, poste, adresse, consultationVideo, planning }) {
                                         <p className="hour">{heure}</p>
                                     </div>
                                 ) : (
-                                    <div className="" key={idx}>
+                                    <div className="no-dispo" key={idx}>
                                         <p className="hour">{heure}</p>
                                     </div>
                                 )

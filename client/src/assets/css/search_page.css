@@ -178,6 +178,23 @@ input {
     opacity: 1;
 }
 
+.no-dispo {
+
+    background: #c2c2c1 0% 0% no-repeat padding-box;
+
+    border-radius: 6px;
+    opacity: 0.9;
+
+
+    text-align: center;
+    font: normal normal bold 16px Montserrat;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+
+
+}
+
 .hour {
     padding: 5px;
 }
@@ -208,6 +225,8 @@ input {
     padding: 10px;
 }
 
+
+
 .dispo-zone {
 
     background: #FFFFFF 0% 0% no-repeat padding-box;
@@ -236,10 +255,10 @@ input {
 .planning {
     border: 1px solid #4FC0D0;
     padding: 0px;
+    width: 100%;
 }
 
 .zone-calendrier {
-    border: 1px solid #4FC0D0;
     padding: 10px;
 }
 
@@ -348,6 +367,8 @@ p {
         color: #000000;
         opacity: 1;
     }
+
+
 
 
     .map {
