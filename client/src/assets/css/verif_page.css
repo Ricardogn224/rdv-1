@@ -1,0 +1,30 @@
+.proposition {
+    border-bottom: 1px solid #4FC0D0;
+}
+
+.proposition:last-child {
+    border-bottom: none;
+}
+
+.proposition svg {
+    margin: 10px;
+    width: 48px;
+    height: 48px;
+}
+
+.proposition button{
+    background-color: #FF8D3E;
+    border: none;
+    border-radius: 0px;
+    padding: 4px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    height: 56px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.proposition .flex-center input{
+    border: .5px solid #707070;
+}

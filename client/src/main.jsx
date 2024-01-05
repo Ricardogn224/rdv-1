@@ -8,6 +8,7 @@ import Search_page from './components/pages/Search_page.jsx'
 import Rdv_page from './components/pages/Rdv_page.jsx'
 import Motif_page from './components/pages/Motif_page'
 import Patient_page from './components/pages/Patient_page.jsx'
+import Verif_page from './components/pages/Verif_page'
 
 
 import {
@@ -49,7 +50,11 @@ const router = createBrowserRouter([
   {
     path: "/patient_page",
     element: <Patient_page />,
-  }
+  },
+  {
+    path: "/verif_page",
+    element: <Verif_page />,
+  },
 
 
 ]);
