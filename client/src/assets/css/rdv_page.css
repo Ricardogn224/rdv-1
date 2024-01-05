@@ -96,19 +96,6 @@ h2 {
     margin: 20px;
 }
 
-button {
-    background-color: #4FC0D0;
-    border: none;
-    border-radius: 6px;
-    padding: 10px;
-    margin: 10px;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 200px;
-}
-
 .encadre2 {
     display: flex;
     flex-direction: column;

@@ -100,17 +100,20 @@ h2 {
     margin: 20px;
 }
 
-button {
-    background-color: #4FC0D0;
+.suivant {
+    padding: 20px;
+}
+
+.encadre button {
+    background-color: #FF8D3E;
     border: none;
     border-radius: 6px;
     padding: 10px;
-    margin: 10px;
     color: white;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
-    width: 200px;
+    width: 100%;
 }
 
 .encadre2 {

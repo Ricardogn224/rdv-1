@@ -7,6 +7,7 @@ import Register_pro from './components/Register_pro.jsx'
 import Search_page from './components/pages/Search_page.jsx'
 import Rdv_page from './components/pages/Rdv_page.jsx'
 import Motif_page from './components/pages/Motif_page'
+import Patient_page from './components/pages/Patient_page.jsx'
 
 
 import {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
     path: "/motif_page",
     element: <Motif_page />,
   },
+  {
+    path: "/patient_page",
+    element: <Patient_page />,
+  }
 
 
 ]);

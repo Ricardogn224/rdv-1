@@ -82,6 +82,12 @@ function Motif_page() {
               </div>
             </div>
           </div>
+          <br />
+            <br />
+
+          <div className="encadre w-700 ma-20 suivant">
+            <button>CONTINUER</button>
+          </div>
         </div>
 
         <Footer />
