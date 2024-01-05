@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Auth\User;
 use App\Entity\Provider;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserProviderController extends AbstractController
 {
+
+    private EmailService $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     public function createUserWithProvider(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
 
@@ -53,6 +62,12 @@ class UserProviderController extends AbstractController
 
         // Serialize the response data to JSON
         $jsonResponseData = $serializer->serialize($responseData, 'json');
+
+        $destinator = $user->getEmail();
+        $htlmContent = "Bienvenue " . $user->getFirstname()  . ' <a href="#">Confirm my Email</a>';
+        $subject = 'Please Confirm your Email';
+
+        $this->emailService->sendVerificationEmail($destinator, $subject, $htlmContent);
 
         return new JsonResponse($jsonResponseData, Response::HTTP_CREATED, [], true);
     }
