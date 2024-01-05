@@ -9,6 +9,7 @@ import Rdv_page from './components/pages/Rdv_page.jsx'
 import Motif_page from './components/pages/Motif_page'
 import Patient_page from './components/pages/Patient_page.jsx'
 import Verif_page from './components/pages/Verif_page'
+import Confirm_page from './components/pages/Confirmation_page'
 
 
 import {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
   {
     path: "/verif_page",
     element: <Verif_page />,
+  },
+  {
+    path: "/confirm_page",
+    element: <Confirm_page />,
   },
 
 
