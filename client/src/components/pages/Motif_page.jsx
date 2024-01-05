@@ -71,11 +71,14 @@ function Motif_page() {
               </div>
 
               <div className="motif_list">
-                <ul className="flex-column">
+                <div className="flex-column">
                   {motif.map((motif) => (
-                      <li key={motif.id}>{motif.name}</li>
+                    <>
+                    <input type="radio" name="motif" id={motif.id} />
+                    <label htmlFor={motif.id}>{motif.name}</label>
+                    </>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>

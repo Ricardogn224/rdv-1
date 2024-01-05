@@ -194,12 +194,12 @@ button {
     width: 100%;
 }
 
-.motif_list ul{
+.motif_list{
     border: 1px solid #00000029;
     border-radius: 10px;
 }
 
-.motif_list ul li{
+.motif_list label{
     border-bottom: 1px solid #00000029;
     padding: 20px 10px;
     margin: 0;
@@ -209,9 +209,30 @@ button {
     font-weight: 600;
 }
 
-.motif_list ul li:last-child{
+.motif_list input[type="radio"] {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.motif_list label:last-child{
     border-bottom: none;
 }
+
+
+.motif_list input[type="radio"]:checked+label {
+    background-color: #4FC0D0;
+    color: white;
+}
+
+.motif_list input[type="radio"]:first-child+label {
+    border-radius: 10px 10px 0 0;
+}
+
+.motif_list input[type="radio"]:checked+label:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
 
 @media screen and (max-width: 768px) {
 
