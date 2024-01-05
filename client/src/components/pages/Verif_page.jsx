@@ -38,7 +38,8 @@ function Verif_page() {
               <p>Jeudi 10 Août 2023 : 12h40</p>
             </div>
           </div>
-          <div className="proposition flex-column">
+          <div className="proposition2 flex-column">
+            <br />
             <div className="flex">
               <svg
                 aria-hidden="true"

@@ -1,18 +1,21 @@
+.proposition2 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
 .proposition {
     border-bottom: 1px solid #4FC0D0;
 }
 
-.proposition:last-child {
-    border-bottom: none;
-}
-
+.proposition2 svg,
 .proposition svg {
     margin: 10px;
     width: 48px;
     height: 48px;
 }
 
-.proposition button{
+.proposition2 button{
     background-color: #FF8D3E;
     border: none;
     border-radius: 0px;
@@ -25,6 +28,6 @@
     width: fit-content;
 }
 
-.proposition .flex-center input{
+.proposition2 .flex-center input{
     border: .5px solid #707070;
 }
