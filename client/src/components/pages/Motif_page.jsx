@@ -99,7 +99,9 @@ function Motif_page() {
           <br />
 
           <div className="encadre w-700 ma-20 suivant">
+            <a href="/confirm_page">
             <button>CONTINUER</button>
+            </a>
           </div>
         </div>
 
