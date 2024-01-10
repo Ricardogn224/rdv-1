@@ -38,10 +38,14 @@ function MedecinList({ nom, poste, adresse, consultationVideo, planning }) {
                             {jour.heures.map((heure, idx) => (
                                 heure !== "-" ? (
                                     <div className="dispo-hour" key={idx}>
-                                        <p className="hour">{heure}</p>
+                                        <p className="hour">
+                                            <a href="/motif_page" className="hour-link">
+                                                {heure}
+                                            </a>
+                                        </p>
                                     </div>
                                 ) : (
-                                    <div className="" key={idx}>
+                                    <div className="no-dispo" key={idx}>
                                         <p className="hour">{heure}</p>
                                     </div>
                                 )
