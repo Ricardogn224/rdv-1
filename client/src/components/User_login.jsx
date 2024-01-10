@@ -6,9 +6,9 @@ import Register from './Register.jsx'
 function User_login() {
   return (
     <>
-        <Login />
-        <Register />
-        
+      <Login />
+      <Register />
+
     </>
   )
 }
