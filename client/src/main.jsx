@@ -1,23 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import Register from './components/Register.jsx'
-import User_login from './components/User_login.jsx'
-import Register_pro from './components/Register_pro.jsx'
-import Search_page from './components/pages/Search_page.jsx'
-import Rdv_page from './components/pages/Rdv_page.jsx'
-import Motif_page from './components/pages/Motif_page'
-import Patient_page from './components/pages/Patient_page.jsx'
-import Verif_page from './components/pages/Verif_page'
-import Confirm_page from './components/pages/Confirmation_page'
+import React, { lazy, Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import Register from "./components/Register.jsx";
+import Register_pro from "./components/Register_pro.jsx";
+import Search_page from "./components/pages/Search_page.jsx";
+import Rdv_page from "./components/pages/Rdv_page.jsx";
+import Motif_page from "./components/pages/Motif_page";
+import Patient_page from "./components/pages/Patient_page.jsx";
+import Verif_page from "./components/pages/Verif_page";
+import Confirm_page from "./components/pages/Confirmation_page";
 
-
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <User_login />,
+    Component: lazy(() => import("./components/User_login.jsx")),
   },
   {
     path: "/register",
@@ -60,16 +53,10 @@ const router = createBrowserRouter([
     path: "/confirm_page",
     element: <Confirm_page />,
   },
-
-
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-
-  </React.StrictMode>,
-)
-
-
-
+  </React.StrictMode>
+);
