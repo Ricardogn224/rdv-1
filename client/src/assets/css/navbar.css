@@ -258,6 +258,7 @@ footer h4 {
     }
 
     header a {
+        margin-bottom: 1rem;
         font-size: 26px;
     }
 
@@ -291,6 +292,23 @@ footer h4 {
         font-size: 30px;
         line-height: 37px;
         margin-bottom: 2rem;
+    }
+
+    .groupinput{
+        flex-direction: column;
+    }
+
+    .row{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .row button{
+        margin-top: 10px;
+    }
+
+    .ml-5{
+        margin-left: 0;
     }
 
     .group-cadre {
