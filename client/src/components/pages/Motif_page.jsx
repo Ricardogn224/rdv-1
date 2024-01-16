@@ -58,6 +58,11 @@ function Motif_page() {
           }
         };
 
+        const handleForm = () => {
+          alert("Votre rendez-vous a bien été pris en compte");
+        }
+
+
 
     
 
@@ -67,7 +72,7 @@ function Motif_page() {
       <>
         <Navbar />
         <div className="flex-center flex-column rdv_list">
-          {currentStep === 1 && currentStep === 2 && (
+          {currentStep < 3 && (
             <div className="encadre w-700 ma-20">
               <div class="proposition">
                 <img src={medecinImage} alt="" />
@@ -99,9 +104,15 @@ function Motif_page() {
             </div>
           )}
 
-          <div className="title ma-10">
-            <p>Renseignez les informations suivantes</p>
-          </div>
+          {currentStep < 3 ? (
+            <div className="title ma-10">
+              <p>Renseignez les informations suivantes</p>
+            </div>
+          ) : (
+            <div className="title ma-20">
+              <p>Confirmez votre rendez-vous</p>
+            </div>
+          )}
           {currentStep === 1 && (
             <div className="encadre w-700 ma-20 step-1">
               <div className="p-30">
@@ -236,15 +247,16 @@ function Motif_page() {
           )}
 
           {currentStep === 2 && (
-            <div className="encadre w-700 ma-20 suivant">
-              <button onClick={goToNextStep}>CONTINUER</button>
+            <div className="encadre-2 w-700 ma-20 suivant">
               <button onClick={goToPreviousStep}>RETOUR</button>
+              <button onClick={goToNextStep}>CONTINUER</button>
             </div>
           )}
 
           {currentStep === 3 && (
-            <div className="encadre w-700 ma-20 suivant">
+            <div className="encadre-2 w-700 ma-20 suivant">
               <button onClick={goToPreviousStep}>RETOUR</button>
+              <button onClick={handleForm}>VALIDER</button>
             </div>
           )}
         </div>
@@ -252,6 +264,6 @@ function Motif_page() {
         <Footer />
       </>
     );
-    }
+  }
 
 export default Motif_page;

@@ -6,8 +6,6 @@ import Register_pro from "./components/Register_pro.jsx";
 import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
-import Patient_page from "./components/pages/Patient_page.jsx";
-import Verif_page from "./components/pages/Verif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -40,14 +38,6 @@ const router = createBrowserRouter([
   {
     path: "/motif_page",
     element: <Motif_page />,
-  },
-  {
-    path: "/patient_page",
-    element: <Patient_page />,
-  },
-  {
-    path: "/verif_page",
-    element: <Verif_page />,
   },
   {
     path: "/confirm_page",
