@@ -17,10 +17,9 @@ header {
     z-index: 1000;
 }
 
-header a {
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 35px;
+.row{
+    display: flex;
+    flex-direction: row;
 }
 
 .groupinput {
