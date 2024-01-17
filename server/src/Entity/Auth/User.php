@@ -16,6 +16,7 @@ use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
 use App\Entity\Employee;
 use App\Entity\Establishment;
+use App\Entity\PlanningEmployee;
 use App\Entity\Provider;
 use App\Entity\ProvisionEmployee;
 use App\Entity\Shop\Product;
@@ -103,6 +104,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $active = null;
 
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: PlanningEmployee::class)]
+    private Collection $planningEmployees;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -113,6 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->establishments = new ArrayCollection();
         $this->provisionEmployees = new ArrayCollection();
+        $this->planningEmployees = new ArrayCollection();
     }
 
     public function getName(): string
@@ -380,6 +385,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(?bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PlanningEmployee>
+     */
+    public function getPlanningEmployees(): Collection
+    {
+        return $this->planningEmployees;
+    }
+
+    public function addPlanningEmployee(PlanningEmployee $planningEmployee): static
+    {
+        if (!$this->planningEmployees->contains($planningEmployee)) {
+            $this->planningEmployees->add($planningEmployee);
+            $planningEmployee->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanningEmployee(PlanningEmployee $planningEmployee): static
+    {
+        if ($this->planningEmployees->removeElement($planningEmployee)) {
+            // set the owning side to null (unless already changed)
+            if ($planningEmployee->getEmployee() === $this) {
+                $planningEmployee->setEmployee(null);
+            }
+        }
 
         return $this;
     }
