@@ -16,6 +16,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Admin from './components/pages/Admin.jsx'
+import AdminProvider from './components/pages/AdminProvider.jsx'
 
 
 
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
   {
     path: "/search_page",
     element: <Search_page />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+  },
+  {
+    path: "/admin_provider",
+    element: <AdminProvider />,
   },
   {
     path: "/rdv_page",
