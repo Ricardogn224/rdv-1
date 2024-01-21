@@ -1,5 +1,5 @@
 import React from 'react'
-import medecinImage from '../assets/medecin.png';
+import medecinImage from '/src/assets/medecin.png';
 function Contenu() {
     return (
         <main>
