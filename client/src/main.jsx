@@ -8,7 +8,15 @@ import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Admin from './components/pages/Admin.jsx'
+import AdminProvider from './components/pages/AdminProvider.jsx'
+
+
 
 const router = createBrowserRouter([
   {
@@ -30,6 +38,14 @@ const router = createBrowserRouter([
   {
     path: "/search_page",
     element: <Search_page />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+  },
+  {
+    path: "/admin_provider",
+    element: <AdminProvider />,
   },
   {
     path: "/rdv_page",
