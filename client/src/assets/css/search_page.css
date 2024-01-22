@@ -76,19 +76,19 @@ body {
 
 }
 
-ul {
+.search ul {
 
     list-style: none;
 }
 
-li {
+.search li {
     margin-left: 10px;
     display: inline-block;
     padding: 10px;
     color: #FFFFFF;
 }
 
-a {
+.search a {
     text-decoration: none;
     color: #FFFFFF;
     font: normal normal 600 18px/22px Montserrat;

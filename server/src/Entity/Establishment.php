@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Auth\User;
 use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,7 +35,7 @@ class Establishment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['employee:write', 'provision:write', 'provision:read', 'provider:read', 'employee:read', 'establishment:write', 'establishment:read'])]
+    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -42,20 +43,19 @@ class Establishment
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
-    #[Groups(['establishment:read'])]
-    #[ORM\ManyToOne(inversedBy: 'establishments')]
-    private ?Provider $provider = null;
-
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Employee::class)]
-    private Collection $employees;
-
     #[ORM\OneToMany(mappedBy: 'Establishment', targetEntity: Provision::class)]
     private Collection $provisions;
 
+    #[ORM\ManyToOne(inversedBy: 'establishments')]
+    private ?User $provider = null;
+
+    #[ORM\OneToMany(mappedBy: 'establishmentEmployee', targetEntity: User::class)]
+    private Collection $employees;
+
     public function __construct()
     {
-        $this->employees = new ArrayCollection();
         $this->provisions = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,48 +87,6 @@ class Establishment
         return $this;
     }
 
-    public function getProvider(): ?Provider
-    {
-        return $this->provider;
-    }
-
-    public function setProvider(?Provider $provider): static
-    {
-        $this->provider = $provider;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Employee>
-     */
-    public function getEmployees(): Collection
-    {
-        return $this->employees;
-    }
-
-    public function addEmployee(Employee $employee): static
-    {
-        if (!$this->employees->contains($employee)) {
-            $this->employees->add($employee);
-            $employee->setEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEmployee(Employee $employee): static
-    {
-        if ($this->employees->removeElement($employee)) {
-            // set the owning side to null (unless already changed)
-            if ($employee->getEstablishment() === $this) {
-                $employee->setEstablishment(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Provision>
      */
@@ -153,6 +111,48 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($provision->getEstablishment() === $this) {
                 $provision->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProvider(): ?User
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(?User $provider): static
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(User $employee): static
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setEstablishmentEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(User $employee): static
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getEstablishmentEmployee() === $this) {
+                $employee->setEstablishmentEmployee(null);
             }
         }
 
