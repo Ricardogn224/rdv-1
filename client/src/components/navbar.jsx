@@ -15,9 +15,10 @@ function Navbar() {
     }, []);
 
       const handleLogout = () => {
-        // Gérer la déconnexion ici
-        localStorage.removeItem("username"); // Assurez-vous de supprimer le bon élément du stockage local
+        // Remove all from local storage
+        localStorage.clear();
         setUsername(null);
+        window.location.href = "/";
       };
 
   return (
