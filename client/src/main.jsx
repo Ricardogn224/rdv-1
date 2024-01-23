@@ -126,6 +126,21 @@ const router = createBrowserRouter([
     path: "/my_employees",
     element: <MyEmployees />,
   },
+  /*
+  {
+    path: "/toto",
+    element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
+    children: [
+      {
+        path: "test",
+        element: <SearchForm/>,
+      },
+      {
+        path: "*",
+        element: <p>Not found</p>
+      }
+    ]
+  },*/
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
