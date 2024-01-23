@@ -59,6 +59,21 @@ const router = createBrowserRouter([
     path: "/confirm_page",
     element: <Confirm_page />,
   },
+  /*
+  {
+    path: "/toto",
+    element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
+    children: [
+      {
+        path: "test",
+        element: <SearchForm/>,
+      },
+      {
+        path: "*",
+        element: <p>Not found</p>
+      }
+    ]
+  },*/
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
