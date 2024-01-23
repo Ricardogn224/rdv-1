@@ -5,7 +5,7 @@ import '../../assets/css/admin.css'
 import Footer from '../Footer'
 
 
-function AdminProvider() {
+function AdminUser() {
 
     const [providers, setProviders] = useState([]);
 
@@ -36,38 +36,6 @@ function AdminProvider() {
         }
     };
 
-    const handleValidateClick = (id) => {
-        console.log(id)
-        // Perform a PATCH request to update provider.active
-        const url = `http://localhost:8888/api/users/${id}`;
-        const updatedData = {
-          active: selectedStatus === 'actif', // Assuming 'actif' means true and 'inactif' means false
-        };
-      
-        fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
-          },
-          body: JSON.stringify(updatedData),
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the response data if needed
-          console.log('Update successful', data);
-        })
-        .catch(error => {
-          // Handle errors
-          console.error('Error updating data:', error);
-        });
-      
-        // Hide the "Annuler" button after successful update
-        setDisplayCancel(false);
-      };
-
-    console.log(localStorage.getItem('jwtToken'));
-
     useEffect(() => {
         const fetchData = async () => {
         try {
@@ -95,7 +63,7 @@ function AdminProvider() {
     <>
         <Navbar_user_log />
         <div className='title-admin-page'>
-            <h1>Gestion prestataires</h1>
+            <h1>Gestion utilisateurs</h1>
         </div>
 
         <div className='admin-container-table'>
@@ -105,7 +73,7 @@ function AdminProvider() {
                         <div className="user-info extend-column"><p>Email</p></div>
                         <div className="user-info extend-column"><p>Nom</p></div>
                         <div className="user-info extend-column"><p>Prenom</p></div>
-                        <div className="user-info"><p>Statut</p></div>
+                        <div className="user-info"><p>Rôle</p></div>
                         <div className="user-info action"><p>Modifier</p></div>
                         <div className="user-info action"><p>Validate</p></div>
                     </div>
@@ -113,18 +81,18 @@ function AdminProvider() {
             
                     {providers && providers.length > 0 ? (
                         providers
-                        .filter((provider) => provider.roles.includes('ROLE_PROVIDER'))
                         .map((provider, index) => (
                         <div className="user-item" key={index}>
                             <div className="user-info"><p>{provider.email}</p></div>
                             <div className="user-info"><p>{provider.lastname}</p></div>
                             <div className="user-info"><p>{provider.firstname}</p></div>
                             <div className="user-info">
-                                <select value={selectedStatus !== '' && editableIndex === index ? selectedStatus : provider.active ? 'actif' : 'inactif'}
+                                <select value={selectedStatus !== '' && editableIndex === index ? selectedStatus : provider.roles[0]}
                                 onChange={handleStatusChange}
                                 disabled={editableIndex !== index}>
-                                    <option value="actif">Actif</option>
-                                    <option value="inactif">Inactif</option>
+                                    <option value="ROLE_USER">ROLE_USER</option>
+                                    <option value="ROLE_PROVIDER">ROLE_PROVIDER</option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
                                 </select>
                             </div>
                             <div className="user-info actions">
@@ -139,24 +107,11 @@ function AdminProvider() {
                                     <input type="hidden" name="roleVal" value="">
                                     <button className="btn valid-button">Valider</button>
                         </form>*/}
-
-                                {displayCancel && editableIndex === index && (
-                                    <a href="#" className="cancel-user-icon" onClick={() => setDisplayCancel(false)}>
-                                    Annuler
-                                    </a>
-                                )}
-
-
-                                {displayCancel && editableIndex === index && (
-                                    <a href="#" className="validate-user-icon"  onClick={() => handleValidateClick(provider.id)}>
-                                    Valider
-                                    </a>
-                                )}
                             </div>
                         </div>
                         ))
                     ) : (
-                        <p>No providers available.</p>
+                        <p>No users available.</p>
                     )}
                 </div>
             </div>
@@ -167,4 +122,4 @@ function AdminProvider() {
   )
 };
 
-export default AdminProvider;
+export default AdminUser;

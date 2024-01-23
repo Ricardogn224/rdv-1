@@ -2,6 +2,22 @@ import React from 'react';
 import medecinImage from '../assets/portrait-docteur.jpg';
 
 function MedecinList({ nom, poste, adresse, consultationVideo, planning }) {
+
+    const handleReservationRdv = (jour, date, heure) => {
+        // Create a JSON object with jour and heure
+        const reservationData = { jour, date, heure };
+    
+        // Convert the JSON object to a string
+        const reservationDataString = JSON.stringify(reservationData);
+    
+        // Store the string in the local storage
+        localStorage.setItem('reservationDataRdv', reservationDataString);
+
+    
+        // Perform any additional actions or navigate to the "/motif_page" if needed
+        // Example: window.location.href = '/motif_page';
+    };
+
     return (
         <section className="flex phone_flex-column mt-40 pration-trouver">
             <div className="zone-info-praticien flex-column">
@@ -39,7 +55,7 @@ function MedecinList({ nom, poste, adresse, consultationVideo, planning }) {
                                 heure !== "-" ? (
                                     <div className="dispo-hour" key={idx}>
                                         <p className="hour">
-                                            <a href="/motif_page" className="hour-link">
+                                            <a href="/motif_page" onClick={() => handleReservationRdv(jour.jour, jour.date, heure)} className="hour-link">
                                                 {heure}
                                             </a>
                                         </p>
