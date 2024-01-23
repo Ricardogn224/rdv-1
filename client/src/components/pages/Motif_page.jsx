@@ -11,8 +11,20 @@ function Motif_page() {
 
 
     const [motif, setMotif] = useState([]);
+    const [appointmentDetail, setAppointmentDetail] = useState(null);
+    
 
     useEffect(() => {
+
+      const storedAppointmentDetail = localStorage.getItem('reservationDataRdv');
+
+      if (storedAppointmentDetail) {
+        // Parse the stored JSON string to get the object
+        const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
+        setAppointmentDetail(parsedAppointmentDetail);
+
+      }
+
         const motif = [
             {
                 id: 1,
@@ -102,6 +114,7 @@ function Motif_page() {
                 </div>
               </div>
             </div>
+
           )}
 
           {currentStep < 3 ? (
@@ -182,7 +195,11 @@ function Motif_page() {
                   </svg>
                   <div class="text">
                     <h4>Le détail de votre rendez-vous</h4>
-                    <p>Jeudi 10 Août 2023 : 12h40</p>
+                    {appointmentDetail ? (
+                      <p>{`${appointmentDetail.jour.jour} ${appointmentDetail.jour.date} : ${appointmentDetail.heure}`}</p>
+                    ) : (
+                      <p>Appointment details not available</p>
+                    )}
                   </div>
                 </div>
                 <div className="proposition2 flex-column">
