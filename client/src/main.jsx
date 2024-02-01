@@ -7,7 +7,6 @@ import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
-import { AuthProvider } from "./components/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 
@@ -94,11 +93,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
       </Suspense>
       <RouterProvider router={router} />
-    </AuthProvider>
   </React.StrictMode>
 );
