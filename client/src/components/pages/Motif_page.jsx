@@ -15,9 +15,20 @@ function Motif_page() {
 
     const [motif, setMotif] = useState([]);
     const [patient, setPatient] = useState([]);
+
     const [formValues, setFormValues] = useState({
-        motif: '',
-        patient: '',
+        motif: "",
+        patient: "",
+        jour: {
+            jour: "Jeudi",
+            date: "10 Août 2023",
+        },
+        heure: "12h40",
+        provisionEmployee: "path/실례.html",
+        appointmentUser: {
+            email: "",
+        },
+
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -113,10 +124,10 @@ function Motif_page() {
               console.log('Registration successful');
               // navigate("/confirmation_page");
             } else {
-              console.error('Registration failed:', await response.text());
+              console.error('RDV failed:', await response.text());
             }
           } catch (error) {
-            console.error('Error during registration:', error);
+            console.error('Error during RDV:', error);
           }
 
           
