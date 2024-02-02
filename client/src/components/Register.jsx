@@ -40,7 +40,7 @@ function Register() {
       if (response.ok) {
         console.log('Registration successful');
         // Handle successful registration (e.g., redirect to login page)
-        navigate("/login");
+        navigate("/");
       } else {
         console.error('Registration failed:', await response.text());
         // Handle errors (e.g., display error message)

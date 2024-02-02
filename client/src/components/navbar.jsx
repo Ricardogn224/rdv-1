@@ -6,9 +6,10 @@ function Navbar() {
     const [username, setUsername] = useState("");
 
     useEffect(() => {
+
       // Fetch the username from local storage
-      let storedUsername = localStorage.getItem("username");
-      storedUsername = "user"
+      const storedUsername = localStorage.getItem("username");
+      // storedUsername = "user"
       if (storedUsername) {
         setUsername(storedUsername);
       }

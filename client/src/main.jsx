@@ -7,10 +7,12 @@ import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 
 import {
   createBrowserRouter,
+  Outlet,
   RouterProvider,
 } from "react-router-dom";
 import Admin from './components/pages/Admin.jsx'
@@ -40,18 +42,41 @@ const router = createBrowserRouter([
     path: "/search_page",
     element: <Search_page />,
   },
+
   {
     path: "/admin",
-    element: <Admin />,
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "dashboard",
+        element: <Admin />,
+      },
+      {
+        path: "provider",
+        element: <AdminProvider />,
+      },
+      {
+        path: "user",
+        element: <AdminUser />,
+      },
+    ],
   },
-  {
-    path: "/admin_provider",
-    element: <AdminProvider />,
-  },
-  {
-    path: "/admin_user",
-    element: <AdminUser />,
-  },
+  // {
+  //   path: "/admin",
+  //   element: <Admin />,
+  // },
+  // {
+  //   path: "/admin_provider",
+  //   element: <AdminProvider />,
+  // },
+  // {
+  //   path: "/admin_user",
+  //   element: <AdminUser />,
+  // },
   {
     path: "/rdv_page",
     element: <Rdv_page />,
@@ -68,6 +93,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
+      <RouterProvider router={router} />
   </React.StrictMode>
 );
