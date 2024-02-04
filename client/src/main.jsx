@@ -89,6 +89,14 @@ const router = createBrowserRouter([
     path: "/confirm_page",
     element: <Confirm_page />,
   },
+  {
+    path: "/employee_rdv/:id",
+    element: <EmployeeRdv />,
+  },
+  {
+    path: "/my_employees",
+    element: <MyEmployees />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
