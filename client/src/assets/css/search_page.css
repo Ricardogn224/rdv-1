@@ -166,7 +166,6 @@ input {
 }
 
 .dispo-hour {
-    background: #4FC0D0 0% 0% no-repeat padding-box;
     border-radius: 6px;
     opacity: 1;
 
@@ -358,7 +357,6 @@ p {
     }
 
     .dispo-hour {
-        background: #4FC0D0 0% 0% no-repeat padding-box;
         border-radius: 6px;
         opacity: 1;
         text-align: center;

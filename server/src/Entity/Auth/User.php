@@ -17,6 +17,7 @@ use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
 use App\Entity\Employee;
 use App\Entity\Establishment;
+use App\Entity\PlanningDoctor;
 use App\Entity\PlanningEmployee;
 use App\Entity\Provider;
 use App\Entity\ProvisionEmployee;
@@ -40,6 +41,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Post(),
+        new GetCollection(
+            uriTemplate: '/userEmployees',
+            normalizationContext: ['groups' => ['planningEmployee:read']],
+        ),
+        new Get(
+            uriTemplate: '/employeePlanning/{id}',
+            normalizationContext: ['groups' => ['planningEmployee:read']],
+        ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
     ],
@@ -70,11 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
@@ -93,20 +102,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
     private Collection $establishments;
 
+    #[Groups(['planningEmployee:read', 'planning:read'])]
     #[ORM\ManyToOne(inversedBy: 'employees')]
     private ?Establishment $establishmentEmployee = null;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: ProvisionEmployee::class)]
     private Collection $provisionEmployees;
 
+    #[Groups(['user:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $kbis = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $active = null;
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: PlanningEmployee::class)]
-    private Collection $planningEmployees;
+    #[Groups(['planningEmployee:read', 'planning:read'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: PlanningDoctor::class)]
+    private Collection $planningDoctors;
 
     public function __construct()
     {
@@ -118,7 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->establishments = new ArrayCollection();
         $this->provisionEmployees = new ArrayCollection();
-        $this->planningEmployees = new ArrayCollection();
+        $this->planningDoctors = new ArrayCollection();
     }
 
     public function getName(): string
@@ -391,29 +403,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, PlanningEmployee>
+     * @return Collection<int, PlanningDoctor>
      */
-    public function getPlanningEmployees(): Collection
+    public function getPlanningDoctors(): Collection
     {
-        return $this->planningEmployees;
+        return $this->planningDoctors;
     }
 
-    public function addPlanningEmployee(PlanningEmployee $planningEmployee): static
+    public function addPlanningDoctor(PlanningDoctor $planningDoctor): static
     {
-        if (!$this->planningEmployees->contains($planningEmployee)) {
-            $this->planningEmployees->add($planningEmployee);
-            $planningEmployee->setEmployee($this);
+        if (!$this->planningDoctors->contains($planningDoctor)) {
+            $this->planningDoctors->add($planningDoctor);
+            $planningDoctor->setEmployee($this);
         }
 
         return $this;
     }
 
-    public function removePlanningEmployee(PlanningEmployee $planningEmployee): static
+    public function removePlanningDoctor(PlanningDoctor $planningDoctor): static
     {
-        if ($this->planningEmployees->removeElement($planningEmployee)) {
+        if ($this->planningDoctors->removeElement($planningDoctor)) {
             // set the owning side to null (unless already changed)
-            if ($planningEmployee->getEmployee() === $this) {
-                $planningEmployee->setEmployee(null);
+            if ($planningDoctor->getEmployee() === $this) {
+                $planningDoctor->setEmployee(null);
             }
         }
 

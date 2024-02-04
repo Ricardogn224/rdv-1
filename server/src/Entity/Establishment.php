@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
     operations: [
         new GetCollection(),
         new Post(),
-        new Get(security: 'is_granted("VIEW", object)',),
+    new Get(/*security: 'is_granted("VIEW", object)',*/),
         new Patch(denormalizationContext: ['groups' => ['establishment:write:update']], security: 'is_granted("EDIT", object)',),
     ],
 )]
@@ -35,11 +35,11 @@ class Establishment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:read'])]
+    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:read', 'planningEmployee:read', 'planningDoctor:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['establishment:write', 'establishment:read'])]
+    #[Groups(['establishment:write', 'establishment:read', 'planningEmployee:read', 'planningDoctor:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
