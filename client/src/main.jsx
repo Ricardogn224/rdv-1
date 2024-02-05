@@ -7,6 +7,8 @@ import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
+import Dashboard_admin from './components/Provider/Dashboard.jsx'
+
 
 
 import {
@@ -59,22 +61,22 @@ const router = createBrowserRouter([
     path: "/confirm_page",
     element: <Confirm_page />,
   },
-  /*
-  {
+  
+  {path: "/provider",
     path: "/toto",
     element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
     children: [
       {
-        path: "test",
-        element: <SearchForm/>,
+        path: "dashboard",
+        element: <Dashboard_admin/>,
       },
       {
         path: "*",
         element: <p>Not found</p>
       }
     ]
-  },*/
-  
+  },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
