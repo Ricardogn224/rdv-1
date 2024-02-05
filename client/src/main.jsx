@@ -5,9 +5,12 @@ import Register from "./components/Register.jsx";
 import Register_pro from "./components/Register_pro.jsx";
 import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
+import EmployeeRdv from "./components/pages/EmployeeRdv.jsx";
+import MyEmployees from "./components/pages/MyEmployees.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+
 
 
 import {
