@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/motif_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
-import Navbar from "../navbar";
-import Footer from "../Footer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -142,7 +140,6 @@ function Motif_page() {
 
     return (
       <>
-        <Navbar />
         <div className="flex-center flex-column rdv_list">
           <form onSubmit={handleSubmit}>
             {currentStep < 3 && (
@@ -358,7 +355,6 @@ function Motif_page() {
           </form>
         </div>
 
-        <Footer />
       </>
     );
   }

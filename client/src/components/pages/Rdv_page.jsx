@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import '../../assets/css/rdv_page.css';
 import medecinImage from '../../assets/portrait-docteur.jpg';
-import Navbar from '../navbar';
-import Footer from '../Footer';
 
 function Rdv_page() {
 
@@ -74,7 +72,6 @@ function Rdv_page() {
 
     return (
       <>
-        <Navbar />
         <div className="flex space-between rdv_list">
           <div className="zone_old_rdv overflow-auto">
             <div className="title ma-20">
@@ -133,7 +130,6 @@ function Rdv_page() {
           </div>
         </div>
 
-        <Footer />
       </>
     );
 }

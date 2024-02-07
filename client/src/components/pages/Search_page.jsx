@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Navbar_user_log from '../Navbar_user_log';
 import SearchForm from '../SearchForm';
 import '../../assets/css/search_page.css';
-import Footer from '../Footer';
 import Map from '../Map';
 import DisponibilityForm from '../DisponibilityForm';
 import MedecinList from '../MedecinList';
 import medecinsData from '../../assets/sample.json'; // Mettez le bon chemin
-import Navbar from '../navbar';
 
 function Search_page() {
   const [medecins, setMedecins] = useState([]);
@@ -47,7 +45,6 @@ function Search_page() {
 
   return (
     <>
-      <Navbar />
       <SearchForm />
       <div className='ma-80'>
         <div className='flex space-between mt-40'>
@@ -73,7 +70,6 @@ function Search_page() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
