@@ -49,15 +49,31 @@ const router = createBrowserRouter([
         element: <Search_page />,
       },
       {
-        path: "/rdv_page",
+        path: "*",
+        element: <h1>404 not found</h1>,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute requiredRole="ROLE_USER">
+          <Navbar />
+          <Outlet />
+          <Footer />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "rdv_page",
         element: <Rdv_page />,
       },
       {
-        path: "/motif_page",
+        path: "motif_page",
         element: <Motif_page />,
       },
       {
-        path: "/confirm_page",
+        path: "confirm_page",
         element: <Confirm_page />,
       },
       {
@@ -82,7 +98,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredRole="ROLE_ADMIN">
         <Outlet />
       </ProtectedRoute>
     ),
@@ -101,18 +117,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "/admin",
-  //   element: <Admin />,
-  // },
-  // {
-  //   path: "/admin_provider",
-  //   element: <AdminProvider />,
-  // },
-  // {
-  //   path: "/admin_user",
-  //   element: <AdminUser />,
-  // },
 
   {
     path: "/employee_rdv/:id",

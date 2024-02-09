@@ -3,15 +3,12 @@ import { Navigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 
-const ProtectedRoute = ({ children }) => {
-
+const ProtectedRoute = ({ children, requiredRole }) => {
   const token = localStorage.getItem("jwtToken");
 
-  const user = token ? decodeToken(token) : null
+  const user = token ? decodeToken(token) : null;
 
-  
-
-  if (!user || !user.roles.includes("ROLE_ADMIN")) {
+  if (!user || !user.roles.includes(requiredRole)) {
     return <Navigate to="/login" />;
   }
 
