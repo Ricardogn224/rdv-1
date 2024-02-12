@@ -28,7 +28,7 @@ use App\Dto\RdvResponseDto;
 class ManageRdv
 {
     public int $provision_employee_id;
-    public int $patient_id;
+    public int $patient_email;
     public string $hour;
     public string $date;
 }

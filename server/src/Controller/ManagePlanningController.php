@@ -128,9 +128,9 @@ class ManagePlanningController extends AbstractController
 
         $hour = $data['hour'];
 
-        $patientId = $data['patient_id'];
+        $patientMail = $data['patient_email'];
 
-        $patient = $entityManager->getRepository(User::class)->find($patientId);
+        $patient = $entityManager->getRepository(User::class)->findOneByEmail($patientMail);
 
         $appointment = new Appointment();
         $appointment->setProvisionEmployee($provisionEmployee);

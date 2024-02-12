@@ -46,10 +46,10 @@ function Admin() {
         <div className='admin-home-container'>
             <ButtonAdmin 
                 txtButton="Gestion des prestataires"
-                route="/admin_provider" />
+                route="/admin/admin_provider" />
             <ButtonAdmin 
                 txtButton="Gestion des utilisateurs"
-                route="/admin_user" />
+                route="/admin/user" />
         </div>
         
       <Footer />
