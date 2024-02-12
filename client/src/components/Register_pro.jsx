@@ -13,7 +13,7 @@ function Register_pro() {
     dateOfBirth: '',
     email: '',
     plainPassword: '',
-    accountType: 'normal', // Assuming a default value
+    accountType: 'provider', // Assuming a default value
     kbis: '',
   });
 
@@ -31,26 +31,26 @@ function Register_pro() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8888/api/userProvider", {
+      const apiUrl = process.env.API_URL || 'http://localhost:8888'; 
+      const response = await fetch(`${apiUrl}/api/users`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formValues),
       });
-
+    
       if (response.ok) {
         console.log('Registration successful');
-        // Handle successful registration (e.g., redirect to login page)
         navigate("/login");
       } else {
         console.error('Registration failed:', await response.text());
-        // Handle errors (e.g., display error message)
       }
     } catch (error) {
       console.error('Error during registration:', error);
     }
-};
+  }
+    
 
   return (
     <div className="flex-center flex-column">

@@ -11,15 +11,21 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\ProvisionController;
+use App\Dto\ProvisionDto;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ApiResource(
-    denormalizationContext: ['groups' => ['provision:write']],
     normalizationContext: ['groups' => ['provision:read']],
     operations: [
         new GetCollection(),
-        new Post(),
+        new Post(
+            denormalizationContext: ['groups' => ['provision:write']],
+            input: ProvisionDto::class,
+            controller: ProvisionController::class,
+            read: false
+        ),
         new Get(),
         new Patch(denormalizationContext: ['groups' => ['provision:write:update']]),
     ],
@@ -33,7 +39,7 @@ class Provision
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:write', 'establishment:read', 'provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
+    #[Groups(['provision:write', 'provision:read', 'provisionEmployee:read', 'establishment:read', 'provisionEmployee:write', 'provisionEmployee:read', 'appointment:read','planningRdv:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -41,6 +47,7 @@ class Provision
     #[ORM\ManyToOne(inversedBy: 'provisions', cascade: ['persist'])]
     private ?Establishment $Establishment = null;
 
+    #[Groups(['provision:write', 'provision:read'])]
     #[ORM\OneToMany(mappedBy: 'provision', targetEntity: ProvisionEmployee::class)]
     private Collection $employeeProvisions;
 

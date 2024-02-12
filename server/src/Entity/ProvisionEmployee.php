@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Auth\User;
 use App\Repository\ProvisionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,16 +34,16 @@ class ProvisionEmployee
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
-    #[ORM\ManyToOne(inversedBy: 'provisionEmployees', cascade: ['persist'])]
-    private ?Employee $employee = null;
-
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read', 'planningRdv:read'])]
     #[ORM\ManyToOne(inversedBy: 'employeeProvisions', cascade: ['persist'])]
     private ?Provision $provision = null;
 
     #[ORM\OneToMany(mappedBy: 'provisionEmployee', targetEntity: Appointment::class)]
     private Collection $appointments;
+
+    #[Groups(['provision:write', 'provision:read'])]
+    #[ORM\ManyToOne(inversedBy: 'provisionEmployees')]
+    private ?User $employee = null;
 
     public function __construct()
     {
@@ -52,18 +53,6 @@ class ProvisionEmployee
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEmployee(): ?Employee
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(?Employee $employee): static
-    {
-        $this->employee = $employee;
-
-        return $this;
     }
 
     public function getProvision(): ?Provision
@@ -104,6 +93,18 @@ class ProvisionEmployee
                 $appointment->setProvisionEmployee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmployee(): ?User
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?User $employee): static
+    {
+        $this->employee = $employee;
 
         return $this;
     }

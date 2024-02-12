@@ -3,10 +3,10 @@ name: PROD CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   install:
@@ -69,8 +69,7 @@ jobs:
       - name: Deploy code to server
         run: |
           pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv/rdv ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
-
+          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv-1/rdv-1 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
   run_code_on_server:
     name: run_code_on_server en deploy on ssh server 
@@ -86,11 +85,11 @@ jobs:
 
       - name: Deploy code to server
         run: |
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv/server && docker-compose up -d" 
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker-compose up -d" 
 
       - name: Deploy front code
         run: |
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv/client && docker-compose up -d" 
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/client && docker-compose up -d" 
       
         
 

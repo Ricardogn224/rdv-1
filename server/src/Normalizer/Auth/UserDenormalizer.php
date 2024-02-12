@@ -22,6 +22,8 @@ class UserDenormalizer implements DenormalizerInterface
     {
         $user = $this->normalizer->denormalize($data, $type, $format, $context);
 
+        // dd($user);die;
+
         assert($user instanceof User);
 
         $plainPassword = $user->getPlainPassword();

@@ -26,7 +26,7 @@ class ProviderEstablishmentDenormalizer implements DenormalizerInterface
 
         assert($establishment instanceof Establishment);
 
-        $establishment->setProvider($this->security->getUser()->getProvider());
+        //$establishment->setProvider($this->security->getUser()->getProvider());
 
         return $establishment;
     }

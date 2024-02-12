@@ -3,6 +3,7 @@
 namespace App\Entity\Auth;
 
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -10,12 +11,17 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\GetUserByRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
 use App\Entity\Blog\Publication;
 use App\Entity\Employee;
+use App\Entity\Establishment;
+use App\Entity\PlanningDoctor;
+use App\Entity\PlanningEmployee;
 use App\Entity\Provider;
+use App\Entity\ProvisionEmployee;
 use App\Entity\Shop\Product;
 use App\Filters\CustomSearchFilter;
 use DateTimeImmutable;
@@ -35,14 +41,22 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/usersRole',
+            controller: GetUserByRoleController::class,
+            read: false,
+        ),
         new Post(),
-        new Post(
-            name: 'userProvider', 
-            uriTemplate: '/userProvider',
-            controller: ControllerUserProviderController::class . '::createUserWithProvider',
+        new GetCollection(
+            uriTemplate: '/userEmployees',
+            normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']], security: 'is_granted("EDIT", object)',),
+        new Get(
+            uriTemplate: '/employeePlanning/{id}',
+            normalizationContext: ['groups' => ['planningEmployee:read']],
+        ),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
     ],
 )]
 #[ORM\Table(name: '`user`')]
@@ -71,11 +85,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write', 'provider:read', 'employee:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write', 'provider:read', 'employee:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
@@ -88,14 +102,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToOne(mappedBy: 'user_employee', cascade: ['persist', 'remove'])]
-    private ?Employee $employee = null;
-
-    #[ORM\OneToOne(mappedBy: 'user_provider', cascade: ['persist', 'remove'])]
-    private ?Provider $provider = null;
-
     #[ORM\OneToMany(mappedBy: 'appointmentUser', targetEntity: Appointment::class)]
     private Collection $appointments;
+
+    #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
+    private Collection $establishments;
+
+    #[Groups(['planningEmployee:read', 'planning:read'])]
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    private ?Establishment $establishmentEmployee = null;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: ProvisionEmployee::class)]
+    private Collection $provisionEmployees;
+
+    #[Groups(['user:write'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $kbis = null;
+
+    #[Groups(['user:write:update', 'user:read', 'user:read:full'])]
+    #[ORM\Column(nullable: true)]
+    private ?bool $active = null;
+
+    #[Groups(['planningEmployee:read', 'planning:read'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: PlanningDoctor::class)]
+    private Collection $planningDoctors;
 
     public function __construct()
     {
@@ -105,6 +135,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->appointments = new ArrayCollection();
+        $this->establishments = new ArrayCollection();
+        $this->provisionEmployees = new ArrayCollection();
+        $this->planningDoctors = new ArrayCollection();
     }
 
     public function getName(): string
@@ -250,50 +283,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmployee(): ?Employee
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(?Employee $employee): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($employee === null && $this->employee !== null) {
-            $this->employee->setUserEmployee(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($employee !== null && $employee->getUserEmployee() !== $this) {
-            $employee->setUserEmployee($this);
-        }
-
-        $this->employee = $employee;
-
-        return $this;
-    }
-
-    public function getProvider(): ?Provider
-    {
-        return $this->provider;
-    }
-
-    public function setProvider(?Provider $provider): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($provider === null && $this->provider !== null) {
-            $this->provider->setUserProvider(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($provider !== null && $provider->getUserProvider() !== $this) {
-            $provider->setUserProvider($this);
-        }
-
-        $this->provider = $provider;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Appointment>
      */
@@ -318,6 +307,132 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($appointment->getAppointmentUser() === $this) {
                 $appointment->setAppointmentUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Establishment>
+     */
+    public function getEstablishments(): Collection
+    {
+        return $this->establishments;
+    }
+
+    public function addEstablishment(Establishment $establishment): static
+    {
+        if (!$this->establishments->contains($establishment)) {
+            $this->establishments->add($establishment);
+            $establishment->setProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstablishment(Establishment $establishment): static
+    {
+        if ($this->establishments->removeElement($establishment)) {
+            // set the owning side to null (unless already changed)
+            if ($establishment->getProvider() === $this) {
+                $establishment->setProvider(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEstablishmentEmployee(): ?Establishment
+    {
+        return $this->establishmentEmployee;
+    }
+
+    public function setEstablishmentEmployee(?Establishment $establishmentEmployee): static
+    {
+        $this->establishmentEmployee = $establishmentEmployee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProvisionEmployee>
+     */
+    public function getProvisionEmployees(): Collection
+    {
+        return $this->provisionEmployees;
+    }
+
+    public function addProvisionEmployee(ProvisionEmployee $provisionEmployee): static
+    {
+        if (!$this->provisionEmployees->contains($provisionEmployee)) {
+            $this->provisionEmployees->add($provisionEmployee);
+            $provisionEmployee->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProvisionEmployee(ProvisionEmployee $provisionEmployee): static
+    {
+        if ($this->provisionEmployees->removeElement($provisionEmployee)) {
+            // set the owning side to null (unless already changed)
+            if ($provisionEmployee->getEmployee() === $this) {
+                $provisionEmployee->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getKbis(): ?string
+    {
+        return $this->kbis;
+    }
+
+    public function setKbis(?string $kbis): static
+    {
+        $this->kbis = $kbis;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(?bool $active): static
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PlanningDoctor>
+     */
+    public function getPlanningDoctors(): Collection
+    {
+        return $this->planningDoctors;
+    }
+
+    public function addPlanningDoctor(PlanningDoctor $planningDoctor): static
+    {
+        if (!$this->planningDoctors->contains($planningDoctor)) {
+            $this->planningDoctors->add($planningDoctor);
+            $planningDoctor->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanningDoctor(PlanningDoctor $planningDoctor): static
+    {
+        if ($this->planningDoctors->removeElement($planningDoctor)) {
+            // set the owning side to null (unless already changed)
+            if ($planningDoctor->getEmployee() === $this) {
+                $planningDoctor->setEmployee(null);
             }
         }
 
