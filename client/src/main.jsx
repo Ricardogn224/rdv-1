@@ -59,11 +59,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute requiredRole="ROLE_USER">
-          <Navbar />
-          <Outlet />
-          <Footer />
-      </ProtectedRoute>
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
     ),
     children: [
       {
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         element: <Rdv_page />,
       },
       {
-        path: "motif_page",
+        path: "rdv",
         element: <Motif_page />,
       },
       {
