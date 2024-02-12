@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\GetUserByRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
@@ -40,16 +41,21 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/usersRole',
+            controller: GetUserByRoleController::class,
+            read: false,
+        ),
         new Post(),
         new GetCollection(
             uriTemplate: '/userEmployees',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
+        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Get(
             uriTemplate: '/employeePlanning/{id}',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
     ],
 )]
@@ -79,11 +85,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
@@ -113,6 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $kbis = null;
 
+    #[Groups(['user:write:update', 'user:read', 'user:read:full'])]
     #[ORM\Column(nullable: true)]
     private ?bool $active = null;
 

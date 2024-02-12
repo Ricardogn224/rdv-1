@@ -9,4 +9,5 @@ enum RolesEnum: string
     case ADMIN = 'ROLE_ADMIN';
     case PROVIDER = 'ROLE_PROVIDER';
     case USER = 'ROLE_USER';
+    case EMPLOYEE = 'ROLE_EMPLOYEE';
 }
