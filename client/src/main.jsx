@@ -64,7 +64,7 @@ const router = createBrowserRouter([
   
   {path: "/provider",
     path: "/toto",
-    element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
+    element:<Outlet/>,
     children: [
       {
         path: "dashboard",
