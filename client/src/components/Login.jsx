@@ -57,7 +57,8 @@ function Login() {
 
 
     try {
-      const response = await fetch("http://localhost:8888/api/auth", {
+      const apiUrl = process.env.API_URL || 'http://localhost:8888'; 
+      const response = await fetch(`${apiUrl}/api/auth`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,10 +68,9 @@ function Login() {
           password: valuePassword,
         }),
       });
-
+    
       if (response.ok) {
-
-        const  { token}  = await response.json();
+        const { token } = await response.json();
         // Assuming the token is in a field named 'token' in the response
         const decodedToken = decodeToken(token);
         console.log(decodedToken);
@@ -81,14 +81,13 @@ function Login() {
           //navigate("/search_page");
         }
       } else {
-        // Gérer l'échec de la connexion
-        console.error('Échec de la connexion.');
+        // Handle connection failure
+        console.error('Connection failed.');
       }
     } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
+      console.error('Error during connection:', error);
     }
-
-  };
+    
 
   return (
     <div className="flex-center flex-column">
