@@ -15,20 +15,14 @@ function Motif_page() {
 
     const [motif, setMotif] = useState([]);
     const [patient, setPatient] = useState([]);
+    const storedUsername = localStorage.getItem("username");
+
 
     const [formValues, setFormValues] = useState({
-        motif: "",
-        patient: "",
-        jour: {
-            jour: "Jeudi",
-            date: "10 Août 2023",
-        },
-        heure: "12h40",
-        provisionEmployee: "path/실례.html",
-        appointmentUser: {
-            email: "",
-        },
-
+      provision_employee_id: motif.name,
+      patient_email: storedUsername,
+      hour: "12h40",
+      date: "30 janvier 2024",
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -112,7 +106,7 @@ function Motif_page() {
           console.log(formValues);
 
           try {
-            const response = await fetch("http://localhost:8888/api/appointments", {
+            const response = await fetch("http://localhost:8888/api/planning/rdv", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
