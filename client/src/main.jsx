@@ -24,6 +24,8 @@ import {
 import Admin from './components/pages/Admin.jsx'
 import AdminProvider from './components/pages/AdminProvider.jsx'
 import AdminUser from './components/pages/AdminUser.jsx'
+import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
+import AdminProvision from "./components/pages/AdminProvision.jsx";
 
 
 
@@ -114,6 +116,14 @@ const router = createBrowserRouter([
       {
         path: "user",
         element: <AdminUser />,
+      },
+      {
+        path: "establishment",
+        element: <AdminEstablishment />,
+      },
+      {
+        path: "provision",
+        element: <AdminProvision />,
       },
     ],
   },

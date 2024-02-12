@@ -14,11 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
 {
-    #[Groups(['user:read:full', 'user:read'])]
+    #[Groups(['user:read:full', 'user:read', 'establishment:write'])]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write', 'planningRdv:read'])]
+    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'establishment:write:update',
+    'establishment:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write',
+    'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
@@ -80,6 +82,10 @@ trait Auth
 
         if ($enum === UserAccountTypeEnum::ADMIN) {
             $this->setRoles([RolesEnum::ADMIN->value]);
+
+            return;
+        } elseif ($enum === UserAccountTypeEnum::EMPLOYEE) {
+            $this->setRoles([RolesEnum::EMPLOYEE->value]);
 
             return;
         } elseif ($enum === UserAccountTypeEnum::PROVIDER) {

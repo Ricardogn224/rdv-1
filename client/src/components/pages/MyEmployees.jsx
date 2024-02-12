@@ -55,8 +55,8 @@ function MyEmployees() {
 
     const handleEmployeeClick = (employee) => {
         // Handle the click event for the selected employee
-        //setSelectedEmployee(employee);
-        navigate(`/employee_rdv/${employee.id}`)
+        setSelectedEmployee(employee);
+        //navigate(`/employee_rdv/${employee.id}`)
     };
 
   return (
@@ -84,10 +84,33 @@ function MyEmployees() {
 
         {selectedEmployee && (
             <div className="my-8 mx-4">
-            <h2 className="text-2xl font-bold mb-4">Informations sur l'employé sélectionné :</h2>
-            <p className="mb-2">Nom complet : {selectedEmployee.firstname} {selectedEmployee.lastname}</p>
-            <p className="mb-2">Email : {selectedEmployee.email}</p>
-            {/* Add other information you want to display */}
+                <h2 className="text-2xl font-bold mb-4">Informations sur l'employé sélectionné :</h2>
+                <p className="mb-2">Nom complet : {selectedEmployee.firstname} {selectedEmployee.lastname}</p>
+                <p className="mb-2">Email : {selectedEmployee.email}</p>
+                {/* Add other information you want to display */}
+                <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">Établissement :</label>
+                    <select
+                    className="mt-1 p-2 border rounded-md w-full"
+                    >
+                    <option value="" disabled>Select an establishment</option>
+                        <option key="1" value="3">
+                        name
+                        </option>
+                    </select>
+                </div>
+
+                <div className="mb-2">
+                    <label className="block text-sm font-medium text-gray-700">Provisions :</label>
+                    <select
+                    className="mt-1 p-2 border rounded-md w-full"
+                    multiple
+                    >
+                    <option key="2" value="1">
+                        Dermato
+                    </option>
+                    </select>
+                </div>
             </div>
         )}
 
