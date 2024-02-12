@@ -65,22 +65,25 @@ function AdminEstablishment() {
             const response = await fetch(`http://localhost:8888/api/usersRole?role=${role}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             if (!response.ok) {
-                throw new Error('Failed to fetch users by role');
+                throw new Error('Failed to fetch users by role'); 
             }
-    
+
             const data = await response.json();
+
             return data;
         } catch (error) {
+         
             console.error('Error fetching users by role:', error);
-            throw error; // Rethrow the error for handling at a higher level
+            throw error; 
         }
     };
+    
 
     const token = localStorage.getItem('jwtToken');
 
@@ -90,22 +93,21 @@ function AdminEstablishment() {
         .then(users => {
             console.log('Users by role:', users);
             setProviders(users)
-            // Do something with the fetched users
+            
         })
         .catch(error => {
             console.error('Error fetching users by role:', error.message);
-            // Handle the error
+           
         });
 
         fetchUsersByRole('ROLE_EMPLOYEE')
         .then(users => {
             console.log('employees by role:', users);
             setEmployees(users)
-            // Do something with the fetched users
         })
         .catch(error => {
             console.error('Error fetching users by role:', error.message);
-            // Handle the error
+            
         });
 
         const fetchData = async () => {
@@ -115,7 +117,7 @@ function AdminEstablishment() {
             const response = await fetch('http://localhost:8888/api/establishments', {
             method: "GET",
             headers: {
-                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                'Authorization': `Bearer ${token}`, 
             },
             });
             const data = await response.json();
@@ -135,31 +137,39 @@ function AdminEstablishment() {
     }, []);
 
     const handleCreateEstablishment = async (event) => {
-        event.preventDefault();
-        console.log(selectedEstablishment)
-        if (Object.keys(selectedEstablishment.provider).length === 0) {
-            console.log(providers[0]);
-            selectedEstablishment.provider = providers[0]
-        }
         try {
+            event.preventDefault();
+            if (Object.keys(selectedEstablishment.provider).length === 0) {
+                console.log(providers[0]);
+                selectedEstablishment.provider = providers[0];
+            }
+
             const url = `http://localhost:8888/api/establishments`;
+    
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(selectedEstablishment),
             });
-            const data = await response.json();
-            console.log('Creation successful', data);
+    
+            if (!response.ok) {
+                throw new Error('Failed to create establishment');
+            }
 
+            const data = await response.json();
+
+            console.log('Creation successful', data);
             setEstablishments(prevEstablishments => [...prevEstablishments, data]);
+    
             handleCloseNewModal();
         } catch (error) {
             console.error('Error creating establishment:', error);
         }
     };
+    
 
     const handleUpdateEstablishment = async (event) => {
         event.preventDefault();
