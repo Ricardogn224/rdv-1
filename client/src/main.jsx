@@ -7,7 +7,7 @@ import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
-import Dashboard_admin from './components/Provider/Dashboard.jsx'
+import DashboardProvider from './components/Provider/Dashboard.jsx'
 
 
 
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <Dashboard_admin/>,
+        element: <DashboardProvider/>,
       },
       {
         path: "*",

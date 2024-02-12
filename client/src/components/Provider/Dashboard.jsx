@@ -1,11 +1,10 @@
 import React from 'react';
-import NavbarAdmin from '../admin/Navbar';
-import HeaderAdmin from '../admin/Header';
-import Dashboard_content from '../admin/Dashboard_content';
+import NavbarAdmin from 'Navbar.jsx';
+import HeaderAdmin from 'Header.jsx';
+import Dashboard_content from 'Dashboard_content.jsx';
 
-import Footer from '../Footer';
 
-function Home() {
+function DashboardProvider() {
   return (
       <>
         <NavbarAdmin />
@@ -16,4 +15,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default DashboardProvider;

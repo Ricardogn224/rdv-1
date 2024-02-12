@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../assets/css/header_admin.css';
 
-function Header() {
+function HeaderAdmin() {
   return (
     <header>
       
@@ -12,4 +12,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderAdmin;
