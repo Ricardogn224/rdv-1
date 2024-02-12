@@ -34,7 +34,7 @@ class ProvisionEmployee
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read', 'planningRdv:read'])]
     #[ORM\ManyToOne(inversedBy: 'employeeProvisions', cascade: ['persist'])]
     private ?Provision $provision = null;
 

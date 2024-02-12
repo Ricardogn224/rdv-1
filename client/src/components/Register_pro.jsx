@@ -13,7 +13,7 @@ function Register_pro() {
     dateOfBirth: '',
     email: '',
     plainPassword: '',
-    accountType: 'normal', // Assuming a default value
+    accountType: 'provider', // Assuming a default value
     kbis: '',
   });
 
@@ -31,7 +31,7 @@ function Register_pro() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8888/api/userProvider", {
+      const response = await fetch("http://localhost:8888/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

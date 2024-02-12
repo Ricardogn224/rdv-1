@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import '../assets/css/navbar.css';
+import { Navigate } from "react-router-dom";
+
 
 function Navbar() {
 
     const [username, setUsername] = useState("");
 
     useEffect(() => {
-
-      // Fetch the username from local storage
       const storedUsername = localStorage.getItem("username");
       // storedUsername = "user"
       if (storedUsername) {
@@ -19,7 +19,7 @@ function Navbar() {
         // Remove all from local storage
         localStorage.clear();
         setUsername(null);
-        window.location.href = "/";
+        return <Navigate to="/" />;
       };
 
   return (

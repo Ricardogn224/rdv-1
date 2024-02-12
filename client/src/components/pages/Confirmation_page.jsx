@@ -1,13 +1,10 @@
 import React from "react";
 import "../../assets/css/confirmation_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
-import Navbar_user_log from "../Navbar_user_log";
-import Footer from "../Footer";
 
 function Confirm_page() {
   return (
     <>
-      <Navbar_user_log />
       <div className="flex-center flex-column rdv_list">
         <div className="encadre w-700 ma-20">
           <div class="proposition">
@@ -104,7 +101,6 @@ function Confirm_page() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }

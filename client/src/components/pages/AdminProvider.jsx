@@ -3,6 +3,7 @@ import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
+import Navbar from '../navbar'
 
 
 function AdminProvider() {
@@ -93,7 +94,7 @@ function AdminProvider() {
   return (
 
     <>
-        <Navbar_user_log />
+        <Navbar />
         <div className='title-admin-page'>
             <h1>Gestion prestataires</h1>
         </div>
@@ -138,7 +139,7 @@ function AdminProvider() {
                                     <input type="hidden" name="_token" value="{{ csrf_token('edit_level' ~ user.id) }}">
                                     <input type="hidden" name="roleVal" value="">
                                     <button className="btn valid-button">Valider</button>
-                        </form>*/}
+                                </form>*/}
 
                                 {displayCancel && editableIndex === index && (
                                     <a href="#" className="cancel-user-icon" onClick={() => setDisplayCancel(false)}>
