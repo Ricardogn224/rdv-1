@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import '../../assets/css/rdv_page.css';
 import medecinImage from '../../assets/portrait-docteur.jpg';
+import { useNavigate } from 'react-router-dom';
 
 function Rdv_page() {
+
 
   const now = new Date();
     console.log(now);
@@ -64,30 +66,36 @@ function Rdv_page() {
             },
         ];
         setRdv(rdv);
+
+        
     }, [])
 
     useEffect(() => {
         const oldrdv =[
             {
                 id: 1,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 2,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 3,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 4,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
@@ -95,6 +103,15 @@ function Rdv_page() {
         ];
         setOldrdv(oldrdv);
     }, [])
+
+        const navigate = useNavigate();
+
+        const MedecinRdv = (medecinId) => () => {
+          navigate(`/medecin/${medecinId}`);
+        };
+
+
+
 
 
 
@@ -126,6 +143,11 @@ function Rdv_page() {
                         <p>{oldrdv.date}</p>
                       </div>
                     </div>
+                    <div className="m-4">
+                      <button onClick={MedecinRdv(oldrdv.medecinid)}>
+                        Reprendre rendez-vous
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>
@@ -151,7 +173,7 @@ function Rdv_page() {
                   </div>
                   <div className="propositionrdv">
                     <div className="flex flex-row items-center">
-                      <div className="zone-vide "></div>
+                      <div className="zone-vide"></div>
                       <div className="text">
                         <h4>Le détail de votre rendez-vous</h4>
                         <p>{rdv.date}</p>
@@ -167,7 +189,6 @@ function Rdv_page() {
             ))}
           </div>
         </div>
-
       </>
     );
 }

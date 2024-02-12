@@ -14,13 +14,14 @@ function Motif_page() {
     const [motif, setMotif] = useState([]);
     const [patient, setPatient] = useState([]);
     const storedUsername = localStorage.getItem("username");
+    const token = localStorage.getItem("jwtToken")
 
 
     const [formValues, setFormValues] = useState({
-      provision_employee_id: motif.name,
-      patient_email: storedUsername,
+      provision_employee_id: 1,
+      patient_id: 1,
       hour: "12h40",
-      date: "30 janvier 2024",
+      date: "30 janv",
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -104,16 +105,20 @@ function Motif_page() {
           console.log(formValues);
 
           try {
-            const response = await fetch("http://localhost:8888/api/planning/rdv", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formValues),
-            });
+            const response = await fetch(
+              "http://localhost:8888/api/planning/rdv",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(formValues),
+              }
+            );
       
             if (response.ok) {
-              console.log('Registration successful');
+              console.log('Rdv successful');
               // navigate("/confirmation_page");
             } else {
               console.error('RDV failed:', await response.text());

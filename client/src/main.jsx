@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/provider/:id",
+        path: "/medecin/:id",
         element: <Provider />,
       },
       {
