@@ -87,8 +87,9 @@ jobs:
       - name: Deploy code to server
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker-compose up -d"
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker compose exec php bin/console composer install && docker compose exec php bin/console d:d:d --force && docker compose exec php bin/console d:d:c && docker compose exec php bin/console make:migration && docker compose exec php bin/console d:m:m && docker compose exec php bin/console doctrine:fixtures:load"  
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker compose exec php bin/console composer install"  
 
+          
       - name: Deploy front code
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/client && docker-compose up -d" 
