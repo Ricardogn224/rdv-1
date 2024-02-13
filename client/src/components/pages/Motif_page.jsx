@@ -24,12 +24,13 @@ function Motif_page() {
 
     const [motif, setMotif] = useState([]);
     const [dateRdv, setDateRdv] = useState('');
+    // const [parsedAppointmentDetail, setParsedAppointmentDetail] = useState(null);
     const storedUsername = localStorage.getItem("username");
     const token = localStorage.getItem("jwtToken")
 
 
     const [formValues, setFormValues] = useState({
-      provision_employee_id: 1,
+      provision_employee_id: 3,
       patient_email: storedUsername,
       hour: "parsedAppointmentDetail.heure",
       date: "parsedAppointmentDetail.date",
@@ -173,10 +174,10 @@ function Motif_page() {
                   </svg>
                   <div className="text">
                     <h4>Le détail de votre rendez-vous</h4>
-                    {dateRdv !== '' ? (
-                        <p>{dateRdv}</p>
+                    {dateRdv !== "" ? (
+                      <p>{dateRdv}</p>
                     ) : (
-                        <p>Aucune date sélectionnée</p>
+                      <p>Aucune date sélectionnée</p>
                     )}
                   </div>
                 </div>
@@ -222,7 +223,6 @@ function Motif_page() {
               </div>
             )}
 
-
             {currentStep === 2 && (
               <div className="flex-center flex-column rdv_list step-3">
                 <div className="encadre w-700 ma-20">
@@ -250,10 +250,10 @@ function Motif_page() {
                     </svg>
                     <div className="text">
                       <h4>Le détail de votre rendez-vous</h4>
-                      {appointmentDetail ? (
-                        <p>{`${appointmentDetail.jour.jour} ${appointmentDetail.jour.date} : ${appointmentDetail.heure}`}</p>
+                      {dateRdv !== "" ? (
+                        <p>{dateRdv}</p>
                       ) : (
-                        <p>Appointment details not available</p>
+                        <p>Aucune date sélectionnée</p>
                       )}
                     </div>
                   </div>
@@ -325,7 +325,6 @@ function Motif_page() {
             )}
           </form>
         </div>
-
       </>
     );
   }
