@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\EstablishmentController;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,35 +21,51 @@ use Doctrine\ORM\Mapping as ORM;
     normalizationContext: ['groups' => ['establishment:read']],
     operations: [
         new GetCollection(),
-        new Post(),
-    new Get(/*security: 'is_granted("VIEW", object)',*/),
-        new Patch(denormalizationContext: ['groups' => ['establishment:write:update']], security: 'is_granted("EDIT", object)',),
+        new Post(
+            denormalizationContext: ['groups' => ['establishment:write']],
+            normalizationContext: ['groups' => ['establishment:read']],
+            /*security: 'is_granted("EDIT", object)'*/
+            controller: EstablishmentController::class,
+            read: false,
+            write:false
+        ),
+        new Get(normalizationContext: ['groups' => ['establishment:read', 'establishment:read:full']], /*security: 'is_granted("VIEW", object)',*/),
+        new Patch(
+            denormalizationContext: ['groups' => ['establishment:write:update']],
+            normalizationContext: ['groups' => ['establishment:read']],
+            /*security: 'is_granted("EDIT", object)'*/
+            controller: EstablishmentController::class,
+            read: false),
     ],
 )]
 #[ORM\Table(name: '`establishment`')]
 #[ORM\Entity()]
 class Establishment
 {
-    #[Groups(['provision:write'])]
+    #[Groups(['provision:write', 'establishment:read',])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:read', 'planningEmployee:read', 'planningDoctor:read'])]
+    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:write:update',
+    'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['establishment:write', 'establishment:read', 'planningEmployee:read', 'planningDoctor:read'])]
+    #[Groups(['establishment:write', 'establishment:write:update', 'establishment:read', 'planningEmployee:read',
+    'planningDoctor:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
     #[ORM\OneToMany(mappedBy: 'Establishment', targetEntity: Provision::class)]
     private Collection $provisions;
 
+    #[Groups(['establishment:read',  'establishment:write', 'establishment:write:update', 'establishment:read:full'])]
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     private ?User $provider = null;
 
+    #[Groups(['establishment:read', 'establishment:write', 'establishment:write:update', 'establishment:read:full'])]
     #[ORM\OneToMany(mappedBy: 'establishmentEmployee', targetEntity: User::class)]
     private Collection $employees;
 

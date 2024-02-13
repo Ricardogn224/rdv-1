@@ -11,7 +11,6 @@ function Login() {
       const [emailError, setEmailError] = useState("");
       const [passwordError, setPasswordError] = useState("");
 
-
     // Gérez les modifications des champs d'entrée
     const inputEmail = (e) => {
       setValueEmail(e.target.value);
@@ -78,7 +77,7 @@ function Login() {
         if (decodedToken) {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
-          //navigate("/search_page");
+          navigate("/search_page");
         }
       } else {
         // Gérer l'échec de la connexion

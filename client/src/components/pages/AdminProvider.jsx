@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
@@ -37,7 +36,7 @@ function AdminProvider() {
         }
     };
 
-    const handleValidateClick = (id) => {
+    const handleValidateClick = (id, index) => {
         console.log(id)
         // Perform a PATCH request to update provider.active
         const url = `http://localhost:8888/api/users/${id}`;
@@ -45,6 +44,7 @@ function AdminProvider() {
           active: selectedStatus === 'actif', // Assuming 'actif' means true and 'inactif' means false
         };
       
+        console.log(updatedData)
         fetch(url, {
           method: 'PATCH',
           headers: {
@@ -56,7 +56,12 @@ function AdminProvider() {
         .then(response => response.json())
         .then(data => {
           // Handle the response data if needed
-          console.log('Update successful', data);
+            console.log('Update successful', data);
+            setEditableIndex(null)
+            // Update the providers array with the modified data
+            const updatedProviders = [...providers]; // Create a copy of the original providers array
+            updatedProviders[index] = data; // Replace the provider at the specified index with the updated data
+            setProviders(updatedProviders); // Update the state with the modified providers array
         })
         .catch(error => {
           // Handle errors
@@ -70,25 +75,33 @@ function AdminProvider() {
     console.log(localStorage.getItem('jwtToken'));
 
     useEffect(() => {
+    
         const fetchData = async () => {
-        try {
-            
-
-            const response = await fetch('http://localhost:8888/api/users', {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
-            },
-            });
-            const data = await response.json();
-            console.log(data);
-            setProviders(data['hydra:member']);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+            try {
+                const response = await fetch('http://localhost:8888/api/users', {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                    },
+                });
+    
+                const data = await response.json();
+                console.log(data);
+                
+                // Update state only if component is mounted
+                if (data.length !== 0) {
+                    setProviders(data['hydra:member']);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
-
-        fetchData();
+    
+        // Fetch data only if component is mounted
+        if (providers.length === 0) {
+            fetchData();
+        }
+    
     }, []);
 
   return (
@@ -129,7 +142,7 @@ function AdminProvider() {
                                 </select>
                             </div>
                             <div className="user-info actions">
-                            <a href="#" className="edit-user-icon" onClick={() => handleEditClick(index)}>
+                            <a className="edit-user-icon" onClick={() => handleEditClick(index)}>
                                 Modifier
                             </a>
                                 <a href="#" className="edit-user-icon">Supprimer</a>
@@ -142,14 +155,14 @@ function AdminProvider() {
                                 </form>*/}
 
                                 {displayCancel && editableIndex === index && (
-                                    <a href="#" className="cancel-user-icon" onClick={() => setDisplayCancel(false)}>
+                                    <a className="cancel-user-icon cursor-pointer" onClick={() => setDisplayCancel(false)}>
                                     Annuler
                                     </a>
                                 )}
 
 
                                 {displayCancel && editableIndex === index && (
-                                    <a href="#" className="validate-user-icon"  onClick={() => handleValidateClick(provider.id)}>
+                                    <a className="validate-user-icon cursor-pointer"  onClick={() => handleValidateClick(provider.id, index)}>
                                     Valider
                                     </a>
                                 )}

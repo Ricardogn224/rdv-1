@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
@@ -11,24 +10,78 @@ Modal.setAppElement('#root');
 function AdminUser() {
 
     const [providers, setProviders] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [establishments, setEstablishments] = useState([]);
 
-    const [newUser, setNewUser] = useState({
+    const bodyUser = {
         email: '',
         lastname: '',
         firstname: '',
-        roles: ['ROLE_USER'],
-    });
+        dateOfBirth: '',
+        plainPassword: '',
+        accountType: "normal",
+    }
+
+    const [newUser, setNewUser] = useState(bodyUser);
+    const [selectedUser, setSelectedUser] = useState(bodyUser);
 
     
-    const handleInputChange = (e) => {
+    const handleInputChange = (e, userType) => {
         const { name, value } = e.target;
-        setSelectedUser((prevUser) => ({
-            ...prevUser,
-            [name]: value,
-        }));
+
+        if (userType === 'selectedUser') {
+
+            if (name === 'roles') {
+
+                var updatedValue = [""]
+    
+                switch (value) {
+                    case 'admin':
+                        updatedValue = ['ROLE_ADMIN'];
+                        break;
+                    case 'user':
+                        updatedValue = ['ROLE_USER'];
+                        break;
+                    case 'provider':
+                        updatedValue = ['ROLE_PROVIDER'];
+                        break;
+                    case 'employee':
+                        updatedValue = ['ROLE_EMPLOYEE'];
+                        break;
+                    default:
+                        break;
+                }
+    
+                setSelectedUser((prevUser) => ({
+                    ...prevUser,
+                    roles: updatedValue,
+                    accountType: value
+                }));
+    
+            } else {
+                setSelectedUser((prevUser) => ({
+                    ...prevUser,
+                    [name]: value,
+                }));
+            }
+
+        } else if (userType === 'newUser') {
+            
+            setNewUser(prevNewUser => ({
+                ...prevNewUser,
+                [name]: value,
+            }));
+
+            if (name === 'roles') {
+                setNewUser(prevNewUser => ({
+                    ...prevNewUser,
+                    accountType: value
+                }));
+            }
+        }
+
+        
     };
 
     const token = localStorage.getItem('jwtToken');
@@ -46,17 +99,47 @@ function AdminUser() {
             });
             const data = await response.json();
             console.log(data);
-            setProviders(data['hydra:member']);
+            if (data.length !== 0) {
+                setProviders(data['hydra:member']);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
         };
 
-        fetchData();
+        if (providers.length === 0) {
+            fetchData();
+        }
+        
     }, []);
 
+    const fetchEstablishments = async () => {
+        try {
+            
+
+            const response = await fetch('http://localhost:8888/api/establishments', {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+            },
+            });
+            const data = await response.json();
+            console.log(data);
+            if (data.length !== 0) {
+                setEstablishments(data['hydra:member']);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        };
+
+        if (establishments.length === 0) {
+            fetchEstablishments();
+        }
+
     const handleModifierClick = (user) => {
-        setSelectedUser(user);
+        setSelectedUser({ ...bodyUser, ...user });
+        console.log(selectedUser)
         setIsEditMode(true);
     };
 
@@ -65,11 +148,39 @@ function AdminUser() {
         setIsEditMode(false);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Add your logic to handle form submission here
-        // You may want to send an API request to update the user data
-        setIsEditMode(false);
+        try {
+            const url = `http://localhost:8888/api/users/${selectedUser.id}`;
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/merge-patch+json',
+                    'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                },
+                body: JSON.stringify(selectedUser),
+            });
+            const data = await response.json();
+            console.log('Update successful', data);
+
+            setProviders(prevProviders => {
+                const updatedProviders = prevProviders.map(provider => {
+                    if (provider.id === selectedUser.id) {
+                        return {
+                            ...provider,
+                            ...data // Include the entire data object
+                        };
+                    } else {
+                        return provider;
+                    }
+                });
+                return updatedProviders;
+            });
+
+            setIsEditMode(false);
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
     };
 
     const handleNewUser = () => {
@@ -78,19 +189,30 @@ function AdminUser() {
 
     const handleCloseNewModal = () => {
         setIsNewModalOpen(false);
-        setNewUser({
-            email: '',
-            lastname: '',
-            firstname: '',
-            roles: ['ROLE_USER'],
-        });
+        setNewUser(bodyUser);
     };
 
-    const handleCreateUser = () => {
-        // Add your logic to handle creating a new user
-        // You may want to send an API request to create a new user
-        // After creating the user, close the modal
-        handleCloseNewModal();
+    const handleCreateUser = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8888/api/users', {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newUser),
+            });
+            const data = await response.json();
+            if (data.length !== 0) {
+                console.log('User created:', data);
+                setProviders(prevProviders => [...prevProviders, data]);
+                handleCloseNewModal();
+            }
+            
+        } catch (error) {
+            console.error('Error creating user:', error);
+        }
     };
 
   return (
@@ -120,8 +242,9 @@ function AdminUser() {
                                 <input
                                     type="text"
                                     id="email"
+                                    name="email"
                                     value={selectedUser.email}
-                                    onChange={handleInputChange}
+                                    onChange={(e) => handleInputChange(e, 'selectedUser')}
                                     className="border border-solid p-2 rounded"
                                 />
                             </div>
@@ -133,8 +256,9 @@ function AdminUser() {
                                 <input
                                     type="text"
                                     id="lastname"
+                                    name="lastname"
                                     value={selectedUser.lastname}
-                                    onChange={handleInputChange}
+                                    onChange={(e) => handleInputChange(e, 'selectedUser')}
                                     className="border border-solid p-2 rounded"
                                 />
                             </div>
@@ -146,8 +270,9 @@ function AdminUser() {
                                 <input
                                     type="text"
                                     id="firstname"
+                                    name="firstname"
                                     value={selectedUser.firstname}
-                                    onChange={handleInputChange}
+                                    onChange={(e) => handleInputChange(e, 'selectedUser')}
                                     className="border border-solid p-2 rounded"
                                 />
                             </div>
@@ -158,13 +283,17 @@ function AdminUser() {
                                 </label>
                                 <select
                                     id="roles"
-                                    value={selectedUser.roles[0]}
-                                    onChange={handleInputChange}
+                                    name="roles"
+                                    value={selectedUser.roles[0] === 'ROLE_ADMIN' ? 'admin' :
+                                    selectedUser.roles[0] === 'ROLE_USER' ? 'normal' : 
+                                    selectedUser.roles[0] === 'ROLE_PROVIDER' ? 'provider' : 'employee'}
+                                    onChange={(e) => handleInputChange(e, 'selectedUser')}
                                     className="border border-solid p-2 rounded w-6/12"
                                 >
-                                    <option value="ROLE_USER">ROLE_USER</option>
-                                    <option value="ROLE_PROVIDER">ROLE_PROVIDER</option>
-                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                    <option value="user">ROLE_USER</option>
+                                    <option value="provider">ROLE_PROVIDER</option>
+                                    <option value="admin">ROLE_ADMIN</option>
+                                    <option value="employee">ROLE_EMPLOYEE</option>
                                 </select>
                             </div>
                 
@@ -207,18 +336,23 @@ function AdminUser() {
                             <div className="user-info"><p>{provider.lastname}</p></div>
                             <div className="user-info"><p>{provider.firstname}</p></div>
                             <div className="user-info">
-                                <select value={provider.roles[0]}
-                                disabled={true}>
-                                    <option value="ROLE_USER">ROLE_USER</option>
-                                    <option value="ROLE_PROVIDER">ROLE_PROVIDER</option>
-                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                            <select
+                                value={provider.roles[0] === 'ROLE_ADMIN' ? 'admin' :
+                                provider.roles[0] === 'ROLE_USER' ? 'normal' : 
+                                provider.roles[0] === 'ROLE_PROVIDER' ? 'provider' : 'employee'}
+                                disabled={true}
+                            >
+                                    <option value="user">ROLE_USER</option>
+                                    <option value="provider">ROLE_PROVIDER</option>
+                                    <option value="admin">ROLE_ADMIN</option>
+                                    <option value="employee">ROLE_EMPLOYEE</option>
                                 </select>
                             </div>
                             <div className="user-info actions">
-                            <a href="#" className="edit-user-icon"  onClick={() => handleModifierClick(provider)}>
+                            <a className="edit-user-icon"  onClick={() => handleModifierClick(provider)}>
                                 Modifier
                             </a>
-                                <a href="#" className="edit-user-icon">Supprimer</a>
+                                <a className="edit-user-icon">Supprimer</a>
                             </div>
                             <div className="user-info">
                             </div>
@@ -237,7 +371,7 @@ function AdminUser() {
                 className='absolute flex justify-center bottom-20 left-0 top-10 right-0 bg-white bg-opacity-60 overflow-hidden transform transition-transform duration-300 ease-out'
                 overlayClassName='bg-black bg-opacity-50'
             >
-                <div className='w-9/12 bg-white border border-black border-solid rounded-tl-2xl rounded-tr-2xl'>
+                <div className='w-9/12 bg-white border border-black border-solid rounded-tl-2xl rounded-tr-2xl overflow-x-scroll'>
                     <h2 className='text-xl font-bold mb-4'>Nouvel utilisateur</h2>
                     <form onSubmit={handleCreateUser} className='space-y-4 p-9'>
                         <div className="flex flex-col">
@@ -247,8 +381,9 @@ function AdminUser() {
                             <input
                                 type="text"
                                 id="email"
+                                name="email"
                                 value={newUser.email}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
                                 className="border border-solid p-2 rounded"
                             />
                         </div>
@@ -260,8 +395,9 @@ function AdminUser() {
                             <input
                                 type="text"
                                 id="lastname"
+                                name="lastname"
                                 value={newUser.lastname}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
                                 className="border border-solid p-2 rounded"
                             />
                         </div>
@@ -273,8 +409,23 @@ function AdminUser() {
                             <input
                                 type="text"
                                 id="firstname"
+                                name="firstname"
                                 value={newUser.firstname}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
+                                className="border border-solid p-2 rounded"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="dateOfBirth" className="mb-1 text-sm font-semibold">
+                                Date de naissance:
+                            </label>
+                            <input
+                                type="date"
+                                id="dateOfBirth"
+                                name="dateOfBirth"
+                                value={newUser.dateOfBirth}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
                                 className="border border-solid p-2 rounded"
                             />
                         </div>
@@ -285,15 +436,54 @@ function AdminUser() {
                             </label>
                             <select
                                 id="roles"
-                                value={newUser.roles[0]}
-                                onChange={handleInputChange}
+                                name="roles"
+                                value={newUser.accountType}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
                                 className="border border-solid p-2 rounded w-6/12"
                             >
-                                <option value="ROLE_USER">ROLE_USER</option>
-                                <option value="ROLE_PROVIDER">ROLE_PROVIDER</option>
-                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                <option value="user">ROLE_USER</option>
+                                <option value="provider">ROLE_PROVIDER</option>
+                                <option value="admin">ROLE_ADMIN</option>
+                                <option value="employee">ROLE_EMPLOYEE</option>
                             </select>
                         </div>
+
+                        {newUser.accountType === 'employee' && (
+                            <div className="flex flex-col">
+                                <label htmlFor="establishment" className="mb-1 text-sm font-semibold">
+                                    Établissement:
+                                </label>
+                                <select
+                                    id="establishment"
+                                    name="establishment"
+                                    value={newUser.establishment}
+                                    onChange={(e) => handleInputChange(e, 'newUser')}
+                                    className="border border-solid p-2 rounded"
+                                >
+                                    {/* Populate options with establishments */}
+                                    {establishments.map(establishment => (
+                                        <option key={establishment.id} value={establishment.id}>
+                                            {establishment.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        <div className="flex flex-col">
+                            <label htmlFor="password" className="mb-1 text-sm font-semibold">
+                                Mot de passe:
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="plainPassword"
+                                value={newUser.plainPassword}
+                                onChange={(e) => handleInputChange(e, 'newUser')}
+                                className="border border-solid p-2 rounded"
+                            />
+                        </div>
+
                         <div className='flex space-x-4'>
                             <button type='submit' className='bg-blue-500 text-white px-4 py-2 rounded'>
                                 Créer

@@ -45,6 +45,7 @@ class Appointment
     private ?User $appointmentUser = null;
 
 
+    #[Groups(['appointment:read', 'appointment:write'])]
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
     private ?PlanningDoctor $planningDoctor = null;
 

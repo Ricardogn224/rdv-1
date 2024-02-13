@@ -15,23 +15,24 @@ import PlanningProvider from './components/Provider/PlanningProvider.jsx'
 import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
 import EmployeeRdvProvider from './components/Provider/EmployeeRdvProvider.jsx'
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import Provider from "./components/pages/Provider.jsx";
 import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
 import HeaderProvider from './components/Provider/HeaderProvider.jsx';
 
 
 
+import Admin from './components/pages/Admin.jsx'
+import AdminProvider from './components/pages/AdminProvider.jsx'
+import AdminUser from './components/pages/AdminUser.jsx'
+import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
+import AdminProvision from "./components/pages/AdminProvision.jsx";
+import Employee from "./components/pages/Employee.jsx";
 
 import {
   createBrowserRouter,
   Outlet,
   RouterProvider,
 } from "react-router-dom";
-import Admin from './components/pages/Admin.jsx'
-import AdminProvider from './components/pages/AdminProvider.jsx'
-import AdminUser from './components/pages/AdminUser.jsx'
-
 
 
 const router = createBrowserRouter([
@@ -48,8 +49,8 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/provider/:id",
-        element: <Provider />,
+        path: "/medecin/:id",
+        element: <Employee />,
       },
       {
         path: "/search_page",
@@ -64,11 +65,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute requiredRole="ROLE_USER">
-          <Navbar />
-          <Outlet />
-          <Footer />
-      </ProtectedRoute>
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
     ),
     children: [
       {
@@ -76,7 +77,7 @@ const router = createBrowserRouter([
         element: <Rdv_page />,
       },
       {
-        path: "motif_page",
+        path: "rdv",
         element: <Motif_page />,
       },
       {
@@ -121,6 +122,14 @@ const router = createBrowserRouter([
       {
         path: "user",
         element: <AdminUser />,
+      },
+      {
+        path: "establishment",
+        element: <AdminEstablishment />,
+      },
+      {
+        path: "provision",
+        element: <AdminProvision />,
       },
     ],
   },

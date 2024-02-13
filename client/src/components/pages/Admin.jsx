@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar_user_log from '../Navbar_user_log'
+import Navbar from '../navbar'
 import SearchForm from '../SearchForm'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
@@ -38,7 +38,7 @@ function Admin() {
   return (
 
     <>
-      <Navbar_user_log />
+      <Navbar />
         <div className='title-admin-page'>
             <h1>Interface administrateur</h1>
         </div>
@@ -46,10 +46,10 @@ function Admin() {
         <div className='admin-home-container'>
             <ButtonAdmin 
                 txtButton="Gestion des prestataires"
-                route="/admin_provider" />
+                route="/admin/admin_provider" />
             <ButtonAdmin 
                 txtButton="Gestion des utilisateurs"
-                route="/admin_user" />
+                route="/admin/user" />
         </div>
         
       <Footer />
