@@ -56,11 +56,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-<>
-          <Navbar />
-          <Outlet />
-          <Footer />
-          </>
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
     ),
     children: [
       {
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
         element: <Rdv_page />,
       },
       {
-        path: "motif_page",
+        path: "rdv",
         element: <Motif_page />,
       },
       {

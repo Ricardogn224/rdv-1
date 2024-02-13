@@ -23,7 +23,6 @@ function Motif_page() {
 
 
     const [motif, setMotif] = useState([]);
-    const [dateRdv, setDateRdv] = useState("");
     const [patient, setPatient] = useState([]);
     const storedUsername = localStorage.getItem("username");
     const token = localStorage.getItem("jwtToken")
@@ -86,13 +85,6 @@ function Motif_page() {
         ];
         setMotif(motif);
 
-        const patient = [
-          {
-            id: 1,
-            name: "Pierre DUPONT",
-          },
-        ];
-        setPatient(patient);
     }, []);
 
 
@@ -111,11 +103,6 @@ function Motif_page() {
           const selectedMotifName = motif.find(
             (m) => m.name === formValues.motif
           )?.name;
-
-          const selectedPatientName = patient.find(
-            (p) => p.name === formValues.patient
-          )?.name;
-
         
 
         const handleSubmit = async (event) => {
@@ -138,7 +125,7 @@ function Motif_page() {
       
             if (response.ok) {
               console.log('Rdv successful');
-              // navigate("/confirmation_page");
+              navigate("/rdv_page");
             } else {
               console.error('RDV failed:', await response.text());
             }
@@ -160,7 +147,7 @@ function Motif_page() {
       <>
         <div className="flex-center flex-column rdv_list">
           <form onSubmit={handleSubmit}>
-            {currentStep < 3 && (
+            {currentStep < 2 && (
               <div className="encadre w-700 ma-20">
                 <div className="proposition">
                   <img src={medecinImage} alt="" />
@@ -196,7 +183,7 @@ function Motif_page() {
               </div>
             )}
 
-            {currentStep < 3 ? (
+            {currentStep < 2 ? (
               <div className="title ma-10">
                 <p>Renseignez les informations suivantes</p>
               </div>
@@ -235,37 +222,8 @@ function Motif_page() {
               </div>
             )}
 
+
             {currentStep === 2 && (
-              <div className="encadre w-700 ma-20 step-2">
-                <div className="p-30">
-                  <div className="ma-11">
-                    <h4>Pour qui est ce rendez-vous?</h4>
-                  </div>
-
-                  <div className="patient_list">
-                    <div className="flex-column">
-                      {patient.map((patient) => (
-                        <div className="patient" key={patient.id}>
-                          <input
-                            type="radio"
-                            name="patient"
-                            id={`patient-${patient.id}`}
-                            value={patient.name}
-                            onChange={handleInputChange}
-                            checked={formValues.patient === patient.name}
-                          />
-                          <label htmlFor={`patient-${patient.id}`}>
-                            {patient.name}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
               <div className="flex-center flex-column rdv_list step-3">
                 <div className="encadre w-700 ma-20">
                   <div className="proposition">
@@ -317,13 +275,11 @@ function Motif_page() {
                         />
                       </svg>
                       <div className="text">
-                        <h4>Pour</h4>
-                        <p>{selectedPatientName || "Nom non sélectionné"}</p>
+                        <p>{storedUsername}</p>
                         <p>{selectedMotifName || "Nom non sélectionné"}</p>
                       </div>
                     </div>
 
-                    <br />
                     {/* <div className="flex-column">
                       <div className="flex-center">
                         <input
@@ -362,13 +318,6 @@ function Motif_page() {
             )}
 
             {currentStep === 2 && (
-              <div className="encadre-2 w-700 ma-20 suivant">
-                <button onClick={goToPreviousStep}>RETOUR</button>
-                <button onClick={goToNextStep}>CONTINUER</button>
-              </div>
-            )}
-
-            {currentStep === 3 && (
               <div className="encadre-2 w-700 ma-20 suivant">
                 <button onClick={goToPreviousStep}>RETOUR</button>
                 <button type="submit">VALIDER</button>
