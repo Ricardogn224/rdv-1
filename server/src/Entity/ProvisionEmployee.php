@@ -41,7 +41,7 @@ class ProvisionEmployee
     #[ORM\OneToMany(mappedBy: 'provisionEmployee', targetEntity: Appointment::class)]
     private Collection $appointments;
 
-    #[Groups(['provision:write', 'provision:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read'])]
     #[ORM\ManyToOne(inversedBy: 'provisionEmployees')]
     private ?User $employee = null;
 

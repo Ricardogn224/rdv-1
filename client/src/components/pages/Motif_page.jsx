@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/motif_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
 import { useNavigate } from "react-router-dom";
+import { parse, format } from 'date-fns';
 
 
 
@@ -10,8 +11,19 @@ function Motif_page() {
 
     const navigate = useNavigate();
 
+    const dayAbbreviationsToFullName = {
+      'DIM': 'Dimanche',
+      'LUN': 'Lundi',
+      'MAR': 'Mardi',
+      'MER': 'Mercredi',
+      'JEU': 'Jeudi',
+      'VEN': 'Vendredi',
+      'SAM': 'Samedi',
+  };
+
 
     const [motif, setMotif] = useState([]);
+    const [dateRdv, setDateRdv] = useState("");
     const [patient, setPatient] = useState([]);
     const storedUsername = localStorage.getItem("username");
     const token = localStorage.getItem("jwtToken")
@@ -19,9 +31,9 @@ function Motif_page() {
 
     const [formValues, setFormValues] = useState({
       provision_employee_id: 1,
-      patient_id: 1,
-      hour: "12h40",
-      date: "30 janv",
+      patient_email: storedUsername,
+      hour: "parsedAppointmentDetail.heure",
+      date: "parsedAppointmentDetail.date",
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -35,16 +47,23 @@ function Motif_page() {
 
 
     const [appointmentDetail, setAppointmentDetail] = useState(null);
+
+    
     
 
     useEffect(() => {
 
         const storedAppointmentDetail = localStorage.getItem("reservationDataRdv");
+        console.log(storedAppointmentDetail)
 
         if (storedAppointmentDetail) {
           // Parse the stored JSON string to get the object
           const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
           setAppointmentDetail(parsedAppointmentDetail);
+          
+          const fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
+          setDateRdv(fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure)
+    
         }
 
         const motif = [
@@ -167,7 +186,11 @@ function Motif_page() {
                   </svg>
                   <div className="text">
                     <h4>Le détail de votre rendez-vous</h4>
-                    <p>Jeudi 10 Août 2023 : 12h40</p>
+                    {dateRdv !== '' ? (
+                        <p>{dateRdv}</p>
+                    ) : (
+                        <p>Aucune date sélectionnée</p>
+                    )}
                   </div>
                 </div>
               </div>
