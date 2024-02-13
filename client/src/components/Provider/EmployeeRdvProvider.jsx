@@ -3,13 +3,13 @@ import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
-import Navbar from '../navbar'
+import NavbarProvider from './NavbarProvider';
 import medecinsData from '../../assets/sample.json';
 import MedecinList from '../MedecinList'
 import { useParams } from 'react-router-dom';
 
 
-function EmployeeRdvProvider() {
+function EmployeeRdv() {
 
   const { id } = useParams();
 
@@ -124,12 +124,15 @@ function EmployeeRdvProvider() {
   }, []);
 
   return (
-
-    <>
-        <Navbar />
-        <div className='title-admin-page'>
-            <h1>Gestion Planning de</h1>
-        </div>
+    <main>
+        <section className="flex">
+            <section>
+                <NavbarProvider />
+            </section>
+            <section className="flex-1 p-4">
+            <div className='title-admin-page'>
+                <h1>Gestion Planning de</h1>
+            </div>
 
           <div>
             <h2>Ajouter congé</h2>
@@ -181,10 +184,11 @@ function EmployeeRdvProvider() {
               </div>
             </div>
           )}
-        
-      <Footer />
-    </>
+            </section>
+        </section>                  
+    </main>
+
   )
 };
 
-export default EmployeeRdvProvider;
+export default EmployeeRdv;

@@ -112,7 +112,7 @@ function MedecinList({ nom, poste, adresse, consultationVideo, planning }) {
                 )}
 
                 <div className="adresse">
-                    <p>{planning.establishmentEmployee.adress}</p>
+                   {/* <p>{planning.establishmentEmployee.adress}</p> */} 
                 </div>
             </div>
 
