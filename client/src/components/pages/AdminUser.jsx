@@ -18,6 +18,9 @@ function AdminUser() {
         firstname: '',
         dateOfBirth: '',
         plainPassword: '',
+        establishmentEmployee : {
+
+        },
         accountType: "normal",
     }
 
@@ -80,6 +83,16 @@ function AdminUser() {
         }
 
         
+    };
+
+    const handleEstablishmentSelection = (e) => {
+        const { value } = e.target;
+        const selectedEstablishment = establishments.find(establishment => establishment.name === value);
+    
+        setNewUser(prevNewUser => ({
+            ...prevNewUser,
+            establishmentEmployee: selectedEstablishment || { name: '' } // Set the provider to the selected provider or an empty object if not found
+        }));
     };
 
     const token = localStorage.getItem('jwtToken');
@@ -192,8 +205,19 @@ function AdminUser() {
 
     const handleCreateUser = async (event) => {
         event.preventDefault();
+
+        
+
         try {
-            const response = await fetch('http://localhost:8888/api/users', {
+            var url = '';
+
+            if (newUser.accountType === 'employee') {
+                url = 'http://localhost:8888/api/usersEmployee'
+            } else{
+                url = 'http://localhost:8888/api/users'
+            }
+
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -211,6 +235,7 @@ function AdminUser() {
         } catch (error) {
             console.error('Error creating user:', error);
         }
+        
     };
 
   return (
