@@ -51,6 +51,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/userEmployees',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
+        new Post(
+            uriTemplate: '/usersEmployee',
+        ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Get(
             uriTemplate: '/employeePlanning/{id}',
@@ -85,11 +88,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 

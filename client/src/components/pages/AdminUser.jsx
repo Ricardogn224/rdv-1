@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
@@ -13,6 +12,7 @@ function AdminUser() {
     const [providers, setProviders] = useState([]);
     const [isEditMode, setIsEditMode] = useState(false);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [establishments, setEstablishments] = useState([]);
 
     const bodyUser = {
         email: '',
@@ -112,6 +112,30 @@ function AdminUser() {
         }
         
     }, []);
+
+    const fetchEstablishments = async () => {
+        try {
+            
+
+            const response = await fetch('http://localhost:8888/api/establishments', {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+            },
+            });
+            const data = await response.json();
+            console.log(data);
+            if (data.length !== 0) {
+                setEstablishments(data['hydra:member']);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        };
+
+        if (establishments.length === 0) {
+            fetchEstablishments();
+        }
 
     const handleModifierClick = (user) => {
         setSelectedUser({ ...bodyUser, ...user });
@@ -423,6 +447,28 @@ function AdminUser() {
                                 <option value="employee">ROLE_EMPLOYEE</option>
                             </select>
                         </div>
+
+                        {newUser.accountType === 'employee' && (
+                            <div className="flex flex-col">
+                                <label htmlFor="establishment" className="mb-1 text-sm font-semibold">
+                                    Établissement:
+                                </label>
+                                <select
+                                    id="establishment"
+                                    name="establishment"
+                                    value={newUser.establishment}
+                                    onChange={(e) => handleInputChange(e, 'newUser')}
+                                    className="border border-solid p-2 rounded"
+                                >
+                                    {/* Populate options with establishments */}
+                                    {establishments.map(establishment => (
+                                        <option key={establishment.id} value={establishment.id}>
+                                            {establishment.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         <div className="flex flex-col">
                             <label htmlFor="password" className="mb-1 text-sm font-semibold">

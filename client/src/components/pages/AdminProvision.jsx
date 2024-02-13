@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'

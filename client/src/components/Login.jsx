@@ -77,7 +77,7 @@ function Login() {
         if (decodedToken) {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
-          //navigate("/search_page");
+          navigate("/search_page");
         }
       } else {
         // Gérer l'échec de la connexion
