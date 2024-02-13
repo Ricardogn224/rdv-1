@@ -9,9 +9,18 @@ import EmployeeRdv from "./components/pages/EmployeeRdv.jsx";
 import MyEmployees from "./components/pages/MyEmployees.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
+import DashboardProvider from './components/Provider/Dashboard.jsx'
+import EtablissementProvider from './components/Provider/EtablissementProvider.jsx'
+import PlanningProvider from './components/Provider/PlanningProvider.jsx'
+import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
+import EmployeeRdvProvider from './components/Provider/EmployeeRdvProvider.jsx'
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
+import HeaderProvider from './components/Provider/HeaderProvider.jsx';
+
+
+
 import Admin from './components/pages/Admin.jsx'
 import AdminProvider from './components/pages/AdminProvider.jsx'
 import AdminUser from './components/pages/AdminUser.jsx'
@@ -97,7 +106,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <ProtectedRoute requiredRole="ROLE_ADMIN">
+      <ProtectedRoute requiredRole="ROLE_USER">
         <Outlet />
       </ProtectedRoute>
     ),
@@ -124,15 +133,45 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
+    path: "/provider",
+    element: (
+      <ProtectedRoute requiredRole="ROLE_PROVIDER">
+        <HeaderProvider />
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <DashboardProvider />,
+      },
+      {
+        path: "etablissement",
+        element: <EtablissementProvider />,
+      },{
+        path: "planning",
+        element: <PlanningProvider />,
+      },{
+        path: "employee",
+        element: <EmployeeProvider />,
+      },{
+        path: "employee_rdv/:id",
+        element: <EmployeeRdvProvider />,
+      },
+    ],
+  },
+
+/*  {
     path: "/employee_rdv/:id",
     element: <EmployeeRdv />,
   },
   {
     path: "/my_employees",
     element: <MyEmployees />,
-  },
+  },*/
+
+
   /*
   {
     path: "/toto",
