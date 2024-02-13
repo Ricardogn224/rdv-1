@@ -4,7 +4,7 @@ function HeaderAdmin() {
   return (
     <header className="bg-teal-500 text-white p-4 flex justify-between items-center ">
       <span className="text-lg font-semibold">
-        <a href="/" className="hover:text-blue-300">
+        <a className="hover:text-blue-300">
           Médecin sur rdv
         </a>{" "}
         Admin

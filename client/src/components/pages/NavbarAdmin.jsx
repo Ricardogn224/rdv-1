@@ -1,18 +1,23 @@
-import React from "react";
+import React, {useTransition} from "react";
 import { useNavigate } from "react-router-dom";
 
 function NavbarAdmin() {
   const navigate = useNavigate();
+    const [isPending, startTransition] = useTransition();
 
   const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("user");
-    navigate("/login");
+    startTransition(() => {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("user");
+        navigate("/login");
+    });
   };
 
   // Fonction pour gérer la navigation
   const handleNavigate = (path) => () => {
-    navigate(path);
+    startTransition(() => {
+        navigate(path);
+    });
   };
 
   return (
@@ -48,7 +53,7 @@ function NavbarAdmin() {
             <span>Provision</span>
           </div>
         </li>
-        <li className="w-full" onClick={handleLogout()}>
+        <li className="w-full" onClick={handleLogout}>
           <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300 cursor-pointer">
             <i className="fas fa-sign-out-alt mr-4"></i>
             <span>Deconnexion</span>

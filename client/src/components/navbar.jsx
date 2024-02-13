@@ -1,31 +1,41 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from "react";
 import '../assets/css/navbar.css';
 import { useNavigate } from "react-router-dom"; // Correction ici pour useNavigate
 
 function Navbar() {
   const navigate = useNavigate();
-
+  const [isPending, startTransition] = useTransition();
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
-      setUsername(storedUsername);
+      startTransition(() => {
+        setUsername(storedUsername);
+      });
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
-    setUsername(null);
-    navigate("/");
+    startTransition(() => {
+      localStorage.clear();
+      setUsername(null);
+      navigate("/");
+    });
   };
+
+   const handleNavigate = (path) => () => {
+    startTransition(() => {
+     navigate(path);
+    });
+   };
 
   return (
     <header>
       <div
         className="text-white font-semibold text-4xl cursor-pointer"
-        onClick={() => navigate('/')}
+        onClick={handleNavigate("/")}
       >
         Médecin sur rdv
       </div>
@@ -33,14 +43,16 @@ function Navbar() {
         {username ? (
           <div
             className="text-white text-lg font-semibold mr-5 cursor-pointer"
-            onClick={() => navigate('/rdv_page')}
+            onClick={handleNavigate("/rdv_page")}
           >
             Mes rendez-vous
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
         <div
           className="text-cyan-700 bg-white text-lg font-semibold hover:text-white hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-700 duration-150 rounded-lg px-5 py-2.5 focus:outline-none cursor-pointer"
-          onClick={() => navigate('/register_pro')}
+          onClick={handleNavigate("/register_pro")}
         >
           Vous êtes un professionnel ?
         </div>
@@ -50,9 +62,12 @@ function Navbar() {
             <button onClick={handleLogout}>Déconnexion</button>
           </div>
         ) : (
-          <div className="connexion cursor-pointer" onClick={() => navigate('/login')}>
+          <div
+            className="connexion cursor-pointer"
+            onClick={handleNavigate("/login")}
+          >
             <>
-           <svg
+              <svg
                 width="32"
                 height="32"
                 viewBox="0 0 32 32"
