@@ -16,8 +16,6 @@
     color: black;
 }
 
-
-
 .admin-home-container .button-admin-container{
     display: flex;
     background-color: aqua;
@@ -99,5 +97,27 @@
   .edit-user-icon:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .cancel-user-icon{
+    background-color: red;
+    margin: 0 2%;
+    padding: 2px;
+    border-radius: 5px;
+  }
+
+  .cancel-user-icon:hover{
+    background-color: rgb(241, 89, 89);
+  }
+
+  .validate-user-icon{
+    background-color: lightblue;
+    margin: 0 2%;
+    padding: 2px;
+    border-radius: 5px
+  }
+
+  .validate-user-icon:hover{
+    background-color: rgb(134, 201, 224);
   }
   

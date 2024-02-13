@@ -1,23 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import '../assets/css/navbar.css';
+import { Navigate } from "react-router-dom";
+
 
 function Navbar() {
 
     const [username, setUsername] = useState("");
 
     useEffect(() => {
-      // Fetch the username from local storage
-      let storedUsername = localStorage.getItem("username");
-      storedUsername = "user"
+      const storedUsername = localStorage.getItem("username");
+      // storedUsername = "user"
       if (storedUsername) {
         setUsername(storedUsername);
       }
     }, []);
 
       const handleLogout = () => {
-        // Gérer la déconnexion ici
-        localStorage.removeItem("username"); // Assurez-vous de supprimer le bon élément du stockage local
+        // Remove all from local storage
+        localStorage.clear();
         setUsername(null);
+        return <Navigate to="/" />;
       };
 
   return (

@@ -14,15 +14,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
 {
+    #[Groups(['user:read:full', 'user:read'])]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write'])]
+    #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write', 'planningRdv:read'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
 
-    #[Groups(['user:read:full'])]
+    #[Groups(['user:read:full', 'user:read'])]
     #[ORM\Column]
     private array $roles = [];
 
@@ -61,7 +62,7 @@ trait Auth
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER'; // guarantee every user at least has ROLE_USER
+        //$roles[] = 'ROLE_USER'; // guarantee every user at least has ROLE_USER
 
         return array_unique($roles);
     }
@@ -71,7 +72,7 @@ trait Auth
         $this->roles = $roles;
     }
 
-    #[Groups(['user:write'])]
+    #[Groups(['user:write', 'user:write:update'])]
     #[ApiProperty(example: UserAccountTypeEnum::NORMAL->value)]
     public function setAccountType(string $type): void
     {
@@ -79,6 +80,10 @@ trait Auth
 
         if ($enum === UserAccountTypeEnum::ADMIN) {
             $this->setRoles([RolesEnum::ADMIN->value]);
+
+            return;
+        } elseif ($enum === UserAccountTypeEnum::PROVIDER) {
+            $this->setRoles([RolesEnum::PROVIDER->value]);
 
             return;
         }

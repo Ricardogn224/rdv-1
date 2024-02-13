@@ -44,8 +44,9 @@ class Appointment
     #[ORM\ManyToOne(inversedBy: 'appointments', cascade: ['persist'])]
     private ?User $appointmentUser = null;
 
+
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
-    private ?PlanningEmployee $planningEmployee = null;
+    private ?PlanningDoctor $planningDoctor = null;
 
     public function getId(): ?int
     {
@@ -76,24 +77,24 @@ class Appointment
         return $this;
     }
 
-    public function getPlanningEmployee(): ?PlanningEmployee
+    public function getPlanningDoctor(): ?PlanningDoctor
     {
-        return $this->planningEmployee;
+        return $this->planningDoctor;
     }
 
-    public function setPlanningEmployee(?PlanningEmployee $planningEmployee): static
+    public function setPlanningDoctor(?PlanningDoctor $planningDoctor): static
     {
         // unset the owning side of the relation if necessary
-        if ($planningEmployee === null && $this->planningEmployee !== null) {
-            $this->planningEmployee->setAppointment(null);
+        if ($planningDoctor === null && $this->planningDoctor !== null) {
+            $this->planningDoctor->setAppointment(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($planningEmployee !== null && $planningEmployee->getAppointment() !== $this) {
-            $planningEmployee->setAppointment($this);
+        if ($planningDoctor !== null && $planningDoctor->getAppointment() !== $this) {
+            $planningDoctor->setAppointment($this);
         }
 
-        $this->planningEmployee = $planningEmployee;
+        $this->planningDoctor = $planningDoctor;
 
         return $this;
     }

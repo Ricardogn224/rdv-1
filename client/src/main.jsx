@@ -5,25 +5,89 @@ import Register from "./components/Register.jsx";
 import Register_pro from "./components/Register_pro.jsx";
 import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
+import EmployeeRdv from "./components/pages/EmployeeRdv.jsx";
+import MyEmployees from "./components/pages/MyEmployees.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
 import DashboardProvider from './components/Provider/Dashboard.jsx'
+import EtablissementProvider from './components/Provider/EtablissementProvider.jsx'
+import PlanningProvider from './components/Provider/PlanningProvider.jsx'
+import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
+import EmployeeRdvProvider from './components/Provider/EmployeeRdvProvider.jsx'
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Provider from "./components/pages/Provider.jsx";
+import Navbar from "./components/navbar";
+import Footer from "./components/Footer";
+import HeaderProvider from './components/Provider/HeaderProvider.jsx';
+
 
 
 
 import {
   createBrowserRouter,
+  Outlet,
   RouterProvider,
 } from "react-router-dom";
 import Admin from './components/pages/Admin.jsx'
 import AdminProvider from './components/pages/AdminProvider.jsx'
+import AdminUser from './components/pages/AdminUser.jsx'
 
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <>
+        <Navbar /> <Outlet /> <Footer />
+      </>
+    ),
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/provider/:id",
+        element: <Provider />,
+      },
+      {
+        path: "/search_page",
+        element: <Search_page />,
+      },
+      {
+        path: "*",
+        element: <h1>404 not found</h1>,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute requiredRole="ROLE_USER">
+          <Navbar />
+          <Outlet />
+          <Footer />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "rdv_page",
+        element: <Rdv_page />,
+      },
+      {
+        path: "motif_page",
+        element: <Motif_page />,
+      },
+      {
+        path: "confirm_page",
+        element: <Confirm_page />,
+      },
+      {
+        path: "*",
+        element: <h1>404 not found</h1>,
+      },
+    ],
   },
   {
     path: "/login",
@@ -37,50 +101,85 @@ const router = createBrowserRouter([
     path: "/register_pro",
     element: <Register_pro />,
   },
-  {
-    path: "/search_page",
-    element: <Search_page />,
-  },
+
   {
     path: "/admin",
-    element: <Admin />,
-  },
-  {
-    path: "/admin_provider",
-    element: <AdminProvider />,
-  },
-  {
-    path: "/rdv_page",
-    element: <Rdv_page />,
-  },
-  {
-    path: "/motif_page",
-    element: <Motif_page />,
-  },
-  {
-    path: "/confirm_page",
-    element: <Confirm_page />,
-  },
-  
-  {path: "/provider",
-    path: "/toto",
-    element:<Outlet/>,
+    element: (
+      <ProtectedRoute requiredRole="ROLE_USER">
+        <Outlet />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: "dashboard",
-        element: <DashboardProvider/>,
+        path: "",
+        element: <Admin />,
+      },
+      {
+        path: "provider",
+        element: <AdminProvider />,
+      },
+      {
+        path: "user",
+        element: <AdminUser />,
+      },
+    ],
+  },
+  {
+    path: "/provider",
+    element: (
+      <ProtectedRoute requiredRole="ROLE_PROVIDER">
+        <HeaderProvider />
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <DashboardProvider />,
+      },
+      {
+        path: "etablissement",
+        element: <EtablissementProvider />,
+      },{
+        path: "planning",
+        element: <PlanningProvider />,
+      },{
+        path: "employee",
+        element: <EmployeeProvider />,
+      },{
+        path: "employee_rdv/:id",
+        element: <EmployeeRdvProvider />,
+      },
+    ],
+  },
+
+/*  {
+    path: "/employee_rdv/:id",
+    element: <EmployeeRdv />,
+  },
+  {
+    path: "/my_employees",
+    element: <MyEmployees />,
+  },*/
+
+
+  /*
+  {
+    path: "/toto",
+    element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
+    children: [
+      {
+        path: "test",
+        element: <SearchForm/>,
       },
       {
         path: "*",
         element: <p>Not found</p>
       }
     ]
-  },
-
+  },*/
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+      <RouterProvider router={router} />
 );

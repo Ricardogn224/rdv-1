@@ -3,20 +3,78 @@ import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
 import Footer from '../Footer'
+import Navbar from '../navbar'
 
 
 function AdminProvider() {
 
     const [providers, setProviders] = useState([]);
 
+    const [editableIndex, setEditableIndex] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const [displayCancel, setDisplayCancel] = useState(false);
+
+    const token = localStorage.getItem('jwtToken');
+
+    const handleEditClick = (index) => {
+        setEditableIndex(index);
+        setSelectedStatus('');
+    };
+
+    const handleStatusChange = (event) => {
+        const selectedValue = event.target.value;
+
+        setSelectedStatus(selectedValue);
+        
+    
+        // Display an alert if the selected status is not the default value
+        if (selectedValue !== (providers[editableIndex]?.active ? 'actif' : 'inactif')) {
+            //alert('You can only change the status from the default value.');
+            setDisplayCancel(true);
+        } else {
+            // Hide the "Annuler" button
+            setDisplayCancel(false);
+        }
+    };
+
+    const handleValidateClick = (id) => {
+        console.log(id)
+        // Perform a PATCH request to update provider.active
+        const url = `http://localhost:8888/api/users/${id}`;
+        const updatedData = {
+          active: selectedStatus === 'actif', // Assuming 'actif' means true and 'inactif' means false
+        };
+      
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/merge-patch+json',
+            'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+          },
+          body: JSON.stringify(updatedData),
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data if needed
+          console.log('Update successful', data);
+        })
+        .catch(error => {
+          // Handle errors
+          console.error('Error updating data:', error);
+        });
+      
+        // Hide the "Annuler" button after successful update
+        setDisplayCancel(false);
+      };
+
     console.log(localStorage.getItem('jwtToken'));
 
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const token = localStorage.getItem('jwtToken');
+            
 
-            const response = await fetch('http://localhost:8888/api/providers', {
+            const response = await fetch('http://localhost:8888/api/users', {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -36,7 +94,7 @@ function AdminProvider() {
   return (
 
     <>
-        <Navbar_user_log />
+        <Navbar />
         <div className='title-admin-page'>
             <h1>Gestion prestataires</h1>
         </div>
@@ -49,20 +107,31 @@ function AdminProvider() {
                         <div className="user-info extend-column"><p>Nom</p></div>
                         <div className="user-info extend-column"><p>Prenom</p></div>
                         <div className="user-info"><p>Statut</p></div>
-                        <div  className="user-info action"><p>Modifier</p></div>
+                        <div className="user-info action"><p>Modifier</p></div>
                         <div className="user-info action"><p>Validate</p></div>
                     </div>
 
             
                     {providers && providers.length > 0 ? (
-                        providers.map((provider, index) => (
+                        providers
+                        .filter((provider) => provider.roles.includes('ROLE_PROVIDER'))
+                        .map((provider, index) => (
                         <div className="user-item" key={index}>
-                            <div className="user-info"><p>{provider.user_provider.email}</p></div>
-                            <div className="user-info"><p>{provider.user_provider.lastname}</p></div>
-                            <div className="user-info"><p>{provider.user_provider.firstname}</p></div>
-                            <div className="user-info"><p>{provider.active ? 'Active' : 'Inactive'}</p></div>
+                            <div className="user-info"><p>{provider.email}</p></div>
+                            <div className="user-info"><p>{provider.lastname}</p></div>
+                            <div className="user-info"><p>{provider.firstname}</p></div>
+                            <div className="user-info">
+                                <select value={selectedStatus !== '' && editableIndex === index ? selectedStatus : provider.active ? 'actif' : 'inactif'}
+                                onChange={handleStatusChange}
+                                disabled={editableIndex !== index}>
+                                    <option value="actif">Actif</option>
+                                    <option value="inactif">Inactif</option>
+                                </select>
+                            </div>
                             <div className="user-info actions">
-                                <a href="#" className="edit-user-icon">Modifier</a>
+                            <a href="#" className="edit-user-icon" onClick={() => handleEditClick(index)}>
+                                Modifier
+                            </a>
                                 <a href="#" className="edit-user-icon">Supprimer</a>
                             </div>
                             <div className="user-info">
@@ -70,9 +139,20 @@ function AdminProvider() {
                                     <input type="hidden" name="_token" value="{{ csrf_token('edit_level' ~ user.id) }}">
                                     <input type="hidden" name="roleVal" value="">
                                     <button className="btn valid-button">Valider</button>
-                                </form>
+                                </form>*/}
 
-                                <a style="display:none;" className="cancel-user-icon" data-user-id="{{ user.id }}">Annuler</a> */}
+                                {displayCancel && editableIndex === index && (
+                                    <a href="#" className="cancel-user-icon" onClick={() => setDisplayCancel(false)}>
+                                    Annuler
+                                    </a>
+                                )}
+
+
+                                {displayCancel && editableIndex === index && (
+                                    <a href="#" className="validate-user-icon"  onClick={() => handleValidateClick(provider.id)}>
+                                    Valider
+                                    </a>
+                                )}
                             </div>
                         </div>
                         ))

@@ -49,7 +49,7 @@ function Admin() {
                 route="/admin_provider" />
             <ButtonAdmin 
                 txtButton="Gestion des utilisateurs"
-                route="/login" />
+                route="/admin_user" />
         </div>
         
       <Footer />
