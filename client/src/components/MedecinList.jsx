@@ -112,7 +112,7 @@ function MedecinList({ nom, poste, adresse, type, consultationVideo, planning })
                 )}
 
                 <div className="adresse">
-                    <p>{planning.establishmentEmployee.adress}</p>
+                   {/* <p>{planning.establishmentEmployee.adress}</p> */} 
                 </div>
             </div>
 
@@ -133,7 +133,7 @@ function MedecinList({ nom, poste, adresse, type, consultationVideo, planning })
                                     <div className="dispo-hour bg-green-300" key={idx}>
                                         <p className="hour">
                                         {type === 'rdv' ? (
-                                            <a href="/motif_page" onClick={() => handleReservationRdv(jour.jour, jour.date, heure)} className="hour-link">
+                                            <a href="/rdv" onClick={() => handleReservationRdv(jour.jour, jour.date, heure)} className="hour-link">
                                                 {heure}
                                             </a>
                                         ) : (

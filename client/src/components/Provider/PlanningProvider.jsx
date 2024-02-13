@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import MedecinList from "../MedecinList";
 
-function Employee() {
-  
+function PlanningProvider() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [doctor, setDoctor] = useState(null);
@@ -11,7 +9,6 @@ function Employee() {
     const [username, setUsername] = useState("");
     const [newComment, setNewComment] = useState("");
     const [comments, setComments] = useState([]);
-    const [employee, setEmployee] = useState(null);
 
 
 
@@ -43,30 +40,30 @@ function Employee() {
     fetchDoctorData();
 
     const fetchEmployeePlanning = async () => {
-      try {
-        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-            // You may include other headers like authorization if needed
-          },
-          // You can include other options like credentials, mode, etc.
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch employee planning');
+        try {
+            const response = await fetch(`http://localhost:8888/api/userEmployees`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                // You may include other headers like authorization if needed
+            },
+            // You can include other options like credentials, mode, etc.
+            });
+    
+            if (!response.ok) {
+            throw new Error('Failed to fetch employees');
+            }
+    
+            const data = await response.json();
+            console.log(data['hydra:member'])
+            setMedecins(data['hydra:member']);
+        } catch (error) {
+            console.error('Error fetching employees:', error);
         }
+        };
 
-        const data = await response.json();
-        console.log(data)
-        setEmployee(data);
-      } catch (error) {
-        console.error('Error fetching employee planning:', error);
-      }
-    };
-
-    fetchEmployeePlanning();
+        fetchEmployeePlanning();
 
       const username = localStorage.getItem("username");
         setUsername(username);
@@ -154,22 +151,18 @@ function Employee() {
                 </p>
 
                 <h2 className="text-xl font-bold mt-6 mb-4">Planning</h2>
-                {employee && (
-                  <div className='planning-container'>
-                    <div>
-                        <MedecinList
-                          key={0}
-                          nom={""}
-                          poste={""}
-                          adresse={""}
-                          type={"rdv"}
-                          consultationVideo={true}
-                          planning={employee}
-                        />
-                    </div>
-                  </div>
-                )}
-               
+                <div className="mb-6 flex flex-col items-center">
+                  {username ? (
+                    <p>Vous êtes connecté en tant que {username}</p>
+                  ) : (
+                    <button
+                      className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                      onClick={navigatelogin}
+                    >
+                      Connectez vous pour prendre rendez-vous
+                    </button>
+                  )}
+                </div>
               </div>
               <br />
               <br />
@@ -222,4 +215,4 @@ function Employee() {
   );
 }
 
-export default Employee;
+export default PlanningProvider;
