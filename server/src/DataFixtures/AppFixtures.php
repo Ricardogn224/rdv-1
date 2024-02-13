@@ -123,6 +123,11 @@ class AppFixtures extends Fixture
                 $establishment->addProvision($provisions[$j]);
             }
 
+            shuffle($employees); // Mélanger le tableau des prestations
+            for ($j = 0; $j < 2; $j++) { // Prenons 2 prestations par établissement pour l'exemple
+                $establishment->addEmployee($employees[$j]);
+            }
+
             $manager->persist($establishment);
     }
 
