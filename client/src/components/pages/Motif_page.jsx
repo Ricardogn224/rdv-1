@@ -23,7 +23,7 @@ function Motif_page() {
 
 
     const [motif, setMotif] = useState([]);
-    const [patient, setPatient] = useState([]);
+    const [dateRdv, setDateRdv] = useState('');
     const storedUsername = localStorage.getItem("username");
     const token = localStorage.getItem("jwtToken")
 

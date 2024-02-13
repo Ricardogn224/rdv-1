@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar_user_log from '../Navbar_user_log';
 import SearchForm from '../SearchForm';
 import '../../assets/css/search_page.css';
 import Map from '../Map';
