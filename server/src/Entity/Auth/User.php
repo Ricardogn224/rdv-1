@@ -40,7 +40,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['user:write']],
     normalizationContext: ['groups' => ['user:read']],
     operations: [
-        new GetCollection(),
+        new GetCollection(
+            security: "is_granted('ROLE_ADMIN')"
+        ),
         new GetCollection(
             uriTemplate: '/usersRole',
             controller: GetUserByRoleController::class,
