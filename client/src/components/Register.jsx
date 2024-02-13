@@ -54,8 +54,8 @@ function Register() {
     <div className="flex-center flex-column">
       <div className='mt-80  form-zone'>
 
-        <div class="flex-center">
-          <h1 class="title"> Crée votre compte </h1>
+        <div className="flex-center">
+          <h1 className="title"> Crée votre compte </h1>
         </div>
 
         <form onSubmit={handleSubmit}>

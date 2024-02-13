@@ -1,14 +1,44 @@
 import React, {useEffect, useState} from 'react'
 import '../../assets/css/rdv_page.css';
 import medecinImage from '../../assets/portrait-docteur.jpg';
+import { useNavigate } from 'react-router-dom';
 
 function Rdv_page() {
 
+
+  const now = new Date();
+    console.log(now);
 
     const [oldrdv, setOldrdv] = useState([]);
     const [rdv, setRdv] = useState([]);
 
     useEffect(() => {
+
+        const fetchRdv = async () => {
+          try {
+            const response = await fetch("http://localhost:8888/api/rdv"); // Mettez ici l'URL de votre API
+            if (!response.ok) {
+              throw new Error("Erreur réseau");
+            }
+            const allRdv = await response.json();
+            const now = new Date();
+
+            const upcomingRdv = allRdv.filter(
+              (rdv) => new Date(rdv.date) > now
+            );
+            const pastRdv = allRdv.filter((rdv) => new Date(rdv.date) <= now);
+
+            setRdv(upcomingRdv);
+            setOldrdv(pastRdv);
+          } catch (error) {
+            console.error("Erreur lors de la récupération des rdv:", error);
+          }
+        };
+
+        fetchRdv();
+
+      
+
         const rdv =[
             {
                 id: 1,
@@ -36,30 +66,36 @@ function Rdv_page() {
             },
         ];
         setRdv(rdv);
+
+        
     }, [])
 
     useEffect(() => {
         const oldrdv =[
             {
                 id: 1,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 2,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 3,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
             {
                 id: 4,
+                medecinid: 1,
                 name: "Sandrine Irigoyen",
                 motif : "Gynécologue obstétricienne",
                 date: "Jeudi 10 Août 2023 : 12h40",
@@ -67,6 +103,15 @@ function Rdv_page() {
         ];
         setOldrdv(oldrdv);
     }, [])
+
+        const navigate = useNavigate();
+
+        const MedecinRdv = (medecinId) => () => {
+          navigate(`/medecin/${medecinId}`);
+        };
+
+
+
 
 
 
@@ -81,18 +126,27 @@ function Rdv_page() {
             {oldrdv.map((oldrdv) => (
               <>
                 <div className="encadre ma-20">
-                  <div className="proposition">
-                    <img src={medecinImage} alt="" />
-                    <div className="text">
-                      <h4>{oldrdv.name}</h4>
-                      <p>{oldrdv.motif}</p>
+                  <div className="propositionrdv">
+                    <div className="flex flex-row items-center">
+                      <img src={medecinImage} alt="" />
+                      <div className="text">
+                        <h4>{oldrdv.name}</h4>
+                        <p>{oldrdv.motif}</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="proposition">
-                    <div className="zone-vide "></div>
-                    <div className="text">
-                      <h4>Le détail de votre rendez-vous</h4>
-                      <p>{oldrdv.date}</p>
+                  <div className="propositionrdv">
+                    <div className="flex flex-row items-center">
+                      <div className="zone-vide "></div>
+                      <div className="text">
+                        <h4>Le détail de votre rendez-vous</h4>
+                        <p>{oldrdv.date}</p>
+                      </div>
+                    </div>
+                    <div className="m-4">
+                      <button onClick={MedecinRdv(oldrdv.medecinid)}>
+                        Reprendre rendez-vous
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -105,31 +159,36 @@ function Rdv_page() {
               <p>Mes rendez-vous à venir </p>
             </div>
 
-            
             {rdv.map((rdv) => (
-                <>
-                    <div className="encadre ma-20">
-                    <div className="proposition">
-                        <img src={medecinImage} alt="" />
-                        <div className="text">
+              <>
+                <div className="encadre ma-20">
+                  <div className="propositionrdv">
+                    <div className="flex flex-row items-center">
+                      <img src={medecinImage} alt="" />
+                      <div className="text">
                         <h4>{rdv.name}</h4>
                         <p>{rdv.motif}</p>
-                        </div>
+                      </div>
                     </div>
-                    <div className="proposition">
-                        <div className="zone-vide "></div>
-                        <div className="text">
+                  </div>
+                  <div className="propositionrdv">
+                    <div className="flex flex-row items-center">
+                      <div className="zone-vide"></div>
+                      <div className="text">
                         <h4>Le détail de votre rendez-vous</h4>
                         <p>{rdv.date}</p>
-                        </div>
+                      </div>
                     </div>
+                    <div className="flex flex-row ">
+                      <button className="m-4">Modifier</button>
+                      <button className="m-4">Annuler</button>
                     </div>
-                </>
-                ))}
-
+                  </div>
+                </div>
+              </>
+            ))}
           </div>
         </div>
-
       </>
     );
 }
