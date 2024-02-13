@@ -21,6 +21,9 @@ function AdminUser() {
         firstname: '',
         dateOfBirth: '',
         plainPassword: '',
+        establishmentEmployee : {
+
+        },
         accountType: "normal",
     }
 
@@ -83,6 +86,16 @@ function AdminUser() {
         }
 
         
+    };
+
+    const handleEstablishmentSelection = (e) => {
+        const { value } = e.target;
+        const selectedEstablishment = establishments.find(establishment => establishment.name === value);
+    
+        setNewUser(prevNewUser => ({
+            ...prevNewUser,
+            establishmentEmployee: selectedEstablishment || { name: '' } // Set the provider to the selected provider or an empty object if not found
+        }));
     };
 
     const token = localStorage.getItem('jwtToken');
@@ -195,8 +208,19 @@ function AdminUser() {
 
     const handleCreateUser = async (event) => {
         event.preventDefault();
+
+        
+
         try {
-            const response = await fetch('http://localhost:8888/api/users', {
+            var url = '';
+
+            if (newUser.accountType === 'employee') {
+                url = 'http://localhost:8888/api/usersEmployee'
+            } else{
+                url = 'http://localhost:8888/api/users'
+            }
+
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -214,6 +238,7 @@ function AdminUser() {
         } catch (error) {
             console.error('Error creating user:', error);
         }
+        
     };
 
   return (
@@ -456,14 +481,12 @@ function AdminUser() {
                                 </label>
                                 <select
                                     id="establishment"
-                                    name="establishment"
-                                    value={newUser.establishment}
-                                    onChange={(e) => handleInputChange(e, 'newUser')}
+                                    name="establishmentEmployee"
+                                    onChange={handleEstablishmentSelection}
                                     className="border border-solid p-2 rounded"
                                 >
-                                    {/* Populate options with establishments */}
                                     {establishments.map(establishment => (
-                                        <option key={establishment.id} value={establishment.id}>
+                                        <option key={establishment.id} value={establishment.name}>
                                             {establishment.name}
                                         </option>
                                     ))}
