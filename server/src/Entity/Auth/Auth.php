@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
 {
-    #[Groups(['user:read:full', 'user:read', 'establishment:write'])]
+    #[Groups(['user:read:full', 'user:read', 'establishment:write', 'provisionEmployee:read'])]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
@@ -33,7 +33,7 @@ trait Auth
     #[ORM\Column]
     private string $password = '';
 
-    #[Groups(['user:write', 'user:write:update'])]
+    #[Groups(['user:write', 'user:write:update', 'employee:write'])]
     private ?string $plainPassword = null;
 
     public function getId(): ?int
@@ -74,7 +74,7 @@ trait Auth
         $this->roles = $roles;
     }
 
-    #[Groups(['user:write', 'user:write:update'])]
+    #[Groups(['user:write', 'user:write:update', 'employee:write'])]
     #[ApiProperty(example: UserAccountTypeEnum::NORMAL->value)]
     public function setAccountType(string $type): void
     {

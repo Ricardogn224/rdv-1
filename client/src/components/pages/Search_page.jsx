@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar_user_log from '../Navbar_user_log';
 import SearchForm from '../SearchForm';
 import '../../assets/css/search_page.css';
 import Map from '../Map';
@@ -9,6 +8,8 @@ import medecinsData from '../../assets/sample.json'; // Mettez le bon chemin
 
 function Search_page() {
   const [medecins, setMedecins] = useState([]);
+
+  const [provisionEmployees, setProvisionEmployees] = useState([]);
 
   const token = localStorage.getItem('jwtToken');
 
@@ -40,7 +41,34 @@ function Search_page() {
       }
     };
 
-    fetchEmployeePlanning();
+    // fetchEmployeePlanning();
+
+    const fetchProvisionEmployee = async () => {
+      try {
+        const response = await fetch(`http://localhost:8888/api/provision_employees`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            // You may include other headers like authorization if needed
+          },
+          // You can include other options like credentials, mode, etc.
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch employees');
+        }
+
+        const data = await response.json();
+        console.log(data['hydra:member'])
+        setProvisionEmployees(data['hydra:member']);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    };
+
+    fetchProvisionEmployee();
+
   }, []);
 
   return (
@@ -53,7 +81,8 @@ function Search_page() {
           </div>
           <div>
             <DisponibilityForm />
-            {medecins && (
+
+            {/* {medecins && (
             <div>
               {medecins.map((medecin, index) => (
                 <MedecinList
@@ -66,6 +95,21 @@ function Search_page() {
                 />
               ))} 
             </div>
+            )} */}
+            
+            {provisionEmployees && (
+              <div className="mt-4">
+                {provisionEmployees.map((provisionEmployee, index) => (
+                  <div key={index} className="border p-4 rounded-lg mb-4">
+                    <p className="font-bold">{provisionEmployee.provision.name}</p>
+                    <p className="text-gray-600">{provisionEmployee.provision.Establishment.name}</p>
+                    <p className="text-gray-600">{provisionEmployee.provision.Establishment.adress}</p>
+                    <a href={`/medecin/${provisionEmployee.employee.id}`} className="text-blue-500 hover:underline">
+                      {provisionEmployee.employee.firstname} {provisionEmployee.employee.lastname}
+                    </a>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

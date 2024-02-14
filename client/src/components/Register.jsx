@@ -1,21 +1,92 @@
 import React, { useState } from 'react';
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import '../assets/css/register.css';
 
 function Register() {
   const navigate = useNavigate();
   
-  // États pour stocker les valeurs du formulaire
+  // State variables for form values and errors
   const [formValues, setFormValues] = useState({
     firstname: '',
     lastname: '',
     dateOfBirth: '',
     email: '',
     plainPassword: '',
-    accountType: 'normal' // Assuming a default value
+    accountType: 'normal' 
   });
 
-  // Fonction pour gérer les changements dans les champs du formulaire
+  const [formErrors, setFormErrors] = useState({
+    firstname: '',
+    lastname: '',
+    dateOfBirth: '',
+    email: '',
+    plainPassword: ''
+  });
+
+
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!formValues.firstname) {
+      errors.firstname = 'First name is required';
+      isValid = false;
+    }
+
+    if (!formValues.lastname) {
+      errors.lastname = 'Last name is required';
+      isValid = false;
+    }
+
+    if (!formValues.email || !/^\S+@\S+\.\S+$/.test(formValues.email)) {
+      errors.email = 'Valid email is required';
+      isValid = false;
+    }
+
+
+    if (!formValues.dateOfBirth) {
+      errors.dateOfBirth = 'Date of birth is required';
+      isValid = false;
+    }
+
+   
+    if (!formValues.plainPassword || formValues.plainPassword.length < 8) {
+      errors.plainPassword = 'Password must be at least 8 characters long';
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      try {
+        const response = await fetch("http://localhost:8888/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formValues),
+        });
+  
+        if (response.ok) {
+          console.log('Registration successful');
+         
+          navigate("/");
+        } else {
+          console.error('Registration failed:', await response.text());
+          
+        }
+      } catch (error) {
+        console.error('Error during registration:', error);
+      }
+    }
+  };
+
+  // Function to handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -24,103 +95,49 @@ function Register() {
     });
   };
 
-  // Fonction pour gérer la soumission du formulaire
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:8888/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (response.ok) {
-        console.log('Registration successful');
-        // Handle successful registration (e.g., redirect to login page)
-        navigate("/");
-      } else {
-        console.error('Registration failed:', await response.text());
-        // Handle errors (e.g., display error message)
-      }
-    } catch (error) {
-      console.error('Error during registration:', error);
-    }
-  };
-
   return (
     <div className="flex-center flex-column">
       <div className='mt-80  form-zone'>
 
-        <div class="flex-center">
-          <h1 class="title"> Crée votre compte </h1>
+        <div className="flex-center">
+          <h1 className="title"> Create your account </h1>
         </div>
 
         <form onSubmit={handleSubmit}>
-
-          {/* <div className="flex-center">
-
-
-            <div className="field space-between flex">
-              <div >
-                <input
-                  className="radio"
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  value="female"
-                  checked={formValues.gender === 'female'}
-                  onChange={handleInputChange}
-                />
-                <label className='flex-center' htmlFor="female ">Féminin</label>
-              </div>
-
-              <div>
-                <input
-                  className="radio"
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  checked={formValues.gender === 'male'}
-                  onChange={handleInputChange}
-                />
-                <label className='flex-center' htmlFor="male">Masculin</label>
-              </div>
-            </div>
-
-          </div> */}
-
           <div className="flex-column flex-center">
             <input
               className="field"
               type="text"
               name="firstname"
               id="firstname"
-              placeholder="Prénom"
+              placeholder="First Name"
               value={formValues.firstname}
               onChange={handleInputChange}
             />
+            {formErrors.firstname && <span className="error">{formErrors.firstname}</span>}
+            
             <input
               className="field"
               type="text"
               name="lastname"
               id="lastname"
-              placeholder="Nom"
+              placeholder="Last Name"
               value={formValues.lastname}
               onChange={handleInputChange}
             />
+            {formErrors.lastname && <span className="error">{formErrors.lastname}</span>}
+
             <input
               className="field"
               type="date"
               name="dateOfBirth"
               id="dateOfBirth"
-              placeholder="Date de naissance"
+              placeholder="Date of Birth"
               value={formValues.dateOfBirth}
               onChange={handleInputChange}
             />
+            {formErrors.dateOfBirth && <span className="error">{formErrors.dateOfBirth}</span>}
+
             <input
               className="field"
               type="email"
@@ -130,20 +147,23 @@ function Register() {
               value={formValues.email}
               onChange={handleInputChange}
             />
+            {formErrors.email && <span className="error">{formErrors.email}</span>}
+
             <input
               className="field"
               type="password"
               name="plainPassword"
               id="plainPassword"
-              placeholder="Mot de passe"
+              placeholder="Password"
               value={formValues.plainPassword}
               onChange={handleInputChange}
             />
+            {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
           </div>
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
-              VALIDER
+              SUBMIT
             </button>
           </div>
         </form>

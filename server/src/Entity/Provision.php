@@ -24,7 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
             denormalizationContext: ['groups' => ['provision:write']],
             input: ProvisionDto::class,
             controller: ProvisionController::class,
-            read: false
+            read: false,
+            write:false
         ),
         new Get(),
         new Patch(denormalizationContext: ['groups' => ['provision:write:update']]),
@@ -43,7 +44,7 @@ class Provision
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['provision:write', 'provision:read'])]
+    #[Groups(['provision:write', 'provision:read', 'provisionEmployee:read'])]
     #[ORM\ManyToOne(inversedBy: 'provisions', cascade: ['persist'])]
     private ?Establishment $Establishment = null;
 

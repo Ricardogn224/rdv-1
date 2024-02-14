@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/motif_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
 import { useNavigate } from "react-router-dom";
+import { parse, format } from 'date-fns';
 
 
 
@@ -10,23 +11,29 @@ function Motif_page() {
 
     const navigate = useNavigate();
 
+    const dayAbbreviationsToFullName = {
+      'DIM': 'Dimanche',
+      'LUN': 'Lundi',
+      'MAR': 'Mardi',
+      'MER': 'Mercredi',
+      'JEU': 'Jeudi',
+      'VEN': 'Vendredi',
+      'SAM': 'Samedi',
+  };
+
 
     const [motif, setMotif] = useState([]);
-    const [patient, setPatient] = useState([]);
+    const [dateRdv, setDateRdv] = useState('');
+    // const [parsedAppointmentDetail, setParsedAppointmentDetail] = useState(null);
+    const storedUsername = localStorage.getItem("username");
+    const token = localStorage.getItem("jwtToken")
+
 
     const [formValues, setFormValues] = useState({
-        motif: "",
-        patient: "",
-        jour: {
-            jour: "Jeudi",
-            date: "10 Août 2023",
-        },
-        heure: "12h40",
-        provisionEmployee: "path/실례.html",
-        appointmentUser: {
-            email: "",
-        },
-
+      provision_employee_id: 3,
+      patient_email: storedUsername,
+      hour: "parsedAppointmentDetail.heure",
+      date: "parsedAppointmentDetail.date",
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -40,16 +47,23 @@ function Motif_page() {
 
 
     const [appointmentDetail, setAppointmentDetail] = useState(null);
+
+    
     
 
     useEffect(() => {
 
         const storedAppointmentDetail = localStorage.getItem("reservationDataRdv");
+        console.log(storedAppointmentDetail)
 
         if (storedAppointmentDetail) {
           // Parse the stored JSON string to get the object
           const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
           setAppointmentDetail(parsedAppointmentDetail);
+          
+          const fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
+          setDateRdv(fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure)
+    
         }
 
         const motif = [
@@ -72,13 +86,6 @@ function Motif_page() {
         ];
         setMotif(motif);
 
-        const patient = [
-          {
-            id: 1,
-            name: "Pierre DUPONT",
-          },
-        ];
-        setPatient(patient);
     }, []);
 
 
@@ -97,11 +104,6 @@ function Motif_page() {
           const selectedMotifName = motif.find(
             (m) => m.name === formValues.motif
           )?.name;
-
-          const selectedPatientName = patient.find(
-            (p) => p.name === formValues.patient
-          )?.name;
-
         
 
         const handleSubmit = async (event) => {
@@ -110,17 +112,21 @@ function Motif_page() {
           console.log(formValues);
 
           try {
-            const response = await fetch("http://localhost:8888/api/appointments", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formValues),
-            });
+            const response = await fetch(
+              "http://localhost:8888/api/planning/rdv",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(formValues),
+              }
+            );
       
             if (response.ok) {
-              console.log('Registration successful');
-              // navigate("/confirmation_page");
+              console.log('Rdv successful');
+              navigate("/rdv_page");
             } else {
               console.error('RDV failed:', await response.text());
             }
@@ -142,7 +148,7 @@ function Motif_page() {
       <>
         <div className="flex-center flex-column rdv_list">
           <form onSubmit={handleSubmit}>
-            {currentStep < 3 && (
+            {currentStep < 2 && (
               <div className="encadre w-700 ma-20">
                 <div className="proposition">
                   <img src={medecinImage} alt="" />
@@ -168,13 +174,17 @@ function Motif_page() {
                   </svg>
                   <div className="text">
                     <h4>Le détail de votre rendez-vous</h4>
-                    <p>Jeudi 10 Août 2023 : 12h40</p>
+                    {dateRdv !== "" ? (
+                      <p>{dateRdv}</p>
+                    ) : (
+                      <p>Aucune date sélectionnée</p>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
-            {currentStep < 3 ? (
+            {currentStep < 2 ? (
               <div className="title ma-10">
                 <p>Renseignez les informations suivantes</p>
               </div>
@@ -214,36 +224,6 @@ function Motif_page() {
             )}
 
             {currentStep === 2 && (
-              <div className="encadre w-700 ma-20 step-2">
-                <div className="p-30">
-                  <div className="ma-11">
-                    <h4>Pour qui est ce rendez-vous?</h4>
-                  </div>
-
-                  <div className="patient_list">
-                    <div className="flex-column">
-                      {patient.map((patient) => (
-                        <div className="patient" key={patient.id}>
-                          <input
-                            type="radio"
-                            name="patient"
-                            id={`patient-${patient.id}`}
-                            value={patient.name}
-                            onChange={handleInputChange}
-                            checked={formValues.patient === patient.name}
-                          />
-                          <label htmlFor={`patient-${patient.id}`}>
-                            {patient.name}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
               <div className="flex-center flex-column rdv_list step-3">
                 <div className="encadre w-700 ma-20">
                   <div className="proposition">
@@ -270,10 +250,10 @@ function Motif_page() {
                     </svg>
                     <div className="text">
                       <h4>Le détail de votre rendez-vous</h4>
-                      {appointmentDetail ? (
-                        <p>{`${appointmentDetail.jour.jour} ${appointmentDetail.jour.date} : ${appointmentDetail.heure}`}</p>
+                      {dateRdv !== "" ? (
+                        <p>{dateRdv}</p>
                       ) : (
-                        <p>Appointment details not available</p>
+                        <p>Aucune date sélectionnée</p>
                       )}
                     </div>
                   </div>
@@ -295,13 +275,11 @@ function Motif_page() {
                         />
                       </svg>
                       <div className="text">
-                        <h4>Pour</h4>
-                        <p>{selectedPatientName || "Nom non sélectionné"}</p>
+                        <p>{storedUsername}</p>
                         <p>{selectedMotifName || "Nom non sélectionné"}</p>
                       </div>
                     </div>
 
-                    <br />
                     {/* <div className="flex-column">
                       <div className="flex-center">
                         <input
@@ -342,19 +320,11 @@ function Motif_page() {
             {currentStep === 2 && (
               <div className="encadre-2 w-700 ma-20 suivant">
                 <button onClick={goToPreviousStep}>RETOUR</button>
-                <button onClick={goToNextStep}>CONTINUER</button>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="encadre-2 w-700 ma-20 suivant">
-                <button onClick={goToPreviousStep}>RETOUR</button>
                 <button type="submit">VALIDER</button>
               </div>
             )}
           </form>
         </div>
-
       </>
     );
   }

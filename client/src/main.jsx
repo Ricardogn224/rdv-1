@@ -9,24 +9,33 @@ import EmployeeRdv from "./components/pages/EmployeeRdv.jsx";
 import MyEmployees from "./components/pages/MyEmployees.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
+import DashboardProvider from './components/Provider/Dashboard.jsx'
+import EtablissementProvider from './components/Provider/EtablissementProvider.jsx'
+import PlanningProvider from './components/Provider/PlanningProvider.jsx'
+import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
+import EmployeeRdvProvider from './components/Provider/EmployeeRdvProvider.jsx'
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import Provider from "./components/pages/Provider.jsx";
 import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
+import HeaderProvider from './components/Provider/HeaderProvider.jsx';
+import HeaderAdmin from "./components/pages/HeaderAdmin";
+import NavbarAdmin from "./components/pages/NavbarAdmin";
+import NotFound from "./components/pages/404";
 
 
+
+import Admin from './components/pages/Admin.jsx'
+import AdminProvider from './components/pages/AdminProvider.jsx'
+import AdminUser from './components/pages/AdminUser.jsx'
+import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
+import AdminProvision from "./components/pages/AdminProvision.jsx";
+import Employee from "./components/pages/Employee.jsx";
 
 import {
   createBrowserRouter,
   Outlet,
   RouterProvider,
 } from "react-router-dom";
-import Admin from './components/pages/Admin.jsx'
-import AdminProvider from './components/pages/AdminProvider.jsx'
-import AdminUser from './components/pages/AdminUser.jsx'
-import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
-import AdminProvision from "./components/pages/AdminProvision.jsx";
-
 
 
 const router = createBrowserRouter([
@@ -43,8 +52,8 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/provider/:id",
-        element: <Provider />,
+        path: "/medecin/:id",
+        element: <Employee />,
       },
       {
         path: "/search_page",
@@ -52,18 +61,18 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 not found</h1>,
+        element: <NotFound />,
       },
     ],
   },
   {
     path: "/",
     element: (
-      <ProtectedRoute requiredRole="ROLE_USER">
-          <Navbar />
-          <Outlet />
-          <Footer />
-      </ProtectedRoute>
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
     ),
     children: [
       {
@@ -71,7 +80,7 @@ const router = createBrowserRouter([
         element: <Rdv_page />,
       },
       {
-        path: "motif_page",
+        path: "rdv",
         element: <Motif_page />,
       },
       {
@@ -80,7 +89,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 not found</h1>,
+        element: <NotFound />,
       },
     ],
   },
@@ -101,7 +110,13 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <ProtectedRoute requiredRole="ROLE_ADMIN">
-        <Outlet />
+        <HeaderAdmin />
+        <section className="flex w-full">
+          <NavbarAdmin />
+          <section className="w-full">
+            <Outlet />
+          </section>
+        </section>
       </ProtectedRoute>
     ),
     children: [
@@ -125,17 +140,59 @@ const router = createBrowserRouter([
         path: "provision",
         element: <AdminProvision />,
       },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+      
+    ],
+  },
+  {
+    path: "/provider",
+    element: (
+      <ProtectedRoute requiredRole="ROLE_PROVIDER">
+        <HeaderProvider />
+
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <DashboardProvider />,
+      },
+      {
+        path: "etablissement",
+        element: <EtablissementProvider />,
+      },
+      {
+        path: "planning",
+        element: <PlanningProvider />,
+      },
+      {
+        path: "employee",
+        element: <EmployeeProvider />,
+      },
+      {
+        path: "employee_rdv/:id",
+        element: <EmployeeRdvProvider />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
   },
 
-  {
+  /*  {
     path: "/employee_rdv/:id",
     element: <EmployeeRdv />,
   },
   {
     path: "/my_employees",
     element: <MyEmployees />,
-  },
+  },*/
+
   /*
   {
     path: "/toto",

@@ -1,62 +1,124 @@
-import React from 'react'
-import Navbar_user_log from '../Navbar_user_log'
-import SearchForm from '../SearchForm'
-import '../../assets/css/search_page.css' 
-import '../../assets/css/admin.css' 
-import Footer from '../Footer'
-import Map from '../Map'
-import DisponibilityForm from '../DisponibilityForm'
-import MedecinList from '../MedecinList'
-import ButtonAdmin from '../Button_admin'
+import React, { useEffect, useState } from "react";
+import "../../assets/css/admin.css";
 
 function Admin() {
-  const planningData = [
-    {
-      jour: "LUN",
-      date: "11 JUL",
-      heures: ["09:20", "10:20", "11:20", "12:20", "13:20", "14:20"]
-    },
-    {
-      jour: "MAR",
-      date: "12 JUL",
-      heures: ["09:20", "-", "-", "-", "-", "-"]
-    },
-    {
-      jour: "MER",
-      date: "13 JUL",
-      heures: ["09:20", "10:20", "11:20", "12:20", "13:20", "14:20"]
-    }, {
-      jour: "JEU",
-      date: "14 JUL",
-      heures: ["09:20", "-", "-", "-", "-", "-"]
-    }, {
-      jour: "VEN",
-      date: "15 JUL",
-      heures: ["09:20", "-", "-", "-", "-", "-"]
-    }
-  ];
+  const [users, setUsers] = useState([]);
+  const token = localStorage.getItem("jwtToken");
+
+  // États pour stocker le compte des utilisateurs par rôle
+  const [countProviders, setCountProviders] = useState(0);
+  const [countNormalUsers, setCountNormalUsers] = useState(0);
+
+  const [establishments, setEstablishments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8888/api/users", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        const users = data["hydra:member"];
+
+        // Mettre à jour les utilisateurs
+        setUsers(users);
+
+        // Calculer le nombre de médecins
+        const providers = users.filter(
+          (user) =>
+            user.roles.includes("ROLE_PROVIDER") ||
+            user.roles.includes("ROLE_EMPLOYEE")
+        );
+        setCountProviders(providers.length);
+
+        // Calculer le nombre d'utilisateurs normaux
+        const normalUsers = users.filter(
+          (user) =>
+            user.roles.includes("ROLE_USER") &&
+            !user.roles.includes("ROLE_PROVIDER") &&
+            !user.roles.includes("ROLE_EMPLOYEE")
+        );
+        setCountNormalUsers(normalUsers.length);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+     const fetchEstablishments = async () => {
+       try {
+         const response = await fetch(
+           "http://localhost:8888/api/establishments",
+           {
+             method: "GET",
+             headers: {
+               Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+             },
+           }
+         );
+         const data = await response.json();
+
+        setEstablishments(data["hydra:member"]);
+
+       } catch (error) {
+         console.error("Error fetching data:", error);
+       }
+     };
+
+       fetchEstablishments();
+
+       const fetchAppointments = async () => {
+          try {
+            const response = await fetch(
+              "http://localhost:8888/api/appointments",
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+                },
+              }
+            );
+            const data = await response.json();
+  
+            setAppointments(data["hydra:member"]);
+  
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
+
+        fetchAppointments();
+  }, []); 
+
   return (
-
     <>
-      <Navbar_user_log />
-        <div className='title-admin-page'>
-            <h1>Interface administrateur</h1>
-        </div>
 
-        <div className='admin-home-container'>
-            <ButtonAdmin 
-                txtButton="Gestion des prestataires"
-                route="/admin/admin_provider" />
-            <ButtonAdmin 
-                txtButton="Gestion des utilisateurs"
-                route="/admin/user" />
-        </div>
-        
-      <Footer />
+      <div className="user-statistics">
+        <h2>Statistiques des utilisateurs</h2>
+        <p>Nombre total d'utilisateurs : {users.length}</p>
+        <p>Nombre de médecins : {countProviders}</p>
+        <p>Nombre d'utilisateurs normaux : {countNormalUsers}</p>
+      </div>
 
+      <div className="establishment-statistics">
+        <h2>Statistiques des établissements</h2>
+        <p>Nombre total d'établissements : {establishments.length}</p>
+      </div>
 
+      <div className="appointment-statistics">
+        <h2>Statistiques des rendez-vous</h2>
+        <p>Nombre total de rendez-vous : {appointments.length}</p>
+      </div>
     </>
-  )
-};
+  );
+}
 
 export default Admin;

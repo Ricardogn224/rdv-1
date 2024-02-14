@@ -3,6 +3,10 @@ import "../../assets/css/confirmation_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
 
 function Confirm_page() {
+
+
+  const storedUsername = localStorage.getItem("username");
+
   return (
     <>
       <div className="flex-center flex-column rdv_list">
@@ -36,28 +40,7 @@ function Confirm_page() {
           </div>
           <div className="proposition2 flex-column">
             <br />
-            <div className="flex">
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 18"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z"
-                />
-              </svg>
-              <div class="text">
-                <h4>Pour</h4>
-                <p>Pierre DUPONT</p>
-              </div>
-            </div>
 
-            <br />
             <div className="flex">
               <svg
                 version="1.1"
@@ -81,7 +64,7 @@ function Confirm_page() {
               </svg>
 
               <div className="text flex-center">
-                <p>mail@gmail.com</p>
+                <p>{storedUsername}</p>
               </div>
             </div>
             <br />
@@ -92,15 +75,15 @@ function Confirm_page() {
         <br />
 
         <div className="encadre w-700 ma-20 suivant">
-            <div className="flex-column flex-center">
-                <h4>Vous allez recevoir un mail de confirmation</h4>
-                <p>Vous pourrez annuler votre rendez-vous depuis ce mail</p>
-
-            </div>
-          
+          <div className="flex-column flex-center">
+            <h4>Vous allez recevoir un mail de confirmation</h4>
+            <p>
+              Vous pourrez annuler votre rendez-vous depuis{" "}
+              <a href="/rdv_page"> votre page de rdv</a>
+            </p>
+          </div>
         </div>
       </div>
-
     </>
   );
 }

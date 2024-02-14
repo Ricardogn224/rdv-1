@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Navbar_user_log from '../Navbar_user_log'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
-import Footer from '../Footer'
-import Navbar from '../navbar'
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -156,7 +153,6 @@ function AdminProvision() {
     return (
 
         <>
-            <Navbar/>
             <div className='title-admin-page'>
                 <h1>Gestion prestations</h1>
             </div>
@@ -292,8 +288,6 @@ function AdminProvision() {
                 </div>
             </Modal>
 
-            
-            <Footer />
         </>
         )
     };

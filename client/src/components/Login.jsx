@@ -26,19 +26,19 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let emailValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
-    let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/;
+    // let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/;
 
     if (!emailValid.test(valueEmail)) {
       setEmailError("Veuillez entrer une adresse e-mail valide.");
       return;
     }
 
-    if (!passwordValid.test(valuePassword)) {
-      setPasswordError(
-        "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial."
-      );
-      return;
-    }
+    // if (!passwordValid.test(valuePassword)) {
+    //   setPasswordError(
+    //     "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial."
+    //   );
+    //   return;
+    // }
 
 
       /*let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
@@ -77,7 +77,7 @@ function Login() {
         if (decodedToken) {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
-          //navigate("/search_page");
+          navigate("/search_page");
         }
       } else {
         // Gérer l'échec de la connexion
@@ -119,9 +119,9 @@ function Login() {
               value={valuePassword}
               onChange={inputPassword}
             />
-            <span id="errorpassword" className="error-message">
+            {/* <span id="errorpassword" className="error-message">
               {passwordError}
-            </span>
+            </span> */}
 
             <div className="field space-between flex">
               <div>

@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\EmployeeController;
 use App\Controller\GetUserByRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
@@ -51,6 +52,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/userEmployees',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
+        new Post(
+            denormalizationContext: ['groups' => ['employee:write']],
+            normalizationContext: ['groups' => ['user:read']],
+            uriTemplate: '/usersEmployee',
+            controller: EmployeeController::class,
+        ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
         new Get(
             uriTemplate: '/employeePlanning/{id}',
@@ -85,15 +92,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
     private Collection $products;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read', 'planningRdv:read', 'establishment:read', 'establishment:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
-    #[Groups(['user:write', 'user:read'])]
+    #[Groups(['user:write', 'user:read', 'employee:write'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
@@ -108,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
     private Collection $establishments;
 
-    #[Groups(['planningEmployee:read', 'planning:read'])]
+    #[Groups(['planningEmployee:read', 'planning:read', 'employee:write'])]
     #[ORM\ManyToOne(inversedBy: 'employees')]
     private ?Establishment $establishmentEmployee = null;
 
