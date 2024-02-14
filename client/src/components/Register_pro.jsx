@@ -69,27 +69,49 @@ function Register_pro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      try {
-        const apiUrl = 'http://localhost:8888'; 
-        const response = await fetch(`${apiUrl}/api/users`, { 
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formValues),
-        });
-      
-        if (response.ok) {
-          console.log('Registration successful');
-          navigate("/login");
-        } else {
-          console.error('Registration failed:', await response.text());
+   if (validateForm()) {
+    try {
+      const apiUrl =  'http://localhost:8888'; 
+      const response = await fetch(`${apiUrl}/api/users`, { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      });
+    
+      if (response.ok) {
+        console.log('Registration successful');
+
+        const  data  = await response.json();
+        const id = data.id
+
+        try {
+          const apiUrl =  'http://localhost:8888'; 
+          const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
+            method: "PATCH",
+            headers: {
+              'Content-Type': 'application/merge-patch+json',
+            },
+            body: JSON.stringify(formValues),
+          });
+        
+          if (response.ok) {
+            console.log('request successful');
+            navigate("/login");
+          } else {
+            console.error('request failed:', await response.text());
+          }
+        } catch (error) {
+          console.error('Error during request:', error);
         }
-      } catch (error) {
-        console.error('Error during registration:', error);
+
+        navigate("/login");
+      } else {
+        console.error('Registration failed:', await response.text());
       }
     }
+   }
   };
 
 

@@ -110,6 +110,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <ProtectedRoute requiredRole="ROLE_ADMIN">
+        <Outlet />
         <HeaderAdmin />
         <section className="flex w-full">
           <NavbarAdmin />
