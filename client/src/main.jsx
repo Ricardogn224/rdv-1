@@ -36,6 +36,7 @@ import {
   Outlet,
   RouterProvider,
 } from "react-router-dom";
+import Login from "./components/Login.jsx";
 
 
 const router = createBrowserRouter([
@@ -60,22 +61,6 @@ const router = createBrowserRouter([
         element: <Search_page />,
       },
       {
-        path: "*",
-        element: <NotFound />,
-      },
-    ],
-  },
-  {
-    path: "/",
-    element: (
-      <>
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </>
-    ),
-    children: [
-      {
         path: "rdv_page",
         element: <Rdv_page />,
       },
@@ -88,23 +73,24 @@ const router = createBrowserRouter([
         element: <Confirm_page />,
       },
       {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "register_pro",
+        element: <Register_pro />,
+      },
+      {
         path: "*",
         element: <NotFound />,
       },
     ],
   },
-  {
-    path: "/login",
-    Component: lazy(() => import("./components/User_login.jsx")),
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/register_pro",
-    element: <Register_pro />,
-  },
+  
 
   {
     path: "/admin",

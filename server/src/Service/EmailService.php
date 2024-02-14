@@ -28,11 +28,11 @@ class EmailService
 
         $sendSmtpEmail = new \Brevo\Client\Model\SendSmtpEmail();
         $sendSmtpEmail['to'] = [['email' => $destinator]];
-        $sendSmtpEmail['sender'] = ['name' => 'Gift Management', 'email' => 'no-reply@gift-management.com'];
+        $sendSmtpEmail['sender'] = ['name' => 'Medecin sur rdv', 'email' => 'no-reply@medecin-sur-rdv.com'];
         $sendSmtpEmail['htmlContent'] = $htmlContent;
         $sendSmtpEmail['subject'] = $subject;
         $sendSmtpEmail['headers'] = array('MIME-version'=>'1.0',
-        'Date'=> date('r'), 'From'=> 'Gift-Management<no-reply@gift-management.com>', 'Reply-To'=> 'Gift-Management<no-reply@gift-management.com>',
+        'Date'=> date('r'), 'From'=> 'Medecin-sur-rdv<no-reply@medecin-sur-rdv.com>', 'Reply-To'=> 'Medecin-sur-rdv<no-reply@medecin-sur-rdv.com>',
         'Content-Type'=> 'text/html; charset=utf-8', 'X-Mailer'=> 'PHP/'.phpversion());
 
         try {

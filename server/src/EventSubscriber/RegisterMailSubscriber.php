@@ -39,8 +39,8 @@ final class RegisterMailSubscriber implements EventSubscriberInterface
         }
 
         $destinator = $user->getEmail();
-        $htlmContent = "Bienvenue " . $user->getFirstname()  . ' <a href="#">Confirm my Email</a>';
-        $subject = 'Please Confirm your Email';
+        $htlmContent = "Bonjour, " . $user->getFirstname(). " <br> <br>Félicitations pour avoir rejoint la plateforme 'Medecin sur Rendez-vous' ! C'est avec une grande joie que nous vous accueillons parmi nous. Votre inscription enrichit notre communauté et renforce notre engagement à fournir des services de qualité dans le domaine médical.";
+        $subject = 'Inscription sur Medecin sur rdv';
 
         $this->emailService->sendVerificationEmail($destinator, $subject, $htlmContent);
 
