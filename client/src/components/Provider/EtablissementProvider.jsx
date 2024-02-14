@@ -9,11 +9,13 @@ function DashboardContenu() {
     const rdvs = [
         { nom: "Kader Conté", heure: "Terminé", raison: "Diabète" },
         { nom: "Maimouna Bangoura", heure: "12:00", raison: "Grippe" },
-        // Ajoutez d'autres rendez-vous ici
+
     ];
     const [afficherFormulaire, setAfficherFormulaire] = useState(false);
     const myProvider = JSON.parse(localStorage.getItem('myProvider'));
+    const [establishments, setEstablishments] = useState(myProvider.establishments);
     console.log(myProvider.establishments);
+
 
 
 
