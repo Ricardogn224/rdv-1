@@ -1,54 +1,71 @@
-import React, {useState, useEffect} from 'react';
-import '../assets/css/navbar.css';
-import { Navigate } from "react-router-dom";
 
+import React, { useState, useEffect, useTransition } from "react";
+import '../assets/css/navbar.css';
+import { useNavigate } from "react-router-dom"; // Correction ici pour useNavigate
 
 function Navbar() {
+  const navigate = useNavigate();
+  const [isPending, startTransition] = useTransition();
+  const [username, setUsername] = useState("");
 
-    const [username, setUsername] = useState("");
-
-    useEffect(() => {
-      const storedUsername = localStorage.getItem("username");
-      // storedUsername = "user"
-      if (storedUsername) {
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      startTransition(() => {
         setUsername(storedUsername);
-      }
-    }, []);
+      });
+    }
+  }, []);
 
-      const handleLogout = () => {
-        // Remove all from local storage
-        localStorage.clear();
-        setUsername(null);
-        return <Navigate to="/" />;
-      };
+  const handleLogout = () => {
+    startTransition(() => {
+      localStorage.clear();
+      setUsername(null);
+      navigate("/");
+    });
+  };
+
+   const handleNavigate = (path) => () => {
+    startTransition(() => {
+     navigate(path);
+    });
+   };
 
   return (
     <header>
-      <a className="text-white font-semibold text-4xl " href="/">
+      <div
+        className="text-white font-semibold text-4xl cursor-pointer"
+        onClick={handleNavigate("/")}
+      >
         Médecin sur rdv
-      </a>
+      </div>
       <div className="groupinput">
         {username ? (
-          <a className="text-white text-lg font-semibold mr-5" href="/rdv_page">
+          <div
+            className="text-white text-lg font-semibold mr-5 cursor-pointer"
+            onClick={handleNavigate("/rdv_page")}
+          >
             Mes rendez-vous
-          </a>
+          </div>
         ) : (
           ""
         )}
-        <a
-          className="text-cyan-700 bg-white text-lg font-semibold hover:text-white hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-700 duration-150 rounded-lg px-5 py-2.5  focus:outline-none"
-          href="/register_pro"
+        <div
+          className="text-cyan-700 bg-white text-lg font-semibold hover:text-white hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-700 duration-150 rounded-lg px-5 py-2.5 focus:outline-none cursor-pointer"
+          onClick={handleNavigate("/register_pro")}
         >
           Vous êtes un professionnel ?
-        </a>
-
+        </div>
         {username ? (
           <div className="text-white text-lg font-semibold w-auto space-x-3 ml-5 row">
             {username} <br />
             <button onClick={handleLogout}>Déconnexion</button>
           </div>
         ) : (
-          <div className="connexion">
+          <div
+            className="connexion cursor-pointer"
+            onClick={handleNavigate("/login")}
+          >
             <>
               <svg
                 width="32"
@@ -72,11 +89,10 @@ function Navbar() {
                   strokeLinejoin="round"
                 />
               </svg>
-
-              <a className="font-semibold" href="/login">
+              <span className="font-semibold text-white">
                 Se connecter <br />
                 <span className="gerer">Gérer mes rdv</span>
-              </a>
+              </span>
             </>
           </div>
         )}
@@ -86,6 +102,7 @@ function Navbar() {
 }
 
 export default Navbar;
+
 
 
 
