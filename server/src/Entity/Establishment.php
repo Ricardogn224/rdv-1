@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
             /*security: 'is_granted("EDIT", object)'*/
             controller: EstablishmentController::class,
             read: false,
-            write:false
+            //write:false
         ),
         new Get(normalizationContext: ['groups' => ['establishment:read', 'establishment:read:full']], /*security: 'is_granted("VIEW", object)',*/),
         new Patch(
@@ -35,7 +35,8 @@ use Doctrine\ORM\Mapping as ORM;
             normalizationContext: ['groups' => ['establishment:read']],
             /*security: 'is_granted("EDIT", object)'*/
             controller: EstablishmentController::class,
-            read: false),
+            read: false
+        ),
     ],
 )]
 #[ORM\Table(name: '`establishment`')]
@@ -48,21 +49,27 @@ class Establishment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:write:update',
-    'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read', 'employee:write', 'user:provider:read'])]
+    #[Groups([
+        'provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:write:update',
+        'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read', 'employee:write', 'user:provider:read'
+    ])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['establishment:write', 'establishment:write:update', 'establishment:read', 'planningEmployee:read',
-    'planningDoctor:read', 'provisionEmployee:read', 'user:provider:read'])]
+    #[Groups([
+        'establishment:write', 'establishment:write:update', 'establishment:read', 'planningEmployee:read',
+        'planningDoctor:read', 'provisionEmployee:read', 'user:provider:read'
+    ])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
     #[ORM\OneToMany(mappedBy: 'Establishment', targetEntity: Provision::class)]
     private Collection $provisions;
 
-    #[Groups(['establishment:read',  'establishment:write', 'establishment:write:update', 'establishment:read:full',
-    'user:provider:read'])]
+    #[Groups([
+        'establishment:read',  'establishment:write', 'establishment:write:update', 'establishment:read:full',
+        'user:provider:read'
+    ])]
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     private ?User $provider = null;
 
@@ -176,5 +183,4 @@ class Establishment
 
         return $this;
     }
-
 }

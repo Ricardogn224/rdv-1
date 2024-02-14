@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function DashboardProvider() {
   const navigate = useNavigate();
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
-
+  console.log(myProvider.establishments);
   useEffect(() => {
     if (myProvider && !myProvider.active) {
       navigate("/");
@@ -14,9 +14,9 @@ function DashboardProvider() {
   }, [myProvider, navigate]);
 
   return (
-      <>
-        <DashboardContenu />
-      </>
+    <>
+      <DashboardContenu />
+    </>
   );
 }
 

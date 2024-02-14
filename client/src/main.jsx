@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/medecin/:id",
+        path: "/medecin",
         element: <Employee />,
       },
       {

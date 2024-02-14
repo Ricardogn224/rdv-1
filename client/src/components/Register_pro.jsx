@@ -78,7 +78,7 @@ function Register_pro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (validateForm()) {
       try {
         const apiUrl = 'http://localhost:8888';
@@ -89,13 +89,13 @@ function Register_pro() {
           },
           body: JSON.stringify(formValues),
         });
-  
+
         if (response.ok) {
           console.log('Registration successful');
-  
+
           const data = await response.json();
           const id = data.id;
-  
+
           try {
             const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",
@@ -104,7 +104,7 @@ function Register_pro() {
               },
               body: JSON.stringify(formValues),
             });
-  
+
             if (responsePatch.ok) {
               console.log('Request successful');
               navigate("/login");
@@ -115,7 +115,7 @@ function Register_pro() {
           } catch (error) {
             setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
           }
-  
+
           navigate("/login");
         } else {
           const errorBody = await response.json(); // Parse l'erreur retournée par l'API

@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 function HeaderAdmin() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("user");
-    navigate("/login");
+    startTransition(() => {
+      localStorage.clear();
+      navigate("/login");
+    });
   };
 
   const handleNavigate = (path) => () => {
-    navigate(path);
-    setIsMenuOpen(false); // Ferme le menu après la navigation
+    startTransition(() => {
+      navigate(path);
+    });
   };
 
   return (
@@ -108,5 +111,3 @@ function HeaderAdmin() {
 }
 
 export default HeaderAdmin;
-
-
