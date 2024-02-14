@@ -18,14 +18,17 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
 import HeaderProvider from './components/Provider/HeaderProvider.jsx';
+import HeaderAdmin from "./components/Admin/HeaderAdmin";
+import NavbarAdmin from "./components/Admin/NavbarAdmin";
+import NotFound from "./components/pages/404";
 
 
 
-import Admin from './components/pages/Admin.jsx'
-import AdminProvider from './components/pages/AdminProvider.jsx'
-import AdminUser from './components/pages/AdminUser.jsx'
-import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
-import AdminProvision from "./components/pages/AdminProvision.jsx";
+import Admin from './components/Admin/Admin.jsx'
+import AdminProvider from './components/Admin/AdminProvider.jsx'
+import AdminUser from './components/Admin/AdminUser.jsx'
+import AdminEstablishment from "./components/Admin/AdminEstablishment.jsx";
+import AdminProvision from "./components/Admin/AdminProvision.jsx";
 import Employee from "./components/pages/Employee.jsx";
 
 import {
@@ -58,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 not found</h1>,
+        element: <NotFound />,
       },
     ],
   },
@@ -86,7 +89,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <h1>404 not found</h1>,
+        element: <NotFound />,
       },
     ],
   },
@@ -106,9 +109,12 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <ProtectedRoute requiredRole="ROLE_USER">
-        <Outlet />
-      </ProtectedRoute>
+      // <ProtectedRoute requiredRole="ROLE_ADMIN">
+      <>
+        <HeaderAdmin />
+         
+      </>
+      // </ProtectedRoute>
     ),
     children: [
       {
@@ -131,6 +137,10 @@ const router = createBrowserRouter([
         path: "provision",
         element: <AdminProvision />,
       },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
   },
   {
@@ -138,6 +148,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute requiredRole="ROLE_PROVIDER">
         <HeaderProvider />
+
         <Outlet />
       </ProtectedRoute>
     ),
@@ -149,20 +160,27 @@ const router = createBrowserRouter([
       {
         path: "etablissement",
         element: <EtablissementProvider />,
-      },{
+      },
+      {
         path: "planning",
         element: <PlanningProvider />,
-      },{
+      },
+      {
         path: "employee",
         element: <EmployeeProvider />,
-      },{
+      },
+      {
         path: "employee_rdv/:id",
         element: <EmployeeRdvProvider />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
 
-/*  {
+  /*  {
     path: "/employee_rdv/:id",
     element: <EmployeeRdv />,
   },
@@ -170,7 +188,6 @@ const router = createBrowserRouter([
     path: "/my_employees",
     element: <MyEmployees />,
   },*/
-
 
   /*
   {

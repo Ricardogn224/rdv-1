@@ -78,7 +78,7 @@ function MyEmployees() {
                 {employee.firstname} {employee.lastname}
                 </li>
             ))}
-            </ul>
+            </ul>   
         </div>
 
         {selectedEmployee && (

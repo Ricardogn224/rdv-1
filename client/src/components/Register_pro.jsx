@@ -3,114 +3,149 @@ import { useNavigate } from "react-router-dom";
 import '../assets/css/register.css';
 
 function Register_pro() {
-
   const navigate = useNavigate();
 
-  // États pour stocker les valeurs du formulaire
   const [formValues, setFormValues] = useState({
     firstname: '',
     lastname: '',
     dateOfBirth: '',
     email: '',
     plainPassword: '',
-    accountType: 'provider', // Assuming a default value
+    accountType: 'provider',
     kbis: '',
   });
 
-  // Fonction pour gérer les changements dans les champs du formulaire
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+  const [formErrors, setFormErrors] = useState({
+    firstname: '',
+    lastname: '',
+    dateOfBirth: '',
+    email: '',
+    plainPassword: '',
+    kbis: '',
+  });
+
+
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!formValues.firstname) {
+      errors.firstname = 'First name is required';
+      isValid = false;
+    }
+
+    if (!formValues.lastname) {
+      errors.lastname = 'Last name is required';
+      isValid = false;
+    }
+
+    if (!formValues.email || !/^\S+@\S+\.\S+$/.test(formValues.email)) {
+      errors.email = 'Valid email is required';
+      isValid = false;
+    }
+
+
+    if (!formValues.dateOfBirth) {
+      errors.dateOfBirth = 'Date of birth is required';
+      isValid = false;
+    }
+
+
+    if (!formValues.kbis) {
+      errors.kbis = 'KBIS is required';
+      isValid = false;
+    }
+
+
+    if (!formValues.plainPassword) {
+      errors.plainPassword = 'Password is required';
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
   };
 
-  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const apiUrl = process.env.API_URL || 'http://localhost:8888'; 
-      const response = await fetch(`${apiUrl}/api/users`, { 
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formValues),
-      });
-    
-      if (response.ok) {
-        console.log('Registration successful');
-        navigate("/login");
-      } else {
-        console.error('Registration failed:', await response.text());
+  
+    if (validateForm()) {
+      try {
+        const apiUrl = 'http://localhost:8888';
+        const response = await fetch(`${apiUrl}/api/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formValues),
+        });
+  
+        if (response.ok) {
+          console.log('Registration successful');
+  
+          const data = await response.json();
+          const id = data.id;
+  
+          try {
+            const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
+              method: "PATCH",
+              headers: {
+                'Content-Type': 'application/merge-patch+json',
+              },
+              body: JSON.stringify(formValues),
+            });
+  
+            if (responsePatch.ok) {
+              console.log('Request successful');
+              navigate("/login");
+            } else {
+              console.error('Request failed:', await responsePatch.text());
+            }
+          } catch (error) {
+            console.error('Error during PATCH request:', error);
+          }
+  
+          navigate("/login");
+        } else {
+          console.error('Registration failed:', await response.text());
+        }
+      } catch (error) {
+        console.error('Error during POST request:', error);
       }
-    } catch (error) {
-      console.error('Error during registration:', error);
     }
-  }
-    
+  };
 
   return (
     <div className="flex-center flex-column">
-      <div className='mt-80  form-zone'>
-
-        <div class="flex-center">
-          <h1 class="title"> Vous êtes prestataire ? </h1>
+      <div className='mt-80 form-zone'>
+        <div className="flex-center">
+          <h1 className="title"> Are you a provider? </h1>
         </div>
 
         <form onSubmit={handleSubmit}>
-
-          {/* <div className="flex-center">
-            <div className="field space-between flex">
-              <div >
-                <input
-                  className="radio"
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  value="female"
-                  checked={formValues.gender === 'female'}
-                  onChange={handleInputChange}
-                />
-                <label className='flex-center' htmlFor="female ">Féminin</label>
-              </div>
-
-              <div>
-                <input
-                  className="radio"
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  checked={formValues.gender === 'male'}
-                  onChange={handleInputChange}
-                />
-                <label className='flex-center' htmlFor="male">Masculin</label>
-              </div>
-            </div>
-          </div> */}
-
           <div className="flex-column flex-center">
-          <input
+            <input
               className="field"
               type="text"
               name="lastname"
               id="lastname"
-              placeholder="Nom"
+              placeholder="Last Name"
               value={formValues.lastname}
               onChange={handleInputChange}
             />
-          <input
+            {formErrors.lastname && <span className="error">{formErrors.lastname}</span>}
+
+            <input
               className="field"
               type="text"
               name="firstname"
               id="firstname"
-              placeholder="Prénom"
+              placeholder="First Name"
               value={formValues.firstname}
               onChange={handleInputChange}
             />
+            {formErrors.firstname && <span className="error">{formErrors.firstname}</span>}
+
             <input
               className="field"
               type="email"
@@ -120,38 +155,45 @@ function Register_pro() {
               value={formValues.email}
               onChange={handleInputChange}
             />
+            {formErrors.email && <span className="error">{formErrors.email}</span>}
+
             <input
               className="field"
               type="date"
               name="dateOfBirth"
               id="dateOfBirth"
-              placeholder="Date de naissance"
+              placeholder="Date of Birth"
               value={formValues.dateOfBirth}
               onChange={handleInputChange}
             />
+            {formErrors.dateOfBirth && <span className="error">{formErrors.dateOfBirth}</span>}
+
             <input
               className="field"
               type="text"
               name="kbis"
               id="kbis"
-              placeholder="Veuillez entrer votre KBIS"
+              placeholder="Enter your KBIS"
               value={formValues.kbis}
               onChange={handleInputChange}
             />
+            {formErrors.kbis && <span className="error">{formErrors.kbis}</span>}
+
             <input
               className="field"
               type="password"
               name="plainPassword"
               id="plainPassword"
-              placeholder="Mot de passe"
+              placeholder="Password"
               value={formValues.plainPassword}
               onChange={handleInputChange}
             />
+            {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
           </div>
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
-              VALIDER
+              SUBMIT
             </button>
           </div>
         </form>

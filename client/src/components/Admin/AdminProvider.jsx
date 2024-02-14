@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../../assets/css/search_page.css' 
 import '../../assets/css/admin.css' 
-import Footer from '../Footer'
-import Navbar from '../navbar'
+
 
 
 function AdminProvider() {
@@ -107,7 +106,6 @@ function AdminProvider() {
   return (
 
     <>
-        <Navbar />
         <div className='title-admin-page'>
             <h1>Gestion prestataires</h1>
         </div>
@@ -176,7 +174,6 @@ function AdminProvider() {
             </div>
         </div>
         
-      <Footer />
     </>
   )
 };

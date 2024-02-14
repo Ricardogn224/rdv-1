@@ -1,8 +1,18 @@
 import React from 'react';
 import DashboardContenu from './DashboardContenu';
-
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function DashboardProvider() {
+  const navigate = useNavigate();
+  const myProvider = JSON.parse(localStorage.getItem('myProvider'));
+
+  useEffect(() => {
+    if (myProvider && !myProvider.active) {
+      navigate("/");
+    }
+  }, [myProvider, navigate]);
+
   return (
       <>
         <DashboardContenu />

@@ -34,9 +34,11 @@ security:
 
     access_control:
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/manageRole, method: PATCH, roles: PUBLIC_ACCESS }
 
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/usersRole, method: GET, roles: ROLE_ADMIN }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

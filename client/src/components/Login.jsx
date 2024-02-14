@@ -26,19 +26,19 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let emailValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
-    let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/;
+    // let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/;
 
     if (!emailValid.test(valueEmail)) {
       setEmailError("Veuillez entrer une adresse e-mail valide.");
       return;
     }
 
-    if (!passwordValid.test(valuePassword)) {
-      setPasswordError(
-        "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial."
-      );
-      return;
-    }
+    // if (!passwordValid.test(valuePassword)) {
+    //   setPasswordError(
+    //     "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial."
+    //   );
+    //   return;
+    // }
 
 
       /*let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
@@ -72,12 +72,40 @@ function Login() {
         const  { token}  = await response.json();
         // Assuming the token is in a field named 'token' in the response
         const decodedToken = decodeToken(token);
-        console.log(decodedToken);
-        console.log(decodedToken.username);
+
         if (decodedToken) {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
-          navigate("/search_page");
+          if (decodedToken.roles.includes('ROLE_PROVIDER')) {
+            
+            try {
+              const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+        
+              if (response.ok) {
+        
+                const  data  = await response.json();
+                console.log(data)
+                localStorage.setItem('myProvider', JSON.stringify(data));
+                navigate("/provider");
+              } else {
+                // Gérer l'échec de la connexion
+                console.error('Échec de la requete.');
+              }
+            } catch (error) {
+              console.error('Erreur lors de la requête:', error);
+            }
+          } else if (decodedToken.roles.includes('ROLE_ADMIN')) {
+            navigate("/admin");
+          } else if (decodedToken.roles.includes('ROLE_USER')) {
+            navigate("/search_page");
+          }
+          
         }
       } else {
         // Gérer l'échec de la connexion
@@ -119,9 +147,9 @@ function Login() {
               value={valuePassword}
               onChange={inputPassword}
             />
-            <span id="errorpassword" className="error-message">
+            {/* <span id="errorpassword" className="error-message">
               {passwordError}
-            </span>
+            </span> */}
 
             <div className="field space-between flex">
               <div>

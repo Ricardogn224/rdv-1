@@ -20,7 +20,7 @@ trait Auth
 
     #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'establishment:write:update',
     'establishment:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write',
-    'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read'])]
+    'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read', 'user:login:write'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
@@ -33,7 +33,7 @@ trait Auth
     #[ORM\Column]
     private string $password = '';
 
-    #[Groups(['user:write', 'user:write:update'])]
+    #[Groups(['user:write', 'user:write:update', 'employee:write'])]
     private ?string $plainPassword = null;
 
     public function getId(): ?int
@@ -74,7 +74,7 @@ trait Auth
         $this->roles = $roles;
     }
 
-    #[Groups(['user:write', 'user:write:update'])]
+    #[Groups(['user:write:role'])]
     #[ApiProperty(example: UserAccountTypeEnum::NORMAL->value)]
     public function setAccountType(string $type): void
     {
