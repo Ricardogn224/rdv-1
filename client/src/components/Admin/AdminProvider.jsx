@@ -36,7 +36,7 @@ function AdminProvider() {
     };
 
     const handleValidateClick = (id, index) => {
-        console.log(id)
+        // console.log(id)
         // Perform a PATCH request to update provider.active
         const url = `http://localhost:8888/api/users/${id}`;
         const updatedData = {
@@ -71,7 +71,7 @@ function AdminProvider() {
         setDisplayCancel(false);
       };
 
-    console.log(localStorage.getItem('jwtToken'));
+    // console.log(localStorage.getItem('jwtToken'));
 
     useEffect(() => {
     

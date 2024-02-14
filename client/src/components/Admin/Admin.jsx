@@ -87,6 +87,7 @@ function Admin() {
               }
             );
             const data = await response.json();
+            console.log(data);
   
             setAppointments(data["hydra:member"]);
   
