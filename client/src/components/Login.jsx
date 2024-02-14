@@ -5,17 +5,23 @@ import {decodeToken} from "react-jwt";
 
 function Login() {
   const navigate = useNavigate();
-    // Utilisez useState pour suivre les valeurs des champs d'entrée
-    const [valueEmail, setValueEmail] = useState("");
-    const [valuePassword, setValuePassword] = useState("");
-      const [emailError, setEmailError] = useState("");
-      const [passwordError, setPasswordError] = useState("");
+  // Utilisez useState pour suivre les valeurs des champs d'entrée
+  const [valueEmail, setValueEmail] = useState("");
+  const [valuePassword, setValuePassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
-    // Gérez les modifications des champs d'entrée
-    const inputEmail = (e) => {
-      setValueEmail(e.target.value);
-      setEmailError(""); // Réinitialiser l'erreur lors de la modification
-    };
+
+  // Gérez les modifications des champs d'entrée
+  const inputEmail = (e) => {
+    setValueEmail(e.target.value);
+    setEmailError(""); // Réinitialiser l'erreur lors de la modification
+  };
+
+  const redirectRegister = () => {
+    navigate("/register");
+  };
 
   const inputPassword = (e) => {
     setValuePassword(e.target.value);
@@ -32,28 +38,6 @@ function Login() {
       setEmailError("Veuillez entrer une adresse e-mail valide.");
       return;
     }
-
-    // if (!passwordValid.test(valuePassword)) {
-    //   setPasswordError(
-    //     "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial."
-    //   );
-    //   return;
-    // }
-
-
-      /*let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
-      if (!regexPassword.test(valuePassword)) {
-        // afficher un message d'erreur si le champ 2 est vide
-        document.getElementById("errorpassword").innerHTML =
-          "Veuillez remplir ce champ";
-        return;
-      } else {
-        document.getElementById("errorpassword").innerHTML = "";
-      }*/
-
-    // let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/; // email valide
-    // let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/; // 8 caractères minimum, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
-
 
     try {
       const response = await fetch("http://localhost:8888/api/auth", {
@@ -90,15 +74,14 @@ function Login() {
               if (response.ok) {
         
                 const  data  = await response.json();
-                console.log(data)
                 localStorage.setItem('myProvider', JSON.stringify(data));
                 navigate("/provider");
               } else {
-                // Gérer l'échec de la connexion
-                console.error('Échec de la requete.');
+                const errorData = await response.json(); // On suppose que l'API renvoie une réponse JSON
+                setErrorMessage(errorData.message || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
               }
             } catch (error) {
-              console.error('Erreur lors de la requête:', error);
+              setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
             }
           } else if (decodedToken.roles.includes('ROLE_ADMIN')) {
             navigate("/admin");
@@ -108,11 +91,10 @@ function Login() {
           
         }
       } else {
-        // Gérer l'échec de la connexion
-        console.error('Échec de la connexion.');
+        setErrorMessage('Échec de la connexion.'); // Utiliser le message d'erreur de l'API
       }
     } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
+      setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
     }
 
   };
@@ -120,6 +102,7 @@ function Login() {
   return (
     <div className="flex-center flex-column">
       <section className=" flex-column mt-80 form-zone">
+        <br/>
         <div className="flex-center">
           <h1 className="title">J'ai déjà un compte</h1>
         </div>
@@ -150,31 +133,26 @@ function Login() {
             {/* <span id="errorpassword" className="error-message">
               {passwordError}
             </span> */}
-
-            <div className="field space-between flex">
-              <div>
-                <input
-                  className="checkbox"
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                />
-                <label htmlFor="remember">Se souvenir de mon identifiant</label>
-              </div>
-            </div>
+            <br/>
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            <br/>
           </div>
+          <br/>
+
           <div className="flex-center">
             <button className="btn-submit" type="submit">
               Se connecter
             </button>
           </div>
           <div className="flex-center">
-            <a className="field link flex-center" href="">
-              Mot de passe oublié
-            </a>
+            <li className="field link flex-center cursor-pointer" onClick={redirectRegister}>
+              S'inscrire
+            </li>
           </div>
+          <br/>
         </form>
       </section>
+      <br/><br/><br/><br/><br/>
     </div>
   );
 

@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[AsController]
 class GetUserLogin extends AbstractController
-{
+{ 
     public function __invoke(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): User
     {
         //$data = json_decode($request->getContent(), true);
@@ -29,13 +29,17 @@ class GetUserLogin extends AbstractController
         $email = trim($email);
 
         if (!$email) {
-            throw new BadRequestHttpException('Email parameter is required');
+            throw new BadRequestHttpException('Le champ email est requis');
         }
 
         $user = $entityManager->getRepository(User::class)->findOneByEmail($email);
 
         if (!$user) {
-            throw new NotFoundHttpException('User not found');
+            throw new NotFoundHttpException('Compte non existant');
+        }
+
+        if (in_array('ROLE_PROVIDER', $user->getRoles(), true) && !$user->isActive()) {
+            throw new AccessDeniedException('Votre compte est en cours de validation par un administrateur.');
         }
 
         return $user;

@@ -4,6 +4,8 @@ import '../assets/css/register.css';
 
 function Register_pro() {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const [formValues, setFormValues] = useState({
     firstname: '',
@@ -107,18 +109,20 @@ function Register_pro() {
               console.log('Request successful');
               navigate("/login");
             } else {
-              console.error('Request failed:', await responsePatch.text());
+              const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+              setErrorMessage(errorBody.message);
             }
           } catch (error) {
-            console.error('Error during PATCH request:', error);
+            setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
           }
   
           navigate("/login");
         } else {
-          console.error('Registration failed:', await response.text());
+          const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+          setErrorMessage('Une erreur est survenue ', errorBody);
         }
       } catch (error) {
-        console.error('Error during POST request:', error);
+        setErrorMessage('Une erreur est survenue ', errorBody);
       }
     }
   };
@@ -126,10 +130,11 @@ function Register_pro() {
   return (
     <div className="flex-center flex-column">
       <div className='mt-80 form-zone'>
+        <br/>
         <div className="flex-center">
-          <h1 className="title"> Are you a provider? </h1>
+          <h1 className="title"> Êtes vous un médecin ? </h1>
         </div>
-
+        <br/>
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -197,13 +202,19 @@ function Register_pro() {
               onChange={handleInputChange}
             />
             {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
+            
+            <br/>
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            <br/>
+          
           </div>
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
-              SUBMIT
+              S'inscrire
             </button>
           </div>
+          <br/>
         </form>
       </div>
     </div>

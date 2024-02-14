@@ -21,7 +21,7 @@ trait Auth
     #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'establishment:write:update',
     'establishment:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write',
     'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read', 'user:login:write'])]
-    #[Assert\Email()]
+    #[Assert\Email(message: "L'adresse email '{{ value }}' n'est pas valide.")]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
 

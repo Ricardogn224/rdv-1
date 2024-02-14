@@ -15,6 +15,8 @@ function Register() {
     accountType: 'normal' 
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [formErrors, setFormErrors] = useState({
     firstname: '',
     lastname: '',
@@ -90,19 +92,21 @@ function Register() {
   
             if (response.ok) {
               console.log('Request successful');
-              navigate("/login");
+              navigate("/");
             } else {
-              console.error('Request failed:', await response.text());
+              const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+              setErrorMessage(errorBody.message);
             }
           } catch (error) {
-            console.error('Error during request:', error);
+            setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
           }
         } else {
-          console.error('Registration failed:', await response.text());
+          const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+          setErrorMessage('Une erreur est survenue ', errorBody.message);
           // Handle errors (e.g., display error message)
         }
       } catch (error) {
-        console.error('Error during registration:', error);
+        setErrorMessage('Une erreur est survenue ', error);
       }
     }
   };
@@ -119,11 +123,12 @@ function Register() {
   return (
     <div className="flex-center flex-column">
       <div className='mt-80  form-zone'>
-
+      <br />
         <div className="flex-center">
-          <h1 className="title"> Create your account </h1>
+          <h1 className="title"> Créer un compte </h1>
         </div>
-
+        <br/>
+        <br/>
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -131,7 +136,7 @@ function Register() {
               type="text"
               name="firstname"
               id="firstname"
-              placeholder="First Name"
+              placeholder="Prénom"
               value={formValues.firstname}
               onChange={handleInputChange}
             />
@@ -142,7 +147,7 @@ function Register() {
               type="text"
               name="lastname"
               id="lastname"
-              placeholder="Last Name"
+              placeholder="Nom"
               value={formValues.lastname}
               onChange={handleInputChange}
             />
@@ -153,7 +158,7 @@ function Register() {
               type="date"
               name="dateOfBirth"
               id="dateOfBirth"
-              placeholder="Date of Birth"
+              placeholder="Date de naissance"
               value={formValues.dateOfBirth}
               onChange={handleInputChange}
             />
@@ -175,21 +180,27 @@ function Register() {
               type="password"
               name="plainPassword"
               id="plainPassword"
-              placeholder="Password"
+              placeholder="Mot de passe"
               value={formValues.plainPassword}
               onChange={handleInputChange}
             />
             {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
+            <br/>
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            <br/>
           </div>
 
+        
           <div className="flex-center">
             <button className="btn-submit" type="submit">
-              SUBMIT
+              S'inscrire
             </button>
           </div>
+          <br />
         </form>
       </div>
-    </div>
+      <br/><br/><br/><br/><br/>
+    </div>   
   );
 }
 
