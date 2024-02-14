@@ -72,12 +72,40 @@ function Login() {
         const  { token}  = await response.json();
         // Assuming the token is in a field named 'token' in the response
         const decodedToken = decodeToken(token);
-        console.log(decodedToken);
-        console.log(decodedToken.username);
+
         if (decodedToken) {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
-          navigate("/search_page");
+          if (decodedToken.roles.includes('ROLE_PROVIDER')) {
+            
+            try {
+              const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+        
+              if (response.ok) {
+        
+                const  data  = await response.json();
+                console.log(data)
+                localStorage.setItem('myProvider', JSON.stringify(data));
+                navigate("/provider");
+              } else {
+                // Gérer l'échec de la connexion
+                console.error('Échec de la requete.');
+              }
+            } catch (error) {
+              console.error('Erreur lors de la requête:', error);
+            }
+          } else if (decodedToken.roles.includes('ROLE_ADMIN')) {
+            navigate("/admin");
+          } else if (decodedToken.roles.includes('ROLE_USER')) {
+            navigate("/search_page");
+          }
+          
         }
       } else {
         // Gérer l'échec de la connexion

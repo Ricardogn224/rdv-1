@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\EmployeeController;
 use App\Controller\GetUserByRoleController;
+use App\Controller\GetUserLogin;
+use App\Controller\ManageRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
 use App\Entity\Blog\Comment;
@@ -58,12 +60,23 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/usersEmployee',
             controller: EmployeeController::class,
         ),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("VIEW", object)',),
+        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]/*, security: 'is_granted("VIEW", object)'*/,),
         new Get(
             uriTemplate: '/employeePlanning/{id}',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
+        new Get(
+            uriTemplate: '/userLogin',
+            controller: GetUserLogin::class,
+            read: false
+        ),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
+        new Patch(
+            uriTemplate: '/manageRole/{id}',
+            denormalizationContext: ['groups' => ['user:write:role']],
+            /*security: 'is_granted("EDIT", object)',*/
+            controller: ManageRoleController::class
+        ),
     ],
 )]
 #[ORM\Table(name: '`user`')]
@@ -93,12 +106,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $products;
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
-    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write'])]
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write', 'user:provider:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
-    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write'])]
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write',
+    'user:provider:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
@@ -114,6 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'appointmentUser', targetEntity: Appointment::class)]
     private Collection $appointments;
 
+    #[Groups(['user:provider:read'])]
     #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
     private Collection $establishments;
 
@@ -124,11 +139,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: ProvisionEmployee::class)]
     private Collection $provisionEmployees;
 
-    #[Groups(['user:write'])]
+    #[Groups(['user:write', 'user:provider:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $kbis = null;
 
-    #[Groups(['user:write:update', 'user:read', 'user:read:full'])]
+    #[Groups(['user:admin:write', 'user:provider:read', 'user:admin:read'])]
     #[ORM\Column(nullable: true)]
     private ?bool $active = null;
 
@@ -138,6 +153,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->active = false;
         $this->posts = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->products = new ArrayCollection();

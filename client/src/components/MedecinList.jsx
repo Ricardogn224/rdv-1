@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import medecinImage from '../assets/portrait-docteur.jpg';
+import { useNavigate } from 'react-router-dom';
 
 function MedecinList({ nom, poste, adresse, type, consultationVideo, planning }) {
-
+const navigate = useNavigate();
     const [planningRegular, setPlanningRegular] = useState([]);
     const [currentWeekStartDate, setCurrentWeekStartDate] = useState(new Date());
 
     const planningDoctors = planning?.planningDoctors || [];
 
-    const handleReservationRdv = (jour, date, heure) => {
+    const handleReservationRdv = (e, jour, date, heure) => {
+        e.preventDefault();
         // Create a JSON object with jour and heure
         const reservationData = { jour, date, heure };
     
         // Convert the JSON object to a string
         const reservationDataString = JSON.stringify(reservationData);
     
-        // Store the string in the local storage
-        localStorage.setItem('reservationDataRdv', reservationDataString);
+        // // Store the string in the local storage
+        // localStorage.setItem('reservationDataRdv', reservationDataString);
+        navigate("/rdv", {state: {reservationDataRdv :  reservationDataString}})
     };
 
     const getCurrentWeekDates = () => {
@@ -133,7 +136,7 @@ function MedecinList({ nom, poste, adresse, type, consultationVideo, planning })
                                     <div className="dispo-hour bg-green-300" key={idx}>
                                         <p className="hour">
                                         {type === 'rdv' ? (
-                                            <a href="/rdv" onClick={() => handleReservationRdv(jour.jour, jour.date, heure)} className="hour-link">
+                                            <a onClick={(e) => handleReservationRdv(e, jour.jour, jour.date, heure)} className="hour-link cursor-pointer">
                                                 {heure}
                                             </a>
                                         ) : (

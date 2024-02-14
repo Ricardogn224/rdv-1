@@ -40,7 +40,28 @@ function Register() {
       if (response.ok) {
         console.log('Registration successful');
         // Handle successful registration (e.g., redirect to login page)
-        navigate("/");
+        const  data  = await response.json();
+        const id = data.id
+
+        try {
+          const apiUrl =  'http://localhost:8888'; 
+          const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
+            method: "PATCH",
+            headers: {
+              'Content-Type': 'application/merge-patch+json',
+            },
+            body: JSON.stringify(formValues),
+          });
+        
+          if (response.ok) {
+            console.log('request successful');
+            navigate("/login");
+          } else {
+            console.error('request failed:', await response.text());
+          }
+        } catch (error) {
+          console.error('Error during request:', error);
+        }
       } else {
         console.error('Registration failed:', await response.text());
         // Handle errors (e.g., display error message)

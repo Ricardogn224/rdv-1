@@ -3,6 +3,7 @@ import "../../assets/css/motif_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
 import { useNavigate } from "react-router-dom";
 import { parse, format } from 'date-fns';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -10,6 +11,7 @@ import { parse, format } from 'date-fns';
 function Motif_page() {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const dayAbbreviationsToFullName = {
       'DIM': 'Dimanche',
@@ -23,17 +25,39 @@ function Motif_page() {
 
 
     const [motif, setMotif] = useState([]);
-    const [dateRdv, setDateRdv] = useState('');
-    // const [parsedAppointmentDetail, setParsedAppointmentDetail] = useState(null);
+    // const [dateRdv, setDateRdv] = useState('');
     const storedUsername = localStorage.getItem("username");
     const token = localStorage.getItem("jwtToken")
 
+    var dateRdv = "";
+
+    const storedAppointmentDetail = location.state.reservationDataRdv;
+
+    console.log(storedAppointmentDetail)
+
+    var parsedAppointmentDetail = {};
+
+
+    // console.log(storedAppointmentDetail)
+
+    if (storedAppointmentDetail) {
+      // Parse the stored JSON string to get the object
+      parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
+      
+      var fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
+      dateRdv = fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure
+
+      console.log(parsedAppointmentDetail)
+
+    }
+
+
 
     const [formValues, setFormValues] = useState({
-      provision_employee_id: 3,
+      provision_employee_id: 1,
       patient_email: storedUsername,
-      hour: "parsedAppointmentDetail.heure",
-      date: "parsedAppointmentDetail.date",
+      hour: parsedAppointmentDetail.heure,
+      date: parsedAppointmentDetail.date,
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -42,29 +66,23 @@ function Motif_page() {
           [name]: value,
         });
     };
-
-
-
-
-    const [appointmentDetail, setAppointmentDetail] = useState(null);
-
     
     
 
     useEffect(() => {
 
-        const storedAppointmentDetail = localStorage.getItem("reservationDataRdv");
-        console.log(storedAppointmentDetail)
+        // const storedAppointmentDetail = localStorage.getItem("reservationDataRdv");
+        // console.log(storedAppointmentDetail)
 
-        if (storedAppointmentDetail) {
-          // Parse the stored JSON string to get the object
-          const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
-          setAppointmentDetail(parsedAppointmentDetail);
+        // if (storedAppointmentDetail) {
+        //   // Parse the stored JSON string to get the object
+        //   const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
+        //   setAppointmentDetail(parsedAppointmentDetail);
           
-          const fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
-          setDateRdv(fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure)
+        //   const fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
+        //   setDateRdv(fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure)
     
-        }
+        // }
 
         const motif = [
             {

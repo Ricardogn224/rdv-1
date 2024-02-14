@@ -31,7 +31,7 @@ function Register_pro() {
     e.preventDefault();
 
     try {
-      const apiUrl = process.env.API_URL || 'http://localhost:8888'; 
+      const apiUrl =  'http://localhost:8888'; 
       const response = await fetch(`${apiUrl}/api/users`, { 
         method: "POST",
         headers: {
@@ -42,6 +42,30 @@ function Register_pro() {
     
       if (response.ok) {
         console.log('Registration successful');
+
+        const  data  = await response.json();
+        const id = data.id
+
+        try {
+          const apiUrl =  'http://localhost:8888'; 
+          const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
+            method: "PATCH",
+            headers: {
+              'Content-Type': 'application/merge-patch+json',
+            },
+            body: JSON.stringify(formValues),
+          });
+        
+          if (response.ok) {
+            console.log('request successful');
+            navigate("/login");
+          } else {
+            console.error('request failed:', await response.text());
+          }
+        } catch (error) {
+          console.error('Error during request:', error);
+        }
+
         navigate("/login");
       } else {
         console.error('Registration failed:', await response.text());
