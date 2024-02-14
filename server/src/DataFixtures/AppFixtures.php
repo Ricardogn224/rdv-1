@@ -67,6 +67,7 @@ class AppFixtures extends Fixture
             $admin = new User();
             $admin->setEmail("admin$i@example.com");
             $admin->setRoles(['ROLE_ADMIN']);
+            $admin->setActive(true);
             $admin->setPassword($this->passwordHasher->hashPassword($admin, "adminpass$i"));
             $manager->persist($admin);
 
@@ -74,6 +75,7 @@ class AppFixtures extends Fixture
             $provider = new User();
             $provider->setEmail("provider$i@example.com");
             $provider->setRoles(['ROLE_PROVIDER']);
+            $provider->setActive(true);
             $provider->setPassword($this->passwordHasher->hashPassword($provider, "providerpass$i"));
             $manager->persist($provider);
             $providers[] = $provider;
