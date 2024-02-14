@@ -24,6 +24,13 @@ function Register_pro() {
     kbis: '',
   });
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
   const validateForm = () => {
     let isValid = true;
@@ -68,7 +75,7 @@ function Register_pro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (validateForm()) {
       try {
         const apiUrl = 'http://localhost:8888';
@@ -79,13 +86,13 @@ function Register_pro() {
           },
           body: JSON.stringify(formValues),
         });
-  
+
         if (response.ok) {
           console.log('Registration successful');
-  
+
           const data = await response.json();
           const id = data.id;
-  
+
           try {
             const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",
@@ -94,7 +101,7 @@ function Register_pro() {
               },
               body: JSON.stringify(formValues),
             });
-  
+
             if (responsePatch.ok) {
               console.log('Request successful');
               navigate("/login");
@@ -104,7 +111,7 @@ function Register_pro() {
           } catch (error) {
             console.error('Error during PATCH request:', error);
           }
-  
+
           navigate("/login");
         } else {
           console.error('Registration failed:', await response.text());
