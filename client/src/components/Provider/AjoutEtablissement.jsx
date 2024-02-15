@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-function AjoutEtablissement() {
+function AjoutEtablissement({ refreshEstablishments }) {
   const token = localStorage.getItem('jwtToken');
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
   const [establishments, setEstablishments] = useState(myProvider.establishments);
@@ -41,12 +41,22 @@ function AjoutEtablissement() {
         },
         body: JSON.stringify(selectedEstablishment),
       });
-      const data = await response.json();
-      console.log('Creation successful', data);
 
-      setEstablishments(prevEstablishments => [...prevEstablishments, data]);
-      myProvider.establishments = establishments;
-      localStorage.setItem('myProvider', JSON.stringify(myProvider));
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Creation successful', data);
+
+        // Update establishments state
+        setEstablishments(prevEstablishments => [...prevEstablishments, data]);
+
+        // Update myProvider with the updated establishments
+        const updatedProvider = { ...myProvider, establishments: [...establishments, data] };
+        localStorage.setItem('myProvider', JSON.stringify(updatedProvider));
+        refreshEstablishments();
+      }
+      
+      // Close the form after successful creation
+      //setAfficherFormulaire(false);
 
     } catch (error) {
       console.error('Error creating establishment:', error);
