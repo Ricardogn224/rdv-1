@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/motif_page.css";
 import medecinImage from "../../assets/portrait-docteur.jpg";
 import { useNavigate } from "react-router-dom";
-import { parse, format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 
