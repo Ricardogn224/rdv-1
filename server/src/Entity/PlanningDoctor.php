@@ -26,6 +26,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity()]
 class PlanningDoctor
 {
+
+    #[Groups(['appointment:read', 'planningDoctor:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -50,6 +52,7 @@ class PlanningDoctor
     #[ORM\OneToOne(inversedBy: 'planningDoctor', cascade: ['persist', 'remove'])]
     private ?Appointment $appointment = null;
 
+    #[Groups(['planningDoctor:write:update', 'appointment:read', 'planningDoctor:read'])]
     #[ORM\Column(nullable: true)]
     private ?bool $isCancelled = null;
 

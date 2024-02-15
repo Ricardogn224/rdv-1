@@ -31,4 +31,5 @@ class ManageRdv
     public string $patient_email;
     public string $hour;
     public string $date;
+    public string $motif;
 }
