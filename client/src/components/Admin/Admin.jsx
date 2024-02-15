@@ -140,7 +140,7 @@ function Admin() {
             </h2>
             <p className="text-lg text-gray-700">
               Nombre total de rendez-vous :{" "}
-              <span className="font-semibold">{appointments.length}</span>
+              <span className="font-semibold">{appointments.length || 0}</span>
             </p>
           </div>
         </div>

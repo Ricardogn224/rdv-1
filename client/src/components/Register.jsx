@@ -106,7 +106,7 @@ function Register() {
           // Handle errors (e.g., display error message)
         }
       } catch (error) {
-        setErrorMessage('Une erreur est survenue ', error);
+        setErrorMessage('Email déjà utiliser', error);
       }
     }
   };

@@ -57,7 +57,7 @@ function HeaderAdmin() {
         <nav
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } top-0 left-0 h-full w-64 bg-teal-500 overflow-x-hidden z-10 text-white transition-all duration-500 min-h-screen md:block`}
+          } top-0 left-0 h-full w-64 bg-teal-500 overflow-x-hidden text-white transition-all duration-500 min-h-screen md:block`}
         >
           {" "}
           <ul className="pt-24 flex flex-col">
