@@ -122,7 +122,7 @@ function Register_pro() {
           setErrorMessage('Une erreur est survenue ', errorBody);
         }
       } catch (error) {
-        setErrorMessage('Une erreur est survenue ', errorBody);
+        setErrorMessage('Une erreur est survenue ', error);
       }
     }
   };
