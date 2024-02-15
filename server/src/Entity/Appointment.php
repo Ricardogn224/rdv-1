@@ -49,6 +49,9 @@ class Appointment
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
     private ?PlanningDoctor $planningDoctor = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $motif = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +99,18 @@ class Appointment
         }
 
         $this->planningDoctor = $planningDoctor;
+
+        return $this;
+    }
+
+    public function getMotif(): ?string
+    {
+        return $this->motif;
+    }
+
+    public function setMotif(?string $motif): static
+    {
+        $this->motif = $motif;
 
         return $this;
     }

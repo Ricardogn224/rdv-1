@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import NavbarProvider from './NavbarProvider';
 import AjoutEtablissement from './AjoutEtablissement'; // Ajustez le chemin d'import selon votre structure de fichiers
 import '../../assets/css/dashboard_admin.css';
+import EditionEtablissement from './EditionEtablissement';
 
 
 
@@ -11,12 +12,42 @@ function DashboardContenu() {
         { nom: "Maimouna Bangoura", heure: "12:00", raison: "Grippe" },
 
     ];
+
     const [afficherFormulaire, setAfficherFormulaire] = useState(false);
+    const [afficherEditForm, setAfficherEditForm] = useState(false);
     const myProvider = JSON.parse(localStorage.getItem('myProvider'));
     const [establishments, setEstablishments] = useState(myProvider.establishments);
-    console.log(myProvider.establishments);
 
+    const bodyEstablishment = {
+        name: '',
+        adress: '',
+        provider: {
+        email: myProvider.email
+        }
+    };
+    
+    console.log(myProvider);
 
+    const [selectedEstablishment, setSelectedEstablishment] = useState(bodyEstablishment);
+
+    const handleModifierClick = (establishment) => {
+        // Extract the 'provider' field from establishment
+        const { provider, ...rest } = establishment;
+
+        // Set the selectedEstablishment state with all fields except 'provider'
+        setSelectedEstablishment({ ...bodyEstablishment, ...rest });
+
+        // Optionally, you can log the updated selectedEstablishment state
+        console.log(selectedEstablishment);
+        setAfficherEditForm(true);
+    };
+
+    const refreshEstablishments = () => {
+        const updatedProvider = JSON.parse(localStorage.getItem('myProvider'));
+        setEstablishments(updatedProvider.establishments);
+        setAfficherFormulaire(false);
+        setAfficherEditForm(false)
+    };
 
 
     return (
@@ -36,7 +67,9 @@ function DashboardContenu() {
                                 {afficherFormulaire ? 'Fermer' : 'Ajouter un établissement'}
                             </button>
                         </div>
-                        {afficherFormulaire && <AjoutEtablissement />}
+                        {afficherFormulaire && <AjoutEtablissement refreshEstablishments={refreshEstablishments} />}
+
+                        {afficherEditForm && <EditionEtablissement selectedEditEstablishment={selectedEstablishment} refreshEstablishments={refreshEstablishments}/>}
 
 
 
@@ -51,14 +84,14 @@ function DashboardContenu() {
                                     </tr>
                                 </thead>
                                 <tbody className="text-gray-700">
-                                    {myProvider.establishments && myProvider.establishments.length > 0 ? (
-                                        myProvider.establishments.map((establishment, index) => (
-                                            <tr>
-
+                                    {establishments && establishments.length > 0 ? (
+                                        establishments.map((establishment, index) => (
+                                            <tr key={index}> {/* Use a unique identifier as the key */}
                                                 <td className="w-1/4 py-3 px-4">{establishment.name}</td>
                                                 <td className="w-1/4 py-3 px-4">{establishment.adress}</td>
                                                 <td className="w-1/4 py-3 px-4 flex justify-around">
-                                                    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">
+                                                    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
+                                                    onClick={() => handleModifierClick(establishment)}>
                                                         Modifier
                                                     </button>
                                                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">

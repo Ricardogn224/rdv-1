@@ -43,7 +43,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity()]
 class Establishment
 {
-    #[Groups(['provision:write', 'establishment:read', 'employee:write'])]
+    #[Groups(['provision:write', 'establishment:read', 'employee:write', 'user:provider:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

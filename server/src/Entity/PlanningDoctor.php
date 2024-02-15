@@ -50,6 +50,9 @@ class PlanningDoctor
     #[ORM\OneToOne(inversedBy: 'planningDoctor', cascade: ['persist', 'remove'])]
     private ?Appointment $appointment = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCancelled = null;
+
     public function __construct()
     {
     }
@@ -115,6 +118,18 @@ class PlanningDoctor
     public function setAppointment(?Appointment $appointment): static
     {
         $this->appointment = $appointment;
+
+        return $this;
+    }
+
+    public function isIsCancelled(): ?bool
+    {
+        return $this->isCancelled;
+    }
+
+    public function setIsCancelled(?bool $isCancelled): static
+    {
+        $this->isCancelled = $isCancelled;
 
         return $this;
     }
