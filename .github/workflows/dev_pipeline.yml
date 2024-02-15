@@ -52,6 +52,9 @@ jobs:
              [ -f ".env.test" ] && . ".env.test"
              set +a
 
+      - name: Rename .env.test to .env.local
+        run: mv server/.env.test server/.env.local
+
       - name: Check server directory contents
         run: |
           ls -l server
