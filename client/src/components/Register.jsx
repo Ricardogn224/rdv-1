@@ -4,6 +4,8 @@ import '../assets/css/register.css';
 
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   
   // State variables for form values and errors
   const [formValues, setFormValues] = useState({
@@ -74,6 +76,7 @@ function Register() {
     e.preventDefault();
   
     if (validateForm()) {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch("http://localhost:8888/api/users", {
           method: "POST",
@@ -89,6 +92,7 @@ function Register() {
           const data = await response.json();
           const id = data.id;
   
+          setLoading(true); // Afficher le loader
           try {
             const apiUrl = 'http://localhost:8888';
             const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
@@ -108,6 +112,8 @@ function Register() {
             }
           } catch (error) {
             setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
+          } finally {
+            setLoading(false); // Masquer le loader
           }
         } else {
           const errorBody = await response.json(); // Parse l'erreur retournée par l'API
@@ -116,6 +122,8 @@ function Register() {
         }
       } catch (error) {
         setErrorMessage('Email déjà utiliser', error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     }
   };
@@ -246,6 +254,11 @@ function Register() {
           </div>
           <br />
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       </div>
       <br />
       <br />

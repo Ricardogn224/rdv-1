@@ -11,7 +11,7 @@ function AdminUser() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [establishments, setEstablishments] = useState([]);
-
+  
   const bodyUser = {
     email: '',
     lastname: '',
@@ -109,12 +109,14 @@ function AdminUser() {
           },
         });
         const data = await response.json();
-        console.log(data);
+
         if (data.length !== 0) {
           setProviders(data['hydra:member']);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setMessageError('Email déjà utilisé');
+        throw new Error('Erreur');
+
       }
     };
 
@@ -135,13 +137,13 @@ function AdminUser() {
         },
       });
       const data = await response.json();
-      console.log(data);
+
       if (data.length !== 0) {
         setEstablishments(data['hydra:member']);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+      setMessageError('Erreur lors de la récupération etablissement');
+      throw new Error('Erreur');    }
   };
 
   if (establishments.length === 0) {
@@ -150,7 +152,6 @@ function AdminUser() {
 
   const handleModifierClick = (user) => {
     setSelectedUser({ ...bodyUser, ...user });
-    console.log(selectedUser)
     setIsEditMode(true);
   };
 
@@ -174,8 +175,6 @@ function AdminUser() {
       const data = await response.json();
 
       if (data.length !== 0) {
-        console.log('Update successful', data);
-
         const id = data.id
 
         try {
@@ -207,17 +206,16 @@ function AdminUser() {
 
             setIsEditMode(false);
           } else {
-            console.error('request failed:', await response.text());
-          }
+            throw new Error('Erreur');          }
         } catch (error) {
-          console.error('Error during request:', error);
-        }
+          setMessageError('Erreur');
+          throw new Error('Erreur');        }
       }
 
 
     } catch (error) {
-      console.error('Error updating user:', error);
-    }
+      setMessageError('Erreur');
+      throw new Error('Erreur');    }
   };
 
   const handleNewUser = () => {
@@ -242,7 +240,7 @@ function AdminUser() {
       } else {
         url = 'http://localhost:8888/api/users'
       }
-      console.log(newUser);
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -253,7 +251,6 @@ function AdminUser() {
       });
       const data = await response.json();
       if (data.length !== 0) {
-        console.log('User created:', data);
 
         const id = data.id
 
@@ -274,17 +271,17 @@ function AdminUser() {
             setProviders(prevProviders => [...prevProviders, dataRole]);
             handleCloseNewModal();
           } else {
-            console.error('request failed:', await response.text());
-          }
+            throw new Error('Erreur');          }
         } catch (error) {
-          console.error('Error during request:', error);
-        }
+          setMessageError('Erreur');
+          throw new Error('Erreur');        }
 
 
       }
 
     } catch (error) {
-      console.error('Error creating user:', error);
+      setMessageError('Erreur');
+      throw new Error('Erreur utilisateur existant');    
     }
 
   };
@@ -632,6 +629,9 @@ function AdminUser() {
               </button>
             </div>
           </form>
+
+          {messageError && <div className="error-message">{messageError}</div>}
+
         </div>
       </Modal>
     </>

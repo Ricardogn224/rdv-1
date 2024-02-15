@@ -11,6 +11,8 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
 
   // Gérez les modifications des champs d'entrée
@@ -43,6 +45,7 @@ function Login() {
       return;
     }
 
+    setLoading(true); // Afficher le loader
     try {
       const response = await fetch("http://localhost:8888/api/auth", {
         method: "POST",
@@ -66,6 +69,7 @@ function Login() {
           localStorage.setItem('jwtToken', token);
           if (decodedToken.roles.includes('ROLE_PROVIDER')) {
             
+            setLoading(true); // Afficher le loader
             try {
               const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
                 method: "GET",
@@ -86,11 +90,17 @@ function Login() {
               }
             } catch (error) {
               setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
+            } finally {
+              setLoading(false); // Masquer le loader
             }
           } else if (decodedToken.roles.includes('ROLE_ADMIN')) {
             navigate("/admin");
           } else if (decodedToken.roles.includes('ROLE_USER')) {
             navigate("/search_page");
+          } else if (decodedToken.roles.includes('ROLE_PROVIDER')) {
+            navigate("/provider");
+          } else {
+            navigate("/");
           }
           
         }
@@ -99,6 +109,8 @@ function Login() {
       }
     } catch (error) {
       setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
+    } finally {
+      setLoading(false); // Masquer le loader
     }
 
   };
@@ -178,6 +190,13 @@ function Login() {
 
           <br />
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
+
+
       </section>
       <br />
       <br />

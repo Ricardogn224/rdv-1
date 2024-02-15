@@ -122,6 +122,8 @@ class ManagePlanningController extends AbstractController
 
         $provisionEmployeeId = $data['provision_employee_id'];
 
+        $motif = $data['motif'];
+
         $provisionEmployee = $entityManager->getRepository(ProvisionEmployee::class)->find($provisionEmployeeId);
 
         $day = $data['date'];
@@ -136,6 +138,7 @@ class ManagePlanningController extends AbstractController
         $appointment->setProvisionEmployee($provisionEmployee);
         $appointment->setAppointmentUser($patient);
 
+        $appointment->setMotif($motif);
             // Insert records into PlanningDoctor for each hour
         $planningDoctor = new PlanningDoctor();
         $planningDoctor->setEmployee($provisionEmployee->getEmployee()); // Assuming $data->employee is the User object

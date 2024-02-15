@@ -32,6 +32,8 @@ function Motif_page() {
 
     const storedAppointmentDetail = location.state.reservationDataRdv;
 
+    const provisionEmployee = location.state.provisionEmployee
+
     console.log(storedAppointmentDetail)
 
     var parsedAppointmentDetail = {};
@@ -53,10 +55,11 @@ function Motif_page() {
 
 
     const [formValues, setFormValues] = useState({
-      provision_employee_id: 1,
+      provision_employee_id: provisionEmployee.id,
       patient_email: storedUsername,
       hour: parsedAppointmentDetail.heure,
       date: parsedAppointmentDetail.date,
+      motif: motif,
     });
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -170,8 +173,8 @@ function Motif_page() {
                 <div className="proposition">
                   <img src={medecinImage} alt="" />
                   <div className="text">
-                    <h4>Sandrine IRIGOYEN</h4>
-                    <p>Gynécologue obstétricienne</p>
+                    <h4>{provisionEmployee.employee.firstname } {provisionEmployee.employee.lastname }</h4>
+                    <p>{provisionEmployee.provision.name }</p>
                   </div>
                 </div>
                 <div className="proposition">

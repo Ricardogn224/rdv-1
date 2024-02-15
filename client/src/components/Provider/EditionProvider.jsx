@@ -1,40 +1,43 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 
-function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments }) {
-  const [selectedEstablishment, setSelectedEstablishment] = useState(selectedEditEstablishment);
+function EditionProvider({ selectedEditEmployee, updateEmployeesList, refresh }) {
+const [selectedEmployee, setSelectedEmployee] = useState(selectedEditEmployee);
   const token = localStorage.getItem('jwtToken');
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
   const [establishments, setEstablishments] = useState(myProvider.establishments);
   //ajout d'un Etablissement 
 
   useEffect(() => {
-    setSelectedEstablishment(selectedEditEstablishment);
-  }, [selectedEditEstablishment]);
+    setSelectedEmployee(selectedEditEmployee);
+  }, [selectedEditEmployee]);
+
+  console.log(selectedEmployee)
 
     const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(selectedEmployee)
 
-    setSelectedEstablishment((prevEstablishment) => ({
-      ...prevEstablishment,
-      [name]: value,
-    }));
+        setSelectedEmployee((prevEmployee) => ({
+            ...prevEmployee,
+            [name]: value,
+        }));
 
-  };
+    };
 
-  const handleUpdateEstablishment = async (event) => {
+  const handleUpdateEmployee = async (event) => {
         event.preventDefault();
-        console.log(selectedEstablishment)
+        console.log(selectedEmployee)
 
         try {
-        const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
+        const url = `http://localhost:8888/api/users/${selectedEmployee.id}`;
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
             'Content-Type': 'application/merge-patch+json',
             'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(selectedEstablishment),
+            body: JSON.stringify(selectedEmployee),
         });
 
         if (response.ok) {
@@ -42,22 +45,8 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
             console.log('Update successful', updatedData);
 
             // Update establishments state
-            const updatedEstablishments = establishments.map(establishment => {
-                if (establishment.id === updatedData.id) {
-                    return updatedData; // Replace the old establishment with the updated one
-                } else {
-                    return establishment; // Keep other establishments unchanged
-                }
-            });
-
-            setEstablishments(updatedEstablishments);
-
-            // Update myProvider with the updated establishments
-            const updatedProvider = { ...myProvider, establishments: updatedEstablishments };
-            localStorage.setItem('myProvider', JSON.stringify(updatedProvider));
-
-            // Refresh the establishments if necessary
-            refreshEstablishments();
+            updateEmployeesList(updatedData);
+            refresh();
         }
         
         // Close the form after successful creation
@@ -70,32 +59,32 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
 
   return (
     <div className="mt-4">
-      <form onSubmit={handleUpdateEstablishment}>
+      <form onSubmit={handleUpdateEmployee}>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-            Nom de l'établissement
+          <label htmlFor="firstname" className="block text-gray-700 text-sm font-bold mb-2">
+            Nom
           </label>
           <input
             type="text"
             id="name"
-            name="name"
+            name="firstname"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Nom de l'établissement"
-            value={selectedEstablishment.name}
+            value={selectedEmployee.firstname}
             onChange={handleInputChange}
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="adress" className="block text-gray-700 text-sm font-bold mb-2">
-            Adresse
+          <label htmlFor="lastname" className="block text-gray-700 text-sm font-bold mb-2">
+            Prénom
           </label>
           <input
             type="text"
             id="adress"
-            name="adress"
+            name="lastname"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Adresse"
-            value={selectedEstablishment.adress}
+            value={selectedEmployee.lastname}
             onChange={handleInputChange}
           />
         </div>
@@ -110,4 +99,4 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
   );
 }
 
-export default EditionEtablissement;
+export default EditionProvider;
