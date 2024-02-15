@@ -26,6 +26,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             stateless: true
             jwt: ~
+            
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_PROVIDER
@@ -34,9 +35,12 @@ security:
 
     access_control:
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/manageRole, method: PATCH, roles: PUBLIC_ACCESS }
 
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/usersRole, method: GET, roles: ROLE_ADMIN }
+        - { path: ^/userLogin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

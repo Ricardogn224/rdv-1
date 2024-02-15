@@ -18,17 +18,17 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
 import HeaderProvider from './components/Provider/HeaderProvider.jsx';
-import HeaderAdmin from "./components/pages/HeaderAdmin";
-import NavbarAdmin from "./components/pages/NavbarAdmin";
+import HeaderAdmin from "./components/Admin/HeaderAdmin";
+import NavbarAdmin from "./components/Admin/NavbarAdmin";
 import NotFound from "./components/pages/404";
 
 
 
-import Admin from './components/pages/Admin.jsx'
-import AdminProvider from './components/pages/AdminProvider.jsx'
-import AdminUser from './components/pages/AdminUser.jsx'
-import AdminEstablishment from "./components/pages/AdminEstablishment.jsx";
-import AdminProvision from "./components/pages/AdminProvision.jsx";
+import Admin from './components/Admin/Admin.jsx'
+import AdminProvider from './components/Admin/AdminProvider.jsx'
+import AdminUser from './components/Admin/AdminUser.jsx'
+import AdminEstablishment from "./components/Admin/AdminEstablishment.jsx";
+import AdminProvision from "./components/Admin/AdminProvision.jsx";
 import Employee from "./components/pages/Employee.jsx";
 
 import {
@@ -36,6 +36,7 @@ import {
   Outlet,
   RouterProvider,
 } from "react-router-dom";
+import Login from "./components/Login.jsx";
 
 
 const router = createBrowserRouter([
@@ -52,29 +53,13 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/medecin/:id",
+        path: "/medecin",
         element: <Employee />,
       },
       {
         path: "/search_page",
         element: <Search_page />,
       },
-      {
-        path: "*",
-        element: <NotFound />,
-      },
-    ],
-  },
-  {
-    path: "/",
-    element: (
-      <>
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </>
-    ),
-    children: [
       {
         path: "rdv_page",
         element: <Rdv_page />,
@@ -88,36 +73,34 @@ const router = createBrowserRouter([
         element: <Confirm_page />,
       },
       {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "register_pro",
+        element: <Register_pro />,
+      },
+      {
         path: "*",
         element: <NotFound />,
       },
     ],
   },
-  {
-    path: "/login",
-    Component: lazy(() => import("./components/User_login.jsx")),
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/register_pro",
-    element: <Register_pro />,
-  },
+  
 
   {
     path: "/admin",
     element: (
-      <ProtectedRoute requiredRole="ROLE_ADMIN">
+      // <ProtectedRoute requiredRole="ROLE_ADMIN">
+      <>
         <HeaderAdmin />
-        <section className="flex w-full">
-          <NavbarAdmin />
-          <section className="w-full">
-            <Outlet />
-          </section>
-        </section>
-      </ProtectedRoute>
+         
+      </>
+      // </ProtectedRoute>
     ),
     children: [
       {
@@ -144,7 +127,6 @@ const router = createBrowserRouter([
         path: "*",
         element: <NotFound />,
       },
-      
     ],
   },
   {

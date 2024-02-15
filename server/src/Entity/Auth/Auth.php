@@ -14,14 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
 {
-    #[Groups(['user:read:full', 'user:read', 'establishment:write', 'provisionEmployee:read'])]
+    #[Groups(['user:read:full', 'user:read', 'establishment:write', 'provisionEmployee:read', 'establishment:read'])]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
     #[Groups(['product:read', 'comment:read', 'user:read', 'user:write', 'establishment:write:update',
     'establishment:write', 'provider:read', 'establishment:read', 'employee:read', 'appointment:read', 'appointment:write',
-    'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read'])]
-    #[Assert\Email()]
+    'planningRdv:read', 'establishment:read:full', 'provision:write', 'provision:read', 'user:login:write'])]
+    #[Assert\Email(message: "L'adresse email '{{ value }}' n'est pas valide.")]
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
 
@@ -74,7 +74,7 @@ trait Auth
         $this->roles = $roles;
     }
 
-    #[Groups(['user:write', 'user:write:update', 'employee:write'])]
+    #[Groups(['user:write:role'])]
     #[ApiProperty(example: UserAccountTypeEnum::NORMAL->value)]
     public function setAccountType(string $type): void
     {

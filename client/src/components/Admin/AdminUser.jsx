@@ -172,23 +172,49 @@ function AdminUser() {
                 body: JSON.stringify(selectedUser),
             });
             const data = await response.json();
-            console.log('Update successful', data);
 
-            setProviders(prevProviders => {
-                const updatedProviders = prevProviders.map(provider => {
-                    if (provider.id === selectedUser.id) {
-                        return {
-                            ...provider,
-                            ...data // Include the entire data object
-                        };
+            if (data.length !== 0) {
+                console.log('Update successful', data);
+
+                const id = data.id
+
+                try {
+                    const apiUrl =  'http://localhost:8888'; 
+                    const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
+                        method: "PATCH",
+                        headers: {
+                        'Content-Type': 'application/merge-patch+json',
+                        'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(newUser),
+                    });
+                    
+                    if (response.ok) {
+                        const  dataRole  = await response.json();
+                        setProviders(prevProviders => {
+                            const updatedProviders = prevProviders.map(provider => {
+                                if (provider.id === selectedUser.id) {
+                                    return {
+                                        ...provider,
+                                        ...dataRole // Include the entire data object
+                                    };
+                                } else {
+                                    return provider;
+                                }
+                            });
+                            return updatedProviders;
+                        });
+            
+                        setIsEditMode(false);
                     } else {
-                        return provider;
+                        console.error('request failed:', await response.text());
                     }
-                });
-                return updatedProviders;
-            });
+                    } catch (error) {
+                    console.error('Error during request:', error);
+                }
+            }
 
-            setIsEditMode(false);
+            
         } catch (error) {
             console.error('Error updating user:', error);
         }
@@ -228,8 +254,33 @@ function AdminUser() {
             const data = await response.json();
             if (data.length !== 0) {
                 console.log('User created:', data);
-                setProviders(prevProviders => [...prevProviders, data]);
-                handleCloseNewModal();
+
+                const id = data.id
+
+                try {
+                    const apiUrl =  'http://localhost:8888'; 
+
+                    const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
+                        method: "PATCH",
+                        headers: {
+                        'Content-Type': 'application/merge-patch+json',
+                        'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(newUser),
+                    });
+                    
+                    if (response.ok) {
+                        const dataRole = await response.json();
+                        setProviders(prevProviders => [...prevProviders, dataRole]);
+                        handleCloseNewModal();
+                    } else {
+                        console.error('request failed:', await response.text());
+                    }
+                    } catch (error) {
+                    console.error('Error during request:', error);
+                }
+
+                
             }
             
         } catch (error) {

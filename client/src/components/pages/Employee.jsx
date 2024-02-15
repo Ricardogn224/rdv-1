@@ -1,46 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MedecinList from "../MedecinList";
 
 function Employee() {
   
     const navigate = useNavigate();
-    const { id } = useParams();
+    const props = useLocation();
+    const provision = props.state.provisionEmployees || {};
     const [doctor, setDoctor] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
-    const [newComment, setNewComment] = useState("");
-    const [comments, setComments] = useState([]);
+    // const [newComment, setNewComment] = useState("");
+    // const [comments, setComments] = useState([]);
     const [employee, setEmployee] = useState(null);
 
 
 
   const token = localStorage.getItem("jwtToken");
 
+  const medecin = provision[0];
+  
+  console.log(medecin);
+
+  const id = medecin.employee.id;
 
   useEffect(() => {
-    const fetchDoctorData = async () => {
-      try {
-        // const response = await fetch(`/api/medecins/${id}`);
-        // if (!response.ok) throw new Error("Réponse réseau non ok");
-        // const data = await response.json();
-           const data = {
-             name: "Dr. John Doe",
-             speciality: "Médecin généraliste",
-             home: "1 rue du médecin, 75000 Paris",
-             description:
-               "Dr. John Doe est un médecin généraliste avec 10 ans d'expérience. Il est spécialisé dans le traitement des maladies courantes et des problèmes de santé généraux. Il est également un expert en médecine préventive et en soins primaires.",
-           };
-        setDoctor(data);
-      } catch (error) {
-        console.error("Erreur lors du fetch des données du médecin:", error);
-        navigate("/search_page"); 
-      } finally {
-        setIsLoading(false); 
-      }
-    };
+    // const fetchDoctorData = async () => {
+    //   try {
+    //     // const response = await fetch(`/api/medecins/${id}`);
+    //     // if (!response.ok) throw new Error("Réponse réseau non ok");
+    //     // const data = await response.json();
+      
+    //     // setDoctor(data);
+    //   } catch (error) {
+    //     console.error("Erreur lors du fetch des données du médecin:", error);
+    //     navigate("/search_page"); 
+    //   } finally {
+    //     setIsLoading(false); 
+    //   }
+    // };
 
-    fetchDoctorData();
+    // fetchDoctorData();
+
+      const data = {
+        firstname: medecin.employee.firstname,
+        lastname: medecin.employee.lastname,
+        adress: medecin.provision.Establishment.adress,
+        speciality: medecin.provision.name,
+        nom: medecin.provision.Establishment.name,
+      };
+
+      setDoctor(data);
 
     const fetchEmployeePlanning = async () => {
       try {
@@ -71,51 +81,48 @@ function Employee() {
       const username = localStorage.getItem("username");
         setUsername(username);
 
-          const fetchComments = async () => {
-            try {
-              const response = await fetch("/api/comments");
-              if (!response.ok) throw new Error("Failed to fetch comments");
-              const data = await response.json();
-              setComments(data); 
-            } catch (error) {
-              console.error("Error fetching comments:", error);
-            }
-          };
+          // const fetchComments = async () => {
+          //   try {
+          //     const response = await fetch("/api/comments");
+          //     if (!response.ok) throw new Error("Failed to fetch comments");
+          //     const data = await response.json();
+          //     setComments(data); 
+          //   } catch (error) {
+          //     console.error("Error fetching comments:", error);
+          //   }
+          // };
 
-          fetchComments();
+          // fetchComments();
 
 
   }, [id, navigate]);
 
 
-    const handleCommentSubmit = async (event) => {
-    event.preventDefault();
-    try {
-        const response = await fetch("/api/comments", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: newComment, doctorId: id }), 
-        });
-        if (!response.ok) throw new Error("Failed to post comment");
+    // const handleCommentSubmit = async (event) => {
+    // event.preventDefault();
+    // try {
+    //     const response = await fetch("/api/comments", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ text: newComment, doctorId: id }), 
+    //     });
+    //     if (!response.ok) throw new Error("Failed to post comment");
 
-        const createdComment = await response.json(); 
-        setComments((prevComments) => [...prevComments, createdComment]); 
-        setNewComment(""); 
-    } catch (error) {
-        console.error("Error posting comment:", error);
-    }
-    };
+    //     const createdComment = await response.json(); 
+    //     setComments((prevComments) => [...prevComments, createdComment]); 
+    //     setNewComment(""); 
+    // } catch (error) {
+    //     console.error("Error posting comment:", error);
+    // }
+    // };
 
 
-  const navigatelogin = () => {
-    navigate("/login");
-  };
+  // const navigatelogin = () => {
+  //   navigate("/login");
+  // };
 
-  if (isLoading) {
-    return <div>Chargement...</div>;
-  }
 
   if (!doctor) {
     return <div>Le médecin demandé n'est pas trouvé</div>;
@@ -133,7 +140,7 @@ function Employee() {
                     src="https://randomuser.me/api/portraits/men/94.jpg"
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   ></img>
-                  <h1 className="text-xl font-bold">{doctor.name}</h1>
+                  <h1 className="text-xl font-bold">{doctor.firstname} {" "} {doctor.lastname}</h1>
                   <p className="text-gray-700">{doctor.speciality}</p>
                 </div>
                 <div className="flex flex-col">
@@ -141,7 +148,7 @@ function Employee() {
                     Coordonnées
                   </span>
                   <ul>
-                    <li className="mb-2">{doctor.home}</li>
+                    <li className="mb-2">{doctor.adress}</li>
                   </ul>
                 </div>
               </div>
@@ -155,25 +162,24 @@ function Employee() {
 
                 <h2 className="text-xl font-bold mt-6 mb-4">Planning</h2>
                 {employee && (
-                  <div className='planning-container'>
+                  <div className="planning-container">
                     <div>
-                        <MedecinList
-                          key={0}
-                          nom={""}
-                          poste={""}
-                          adresse={""}
-                          type={"rdv"}
-                          consultationVideo={true}
-                          planning={employee}
-                        />
+                      <MedecinList
+                        key={0}
+                        nom={""}
+                        poste={""}
+                        adresse={""}
+                        type={"rdv"}
+                        consultationVideo={true}
+                        planning={employee}
+                      />
                     </div>
                   </div>
                 )}
-               
               </div>
               <br />
               <br />
-              <div className="bg-white shadow rounded-lg p-6">
+              {/* <div className="bg-white shadow rounded-lg p-6">
                 <h2 className="text-xl font-bold mb-4">Commentaire</h2>
 
                 {username ? (
@@ -213,7 +219,7 @@ function Employee() {
                 ) : (
                   <p>Pas de commentaires pour le moment.</p>
                 )}
-              </div>
+              </div>*/}
             </div>
           </div>
         </div>

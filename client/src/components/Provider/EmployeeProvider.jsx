@@ -12,44 +12,51 @@ function EmployeeProvider() {
 
     const token = localStorage.getItem('jwtToken');
 
+    const myProvider = JSON.parse(localStorage.getItem('myProvider'));
+    const [establishments, setEstablishments] = useState(myProvider.establishments);
+
     // State variables to manage form data
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [employeePlanning, setEmployeePlanning] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [employees, setEmployees] = useState([]);
 
     const [listEmployees, setListEmployees] = useState([]);
 
     const [planning, setPlanning] = useState([]);
 
     useEffect(() => {
-
         const fetchEmployees = async () => {
-        try {
-            const response = await fetch('http://localhost:8888/api/users', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-            throw new Error('Failed to fetch employees');
+            try {
+                const employeesList = [];
+                for (const establishment of establishments) {
+                    const url = `http://localhost:8888/api/establishments/${establishment.id}`;
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        employeesList.push(...data.employees);
+                    } else {
+                        console.error('Failed to fetch employees for establishment:', establishment.id);
+                    }
+                }
+                setEmployees(employeesList);
+            } catch (error) {
+                console.error('Error fetching employees:', error);
             }
-
-            const data = await response.json();
-            setListEmployees(data['hydra:member']);
-        } catch (error) {
-            console.error('Error fetching employees :', error);
-        }
         };
 
         fetchEmployees();
-
-    }, []);
+    }, [token]);
 
     const handleEmployeeClick = (employee) => {
+        console.log(employee)
         // Handle the click event for the selected employee
         //setSelectedEmployee(employee);
         navigate(`/provider/employee_rdv/${employee.id}`)
@@ -70,15 +77,11 @@ function EmployeeProvider() {
             <div className="mt-8 mx-4 bg-white shadow-md rounded-lg p-4">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Liste des employés :</h2>
                 <ul className="list-disc pl-5">
-                {listEmployees.map((employee) => (
-                    <li
-                    key={employee.id}
-                    onClick={() => handleEmployeeClick(employee)}
-                    className="cursor-pointer text-blue-500 hover:underline mb-2"
-                    >
-                    {employee.firstname} {employee.lastname}
-                    </li>
-                ))}
+                    {employees.map((employee, index) => (
+                        <li key={index} onClick={() => handleEmployeeClick(employee)} className="cursor-pointer text-blue-500 hover:underline mb-2">
+                            {employee.firstname} {employee.lastname}
+                        </li>
+                    ))}
                 </ul>
             </div>
 

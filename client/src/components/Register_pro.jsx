@@ -4,6 +4,8 @@ import '../assets/css/register.css';
 
 function Register_pro() {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const [formValues, setFormValues] = useState({
     firstname: '',
@@ -23,6 +25,14 @@ function Register_pro() {
     plainPassword: '',
     kbis: '',
   });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
 
   const validateForm = () => {
@@ -71,43 +81,60 @@ function Register_pro() {
 
     if (validateForm()) {
       try {
-        const apiUrl = 'http://localhost:8888'; 
-        const response = await fetch(`${apiUrl}/api/users`, { 
+        const apiUrl = 'http://localhost:8888';
+        const response = await fetch(`${apiUrl}/api/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formValues),
         });
-      
+
         if (response.ok) {
           console.log('Registration successful');
+
+          const data = await response.json();
+          const id = data.id;
+
+          try {
+            const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
+              method: "PATCH",
+              headers: {
+                'Content-Type': 'application/merge-patch+json',
+              },
+              body: JSON.stringify(formValues),
+            });
+
+            if (responsePatch.ok) {
+              console.log('Request successful');
+              navigate("/login");
+            } else {
+              const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+              setErrorMessage(errorBody.message);
+            }
+          } catch (error) {
+            setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
+          }
+
           navigate("/login");
         } else {
-          console.error('Registration failed:', await response.text());
+          const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+          setErrorMessage('Une erreur est survenue ', errorBody);
         }
       } catch (error) {
-        console.error('Error during registration:', error);
+        setErrorMessage('Une erreur est survenue ', errorBody);
       }
     }
-  };
-
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
   };
 
   return (
     <div className="flex-center flex-column">
       <div className='mt-80 form-zone'>
+        <br/>
         <div className="flex-center">
-          <h1 className="title"> Are you a provider? </h1>
+          <h1 className="title"> Êtes vous un médecin ? </h1>
         </div>
-
+        <br/>
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -175,13 +202,19 @@ function Register_pro() {
               onChange={handleInputChange}
             />
             {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
+            
+            <br/>
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            <br/>
+          
           </div>
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
-              SUBMIT
+              S'inscrire
             </button>
           </div>
+          <br/>
         </form>
       </div>
     </div>

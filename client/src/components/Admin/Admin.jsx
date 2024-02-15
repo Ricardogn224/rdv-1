@@ -87,6 +87,7 @@ function Admin() {
               }
             );
             const data = await response.json();
+            console.log(data);
   
             setAppointments(data["hydra:member"]);
   
@@ -100,22 +101,49 @@ function Admin() {
 
   return (
     <>
+      <div className=" mx-auto px-4 py-8">
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Statistiques des utilisateurs */}
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Statistiques des utilisateurs
+            </h2>
+            <p className="text-lg text-gray-700">
+              Nb total d'utilisateurs :{" "}
+              <span className="font-semibold">{users.length}</span>
+            </p>
+            <p className="text-lg text-gray-700">
+              Nb médecins :{" "}
+              <span className="font-semibold">{countProviders}</span>
+            </p>
+            <p className="text-lg text-gray-700">
+              Nb d'utilisateurs :{" "}
+              <span className="font-semibold">{countNormalUsers}</span>
+            </p>
+          </div>
 
-      <div className="user-statistics">
-        <h2>Statistiques des utilisateurs</h2>
-        <p>Nombre total d'utilisateurs : {users.length}</p>
-        <p>Nombre de médecins : {countProviders}</p>
-        <p>Nombre d'utilisateurs normaux : {countNormalUsers}</p>
-      </div>
+          {/* Statistiques des établissements */}
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Statistiques des établissements
+            </h2>
+            <p className="text-lg text-gray-700">
+              Nombre total d'établissements :{" "}
+              <span className="font-semibold">{establishments.length}</span>
+            </p>
+          </div>
 
-      <div className="establishment-statistics">
-        <h2>Statistiques des établissements</h2>
-        <p>Nombre total d'établissements : {establishments.length}</p>
-      </div>
-
-      <div className="appointment-statistics">
-        <h2>Statistiques des rendez-vous</h2>
-        <p>Nombre total de rendez-vous : {appointments.length}</p>
+          {/* Statistiques des rendez-vous */}
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Statistiques des rendez-vous
+            </h2>
+            <p className="text-lg text-gray-700">
+              Nombre total de rendez-vous :{" "}
+              <span className="font-semibold">{appointments.length}</span>
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
