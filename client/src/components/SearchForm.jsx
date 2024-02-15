@@ -24,8 +24,8 @@ function SearchForm() {
     <>
       <section>
         <form className="flex-center" onSubmit={handleSubmit}>
-          <div className="flex space-between form-recherche">
-            <div className="field">
+          <div className="flex space-between form-recherche flex-center">
+            <div className="w-5/12">
               <input
                 type="text"
                 placeholder="Médecin généraliste"
@@ -33,7 +33,7 @@ function SearchForm() {
                 onChange={handleDoctorChange}
               />
             </div>
-            <div className="field">
+            <div className="w-5/12">
               <input
                 type="text"
                 placeholder="Ville"
@@ -41,8 +41,10 @@ function SearchForm() {
                 onChange={handleCityChange}
               />
             </div>
-            <div className="field">
-              <input type="submit" value="Rechercher" />
+            <div className="w-1/12">
+              <button type="submit" className="btn-action">
+                Rechercher
+              </button>
             </div>
           </div>
         </form>

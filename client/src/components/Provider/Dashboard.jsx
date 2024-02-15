@@ -7,6 +7,9 @@ function DashboardProvider() {
   const navigate = useNavigate();
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
   console.log(myProvider.establishments);
+  const token = localStorage.getItem('jwtToken');
+  const decodedToken = JSON.parse(localStorage.getItem('decoded'));
+  console.log(decodedToken)
   useEffect(() => {
     if (myProvider && !myProvider.active) {
       navigate("/");

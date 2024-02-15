@@ -44,7 +44,7 @@ function NavbarAdmin() {
         <li className="w-full" onClick={handleNavigate("/admin/provider")}>
           <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300 cursor-pointer">
             <i className="fas fa-credit-card mr-4"></i>
-            <span>Provider</span>
+            <span>Prestataires</span>
           </div>
         </li>
         <li className="w-full" onClick={handleNavigate("/admin/provision")}>

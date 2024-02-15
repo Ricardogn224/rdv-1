@@ -11,9 +11,12 @@ function Admin() {
 
   const [establishments, setEstablishments] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch("http://localhost:8888/api/users", {
           method: "GET",
@@ -48,59 +51,72 @@ function Admin() {
         setCountNormalUsers(normalUsers.length);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
     fetchData();
 
-     const fetchEstablishments = async () => {
-       try {
-         const response = await fetch(
-           "http://localhost:8888/api/establishments",
-           {
-             method: "GET",
-             headers: {
-               Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-             },
-           }
-         );
-         const data = await response.json();
+    const fetchEstablishments = async () => {
+      setLoading(true); // Afficher le loader
+      try {
+        const response = await fetch(
+          "http://localhost:8888/api/establishments",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
+          }
+        );
+        const data = await response.json();
 
         setEstablishments(data["hydra:member"]);
 
-       } catch (error) {
-         console.error("Error fetching data:", error);
-       }
-     };
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
+      }
+    };
 
-       fetchEstablishments();
+    fetchEstablishments();
 
-       const fetchAppointments = async () => {
-          try {
-            const response = await fetch(
-              "http://localhost:8888/api/appointments",
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-                },
-              }
-            );
-            const data = await response.json();
-            console.log(data);
-  
-            setAppointments(data["hydra:member"]);
-  
-          } catch (error) {
-            console.error("Error fetching data:", error);
+    const fetchAppointments = async () => {
+      setLoading(true); // Afficher le loader
+      try {
+        const response = await fetch(
+          "http://localhost:8888/api/appointments",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
           }
-        }
+        );
+        const data = await response.json();
+        console.log(data);
 
-        fetchAppointments();
-  }, []); 
+        setAppointments(data["hydra:member"]);
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
+      }
+    }
+
+    fetchAppointments();
+  }, []);
 
   return (
     <>
+    {loading && (
+          <div className="flex justify-center items-center my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       <div className=" mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Statistiques des utilisateurs */}
@@ -110,15 +126,15 @@ function Admin() {
             </h2>
             <p className="text-lg text-gray-700">
               Nb total d'utilisateurs :{" "}
-              <span className="font-semibold">{users.length}</span>
+              <span className="font-semibold">{users ? users.length : 'N/A'}</span>
             </p>
             <p className="text-lg text-gray-700">
               Nb médecins :{" "}
-              <span className="font-semibold">{countProviders}</span>
+              <span className="font-semibold">{countProviders !== undefined ? countProviders : 'N/A'}</span>
             </p>
             <p className="text-lg text-gray-700">
               Nb d'utilisateurs :{" "}
-              <span className="font-semibold">{countNormalUsers}</span>
+              <span className="font-semibold">{countNormalUsers !== undefined ? countNormalUsers : 'N/A'}</span>
             </p>
           </div>
 
@@ -129,7 +145,7 @@ function Admin() {
             </h2>
             <p className="text-lg text-gray-700">
               Nombre total d'établissements :{" "}
-              <span className="font-semibold">{establishments.length}</span>
+              <span className="font-semibold">{establishments ? establishments.length : 0} </span>
             </p>
           </div>
 
@@ -138,10 +154,12 @@ function Admin() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Statistiques des rendez-vous
             </h2>
+
             <p className="text-lg text-gray-700">
               Nombre total de rendez-vous :{" "}
-              <span className="font-semibold">{appointments.length}</span>
+              <span className="font-semibold">{appointments ? appointments.length : 0}</span>
             </p>
+
           </div>
         </div>
       </div>

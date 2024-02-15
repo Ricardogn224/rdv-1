@@ -49,6 +49,7 @@ class Appointment
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
     private ?PlanningDoctor $planningDoctor = null;
 
+    #[Groups(['appointment:read', 'appointment:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $motif = null;
 

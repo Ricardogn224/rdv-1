@@ -29,6 +29,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity()]
 class ProvisionEmployee
 {
+
+    #[Groups(['appointment:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -41,7 +43,7 @@ class ProvisionEmployee
     #[ORM\OneToMany(mappedBy: 'provisionEmployee', targetEntity: Appointment::class)]
     private Collection $appointments;
 
-    #[Groups(['provisionEmployee:write', 'provisionEmployee:read'])]
+    #[Groups(['provisionEmployee:write', 'provisionEmployee:read', 'appointment:read'])]
     #[ORM\ManyToOne(inversedBy: 'provisionEmployees')]
     private ?User $employee = null;
 

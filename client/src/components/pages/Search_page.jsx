@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchForm from "../SearchForm";
 import "../../assets/css/search_page.css";
 import { useNavigate } from "react-router-dom";
+import useApi from "../HookApi";
 import Map from "../Map";
 import DisponibilityForm from "../DisponibilityForm";
 import MedecinList from "../MedecinList";
@@ -12,6 +13,7 @@ function Search_page() {
   const navigate = useNavigate();
 
   const [provisionEmployees, setProvisionEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("jwtToken");
 
@@ -20,6 +22,7 @@ function Search_page() {
     // Par exemple, si vous chargez les données une fois au chargement de la page :
 
     // const fetchEmployeePlanning = async () => {
+     // setLoading(true); // Afficher le loader
     //   try {
     //     const response = await fetch(`http://localhost:8888/api/userEmployees`, {
     //       method: 'GET',
@@ -41,11 +44,15 @@ function Search_page() {
     //   } catch (error) {
     //     console.error('Error fetching employees:', error);
     //   }
+    //finally {
+    //  setLoading(false); // Masquer le loader
+    //}
     // };
 
     // fetchEmployeePlanning();
 
     const fetchProvisionEmployee = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
           `http://localhost:8888/api/provision_employees`,
@@ -69,6 +76,8 @@ function Search_page() {
         setProvisionEmployees(data["hydra:member"]);
       } catch (error) {
         console.error("Error fetching employees:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
@@ -81,7 +90,7 @@ function Search_page() {
         `/medecin`,
         {
           state: {
-            provisionEmployees: provisionEmployees,
+            provisionEmployees: provisionEmployees[0],
           },
         },
         { replace: true }
@@ -89,17 +98,21 @@ function Search_page() {
     };
   };
 
+
   return (
     <>
+      {loading && (
+          <div className="flex justify-center items-center my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       <SearchForm />
       <div className="ma-80">
-        <div className="flex space-between mt-40">
-          <div className="map">
+        <div className="flex mt-40 space-between gap-10 w-full">
+          <div className="map w-5/12">
             <Map />
           </div>
-          <div>
-            <DisponibilityForm />
-
+          <div className="w-6/12">
             {/* {medecins && (
             <div>
               {medecins.map((medecin, index) => (
@@ -116,26 +129,39 @@ function Search_page() {
             )} */}
 
             {provisionEmployees && (
-              <div className="mt-4">
+              <div className="grid md:grid-cols-2 gap-8">
                 {provisionEmployees.map((provisionEmployee, index) => (
-                  <div key={index} className="border p-4 rounded-lg mb-4">
-                    <p className="font-bold">
-                      {provisionEmployee.provision.name}
-                    </p>
-                    <p className="text-gray-600">
-                      {provisionEmployee.provision.Establishment.name}
-                    </p>
-                    <p className="text-gray-600">
-                      {provisionEmployee.provision.Establishment.adress}
-                    </p>
-                    <li
-                      onClick={handleNavigate(provisionEmployee)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      {provisionEmployee.employee.firstname}{" "}
-                      {provisionEmployee.employee.lastname}
-                    </li>
-                  </div>
+                  <li
+                    className="bg-white shadow rounded-lg p-6 mb-8 mw-1/3"
+                    key={index}
+                    onClick={handleNavigate(provisionEmployee)}
+                  >
+                    <div className="flex flex-row gap-8">
+                      <div className="flex align-middle">
+                        <img
+                          src="https://randomuser.me/api/portraits/men/94.jpg"
+                          className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                        ></img>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <p className="">
+                          {" "}
+                          Mr/Mme {provisionEmployee.employee.firstname}{" "}
+                          {provisionEmployee.employee.lastname}
+                        </p>
+                        <p className="font-bold">
+                          {provisionEmployee.provision.name}
+                        </p>
+                      {/* <p className="text-gray-600">
+                          {provisionEmployee.provision.Establishment.name}
+                        </p>
+                        <p className="text-gray-600">
+                          {provisionEmployee.provision.Establishment.adress}
+                        </p>*/}
+                      </div>
+                    </div>
+                  </li>
                 ))}
               </div>
             )}

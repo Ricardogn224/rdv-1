@@ -5,6 +5,8 @@ import '../assets/css/register.css';
 function Register_pro() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
 
   const [formValues, setFormValues] = useState({
@@ -80,6 +82,7 @@ function Register_pro() {
     e.preventDefault();
 
     if (validateForm()) {
+      setLoading(true); // Afficher le loader
       try {
         const apiUrl = 'http://localhost:8888';
         const response = await fetch(`${apiUrl}/api/users`, {
@@ -96,6 +99,7 @@ function Register_pro() {
           const data = await response.json();
           const id = data.id;
 
+          setLoading(true); // Afficher le loader
           try {
             const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",
@@ -114,6 +118,8 @@ function Register_pro() {
             }
           } catch (error) {
             setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
+          } finally {
+            setLoading(false); // Masquer le loader
           }
 
           navigate("/login");
@@ -122,7 +128,9 @@ function Register_pro() {
           setErrorMessage('Une erreur est survenue ', errorBody);
         }
       } catch (error) {
-        setErrorMessage('Une erreur est survenue ', errorBody);
+        setErrorMessage('Une erreur est survenue ', error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     }
   };
@@ -216,6 +224,11 @@ function Register_pro() {
           </div>
           <br/>
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       </div>
     </div>
   );

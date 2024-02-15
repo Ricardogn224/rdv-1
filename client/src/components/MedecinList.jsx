@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import medecinImage from '../assets/portrait-docteur.jpg';
 import { useNavigate } from 'react-router-dom';
 
-function MedecinList({ nom, poste, adresse, type, consultationVideo, planning }) {
+function MedecinList({ nom, poste, adresse, type, consultationVideo, planning, provision_employee }) {
 const navigate = useNavigate();
     const [planningRegular, setPlanningRegular] = useState([]);
     const [currentWeekStartDate, setCurrentWeekStartDate] = useState(new Date());
@@ -19,7 +19,7 @@ const navigate = useNavigate();
     
         // // Store the string in the local storage
         // localStorage.setItem('reservationDataRdv', reservationDataString);
-        navigate("/rdv", {state: {reservationDataRdv :  reservationDataString}})
+        navigate("/rdv", {state: {reservationDataRdv :  reservationDataString, provisionEmployee : provision_employee}})
     };
 
     const getCurrentWeekDates = () => {
@@ -84,7 +84,10 @@ const navigate = useNavigate();
 
 
     useEffect(() => {
-        setPlanningRegular(generatePlanningForWeek(currentWeekStartDate));
+        // Check if planningDoctors has changed and whether currentWeekStartDate is stable
+        if (planningRegular.length == 0) {
+            setPlanningRegular(generatePlanningForWeek(currentWeekStartDate));
+        }
     }, [currentWeekStartDate, planningDoctors]);
 
 

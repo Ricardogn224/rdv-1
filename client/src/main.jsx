@@ -72,35 +72,35 @@ const router = createBrowserRouter([
         path: "confirm_page",
         element: <Confirm_page />,
       },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
-      {
-        path: "register_pro",
-        element: <Register_pro />,
-      },
+
       {
         path: "*",
         element: <NotFound />,
       },
     ],
   },
-  
+
+  {
+    path: "login",
+    element: <Login />,
+  },
+  {
+    path: "register",
+    element: <Register />,
+  },
+  {
+    path: "register_pro",
+    element: <Register_pro />,
+  },
 
   {
     path: "/admin",
     element: (
-      // <ProtectedRoute requiredRole="ROLE_ADMIN">
+    <ProtectedRoute requiredRole="ROLE_ADMIN">
       <>
         <HeaderAdmin />
-         
       </>
-      // </ProtectedRoute>
+    </ProtectedRoute>
     ),
     children: [
       {
@@ -157,6 +157,10 @@ const router = createBrowserRouter([
       },
       {
         path: "employee_rdv/:id",
+        element: <EmployeeRdvProvider />,
+      },
+      {
+        path: "reservation",
         element: <EmployeeRdvProvider />,
       },
       {
