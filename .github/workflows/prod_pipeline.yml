@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - production
-      
+
   pull_request:
     branches:
       - production
@@ -52,6 +52,9 @@ jobs:
             set -a
             [ -f ".env.local" ] && . ".env.local"
             set +a
+      
+      - name: Rename .env.test to .env.local
+        run: mv server/.env.test server/.env.local
 
       - name: Check server directory contents
         run: |
