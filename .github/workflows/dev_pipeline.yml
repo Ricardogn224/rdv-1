@@ -44,13 +44,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
-      # - name: Load .env.local file
-      #   run: |
-      #       cd server
-      #       echo "Loading environment variables from .env.local"
-      #       set -a
-      #       [ -f ".env.local" ] && . ".env.local"
-      #       set +a
+      - name: Load .env.local file
+        run: |
+             cd server
+             echo "Loading environment variables from .env.local"
+             set -a
+             [ -f ".env.local" ] && . ".env.local"
+             set +a
 
       - name: Check server directory contents
         run: |
@@ -64,33 +64,7 @@ jobs:
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
-  
-      - name: Deploy code to server
-        run: |
-          pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
-
-  run_code_on_server:
-    name: run_code_on_server en deploy on ssh server 
-    runs-on: ubuntu-latest
-    needs: run_back_end
-    env:
-      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-      SSH_IP: ${{ secrets.SSH_IP }}
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Deploy code to server
-        run: |
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/server && docker-compose stop"
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/server && docker-compose up -d"
-        
-      - name: Deploy front code
-        run: |
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/client && docker-compose up -d" 
       
         
 
