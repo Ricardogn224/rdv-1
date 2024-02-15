@@ -144,13 +144,14 @@ function Rdv_page() {
   };
 
   return (
-     {loading && (
+    
+    <div className="flex space-between rdv_list">
+      <div className="zone_old_rdv overflow-auto">
+      {loading && (
           <div className="flex justify-center items-center my-2">
             <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
           </div>
         )}
-    <div className="flex space-between rdv_list">
-      <div className="zone_old_rdv overflow-auto">
         <div className="title ma-20">
           <p>Mes rendez-vous passés</p>
         </div>
