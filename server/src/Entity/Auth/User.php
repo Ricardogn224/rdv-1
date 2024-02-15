@@ -108,13 +108,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $products;
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
-    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write', 'user:provider:read'])]
+    'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read',
+    'employee:write', 'user:provider:read', 'appointment:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
     'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read', 'employee:write',
-    'user:provider:read'])]
+    'user:provider:read', 'appointment:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
