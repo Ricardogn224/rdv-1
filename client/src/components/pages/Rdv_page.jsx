@@ -16,7 +16,7 @@ function Rdv_page() {
 
         const fetchRdv = async () => {
           try {
-            const response = await fetch("http://localhost:8888/api/rdv"); // Mettez ici l'URL de votre API
+            const response = await fetch("http://localhost:8888/api/rdv");
             if (!response.ok) {
               throw new Error("Erreur réseau");
             }
@@ -39,7 +39,7 @@ function Rdv_page() {
 
       
 
-        const rdv =[
+       /*  const rdv =[
             {
                 id: 1,
                 name: "Sandrine Irigoyen",
@@ -65,12 +65,12 @@ function Rdv_page() {
                 date: "Jeudi 10 Août 2023 : 12h40",
             },
         ];
-        setRdv(rdv);
+        setRdv(rdv); */
 
         
     }, [])
 
-    useEffect(() => {
+    /* useEffect(() => {
         const oldrdv =[
             {
                 id: 1,
@@ -102,13 +102,13 @@ function Rdv_page() {
             },
         ];
         setOldrdv(oldrdv);
-    }, [])
+    }, []) */
 
-        const navigate = useNavigate();
-
+      const navigate = useNavigate();
         const MedecinRdv = (medecinId) => () => {
           navigate(`/medecin`);
         };
+
 
 
 

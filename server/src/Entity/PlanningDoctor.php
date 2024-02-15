@@ -31,11 +31,11 @@ class PlanningDoctor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read'])]
+    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $date = null;
 
-    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read'])]
+    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $hour = null;
 
