@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 #[AsController]
 class GetUserLogin extends AbstractController
 { 
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): User
+        public function __invoke(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): User
     {
         //$data = json_decode($request->getContent(), true);
         $email =  $request->query->get('email');

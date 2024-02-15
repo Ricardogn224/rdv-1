@@ -91,7 +91,7 @@ function Login() {
           
         }
       } else {
-        setErrorMessage('Échec de la connexion.'); // Utiliser le message d'erreur de l'API
+        setErrorMessage('Échec de la conndexion.'); // Utiliser le message d'erreur de l'API
       }
     } catch (error) {
       setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
