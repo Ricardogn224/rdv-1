@@ -1,209 +1,220 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react';
 import '../../assets/css/rdv_page.css';
 import medecinImage from '../../assets/portrait-docteur.jpg';
 import { useNavigate } from 'react-router-dom';
 
 function Rdv_page() {
-
   const token = localStorage.getItem("jwtToken");
 
+  const dataCancel = {
+    isCancelled: true,
+  };
 
-  const now = new Date();
-    console.log(now);
+  const monthsAbbreviationsToFullName = {
+    'janv.': 'january',
+    'févr.': 'february',
+    'mars': 'march',
+    'avr.': 'april',
+    'mai': 'may',
+    'juin': 'june',
+    'juil': 'july',
+    'août': 'august',
+    'sept.': 'september',
+    'oct.': 'october',
+    'nov.': 'november',
+    'déc.': 'december'
+  };
 
-    const [oldrdv, setOldrdv] = useState([]);
-    const [rdv, setRdv] = useState([]);
+  const [oldrdv, setOldrdv] = useState([]);
+  const [rdv, setRdv] = useState([]);
 
-    useEffect(() => {
+  const convertDateStringToDate = (dateString) => {
+    // Extract the day and abbreviated month from the date string
+    const [, day, abbreviatedMonth] = dateString.match(/(\d+)\s([^\s]+)/);
 
-        const fetchRdv = async () => {
-          try {
-            const response = await fetch("http://localhost:8888/api/appointments", {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-                // You may include other headers like authorization if needed
-              },
-            });
-            if (!response.ok) {
-              throw new Error("Erreur réseau");
-            }
-            const allRdv = await response.json();
-            // const now = new Date();
+    // Map the abbreviated month name to its corresponding full month name
+    const fullMonth = monthsAbbreviationsToFullName[abbreviatedMonth];
 
-            // const upcomingRdv = allRdv.filter(
-            //   (rdv) => new Date(rdv.date) > now
-            // );
-            // const pastRdv = allRdv.filter((rdv) => new Date(rdv.date) <= now);
+    // Get the current year
+    const currentYear = new Date().getFullYear();
 
-            console.log(allRdv)
+    // Construct the full date string with the current year
+    const fullDateString = `${day} ${fullMonth} ${currentYear}`;
 
-            setRdv(allRdv['hydra:member']);
-            // setOldrdv(pastRdv);
-          } catch (error) {
-            console.error("Erreur lors de la récupération des rdv:", error);
+    // Convert the resulting string to a JavaScript Date object
+    const date = new Date(fullDateString);
+
+    return date;
+  };
+
+  useEffect(() => {
+    const fetchRdv = async () => {
+      try {
+        const response = await fetch("http://localhost:8888/api/appointments", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Erreur réseau");
+        }
+        const allRdv = await response.json();
+
+        const pastRdv = [];
+        const upcomingRdv = [];
+
+        const now = new Date();
+
+        console.log(allRdv['hydra:member'])
+
+        allRdv['hydra:member'].forEach((rdv) => {
+          const [, day, abbreviatedMonth] = rdv.planningDoctor.date.match(/(\d+)\s([^\s]+)/);
+          const fullMonth = monthsAbbreviationsToFullName[abbreviatedMonth];
+          const fullDateString = `${day} ${fullMonth} ${now.getFullYear()}`;
+          const rdvDate = new Date(fullDateString);
+
+          if (rdvDate < now) {
+            pastRdv.push(rdv);
+          } else {
+            upcomingRdv.push(rdv);
           }
+        });
+
+        setOldrdv(pastRdv);
+        setRdv(upcomingRdv);
+
+      } catch (error) {
+        console.error("Erreur lors de la récupération des rdv:", error);
+      }
+    };
+
+    fetchRdv();
+
+  }, []);
+
+  const cancelRdv = async (event, id) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:8888/api/planning_doctors/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/merge-patch+json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(dataCancel),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur réseau");
+      }
+      const data = await response.json();
+
+      const index = rdv.findIndex(rdv => rdv.planningDoctor && rdv.planningDoctor['id'] === data.id);
+
+      if (index !== -1) {
+        const updatedRdv = {
+          ...rdv[index],
+          planningDoctor: data,
         };
+        const updatedRdvs = [...rdv];
+        updatedRdvs[index] = updatedRdv;
+        setRdv(updatedRdvs);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'annulation du rdv:", error);
+    }
+  };
 
-        fetchRdv();
+  const navigate = useNavigate();
 
-      
-
-       /*  const rdv =[
-            {
-                id: 1,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 2,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 3,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 4,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-        ];
-        setRdv(rdv); */
-
-        
-    }, [])
-
-    /* useEffect(() => {
-        const oldrdv =[
-            {
-                id: 1,
-                medecinid: 1,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 2,
-                medecinid: 1,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 3,
-                medecinid: 1,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-            {
-                id: 4,
-                medecinid: 1,
-                name: "Sandrine Irigoyen",
-                motif : "Gynécologue obstétricienne",
-                date: "Jeudi 10 Août 2023 : 12h40",
-            },
-        ];
-        setOldrdv(oldrdv);
-    }, []) */
-
-      const navigate = useNavigate();
-        const MedecinRdv = (medecinId) => () => {
-          navigate(`/medecin`);
-        };
-
-
-
-
-
-
-
-    return (
-      <>
-        <div className="flex space-between rdv_list">
-          <div className="zone_old_rdv overflow-auto">
-            <div className="title ma-20">
-              <p>Mes rendez-vous passés </p>
-            </div>
-
-            {oldrdv.map((oldrdv) => (
-              <>
-                <div className="encadre ma-20">
-                  <div className="propositionrdv">
-                    <div className="flex flex-row items-center">
-                      <img src={medecinImage} alt="" />
-                      <div className="text">
-                        <h4>{oldrdv.name}</h4>
-                        <p>{oldrdv.motif}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="propositionrdv">
-                    <div className="flex flex-row items-center">
-                      <div className="zone-vide "></div>
-                      <div className="text">
-                        <h4>Le détail de votre rendez-vous</h4>
-                        <p>{oldrdv.date}</p>
-                      </div>
-                    </div>
-                    <div className="m-4">
-                      <button onClick={MedecinRdv(oldrdv.medecinid)}>
-                        Reprendre rendez-vous
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ))}
-          </div>
-
-          <div className="zone_new_rdv overflow-auto">
-            <div className="title ma-20">
-              <p>Mes rendez-vous à venir </p>
-            </div>
-
-            {rdv && (
-              rdv.map((rdv) => (
-                <>
-                  <div className="encadre ma-20">
-                    <div className="propositionrdv">
-                      <div className="flex flex-row items-center">
-                        <img src={medecinImage} alt="" />
-                        <div className="text">
-                          <h4>{rdv.provisionEmployee.employee.firstname} {rdv.provisionEmployee.employee.lastname}</h4>
-                          <p>{rdv.provisionEmployee.provision.name}</p>
-                          <p>{rdv.motif}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="propositionrdv">
-                      <div className="flex flex-row items-center">
-                        <div className="zone-vide"></div>
-                        <div className="text">
-                          <h4>Le détail de votre rendez-vous</h4>
-                          <p>{rdv.planningDoctor.date} à {rdv.planningDoctor.hour}</p>
-                        </div>
-                      </div>
-                      <div className="flex flex-row ">
-                        <button className="m-4">Annuler</button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ))
-            )}
-          </div>
-        </div>
-      </>
+  const MedecinRdv = (provisionEmployee) => () => {
+    navigate(
+      `/medecin`,
+      {
+        state: {
+          provisionEmployees: provisionEmployee,
+        },
+      },
+      { replace: true }
     );
+  };
+
+  return (
+    <div className="flex space-between rdv_list">
+      <div className="zone_old_rdv overflow-auto">
+        <div className="title ma-20">
+          <p>Mes rendez-vous passés</p>
+        </div>
+
+        {oldrdv && oldrdv.map((oldRdv) => (
+          <div key={oldRdv.id} className="encadre ma-20">
+            <div className="propositionrdv">
+              <div className="flex flex-row items-center">
+                <img src={medecinImage} alt="" />
+                <div className="text">
+                  <h4>{oldRdv.provisionEmployee.employee.firstname} {oldRdv.provisionEmployee.employee.lastname}</h4>
+                  <p>{oldRdv.provisionEmployee.provision.name}</p>
+                  <p>{oldRdv.motif}</p>
+                </div>
+              </div>
+            </div>
+            <div className="propositionrdv">
+              <div className="flex flex-row items-center">
+                <div className="zone-vide "></div>
+                <div className="text">
+                  <h4>Le détail de votre rendez-vous</h4>
+                  <p>{oldRdv.planningDoctor.date} à {oldRdv.planningDoctor.hour}</p>
+                </div>
+              </div>
+              <div className="m-4">
+                <button onClick={MedecinRdv(oldRdv.provisionEmployee)}>
+                  Reprendre rendez-vous
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="zone_new_rdv overflow-auto">
+        <div className="title ma-20">
+          <p>Mes rendez-vous à venir</p>
+        </div>
+
+        {rdv && rdv.map((rdv) => (
+          <div key={rdv.id} className="encadre ma-20">
+            <div className="propositionrdv">
+              <div className="flex flex-row items-center">
+                <img src={medecinImage} alt="" />
+                <div className="text">
+                  <h4>{rdv.provisionEmployee.employee.firstname} {rdv.provisionEmployee.employee.lastname}</h4>
+                  <p>{rdv.provisionEmployee.provision.name}</p>
+                  <p>{rdv.motif}</p>
+                </div>
+              </div>
+            </div>
+            <div className="propositionrdv">
+              <div className="flex flex-row items-center">
+                <div className="zone-vide"></div>
+                <div className="text">
+                  <h4>Le détail de votre rendez-vous</h4>
+                  <p>{rdv.planningDoctor.date} à {rdv.planningDoctor.hour}</p>
+                </div>
+              </div>
+              <div className="flex flex-row">
+                {rdv.planningDoctor.isCancelled && rdv.planningDoctor.isCancelled === true ? (
+                  <p className="m-4 font-bold">Annulé</p>
+                ) : (
+                  <button onClick={(event) => cancelRdv(event, rdv.planningDoctor.id)} className="m-4">Annuler</button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Rdv_page;

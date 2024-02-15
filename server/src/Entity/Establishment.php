@@ -52,14 +52,14 @@ class Establishment
     #[Groups([
         'provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:write:update',
         'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read',
-        'employee:write', 'user:provider:read', 'user:read', 'establishment:read:full'
+        'employee:write', 'user:provider:read', 'user:read', 'establishment:read:full', 'appointment:read'
     ])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
     #[Groups([
         'establishment:write', 'establishment:write:update', 'establishment:read', 'planningEmployee:read',
-        'planningDoctor:read', 'provisionEmployee:read', 'user:provider:read'
+        'planningDoctor:read', 'provisionEmployee:read', 'user:provider:read', 'provisionEmployee:read', 'appointment:read'
     ])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;

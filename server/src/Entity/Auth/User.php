@@ -100,7 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
     'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read',
-    'employee:write', 'user:provider:read', 'appointment:read'])]
+    'employee:write', 'user:provider:read', 'appointment:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
