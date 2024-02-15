@@ -94,7 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $name = '';
 
     #[ApiFilter(DateFilter::class)]
-    #[Groups(['user:read'])]
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
@@ -119,12 +118,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = '';
 
-    #[Groups(['user:write', 'user:read', 'employee:write'])]
+    #[Groups(['user:write', 'employee:write'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ApiFilter(DateFilter::class)]
-    #[Groups(['user:read'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -135,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'provider', targetEntity: Establishment::class)]
     private Collection $establishments;
 
-    #[Groups(['planningEmployee:read', 'planning:read', 'employee:write'])]
+    #[Groups(['planningEmployee:read', 'planning:read', 'employee:write', 'user:read'])]
     #[ORM\ManyToOne(inversedBy: 'employees')]
     private ?Establishment $establishmentEmployee = null;
 

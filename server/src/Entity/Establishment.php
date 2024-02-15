@@ -43,7 +43,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity()]
 class Establishment
 {
-    #[Groups(['provision:write', 'establishment:read', 'employee:write', 'user:provider:read'])]
+    #[Groups(['provision:write', 'establishment:read', 'employee:write', 'user:provider:read', 'user:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -51,7 +51,8 @@ class Establishment
 
     #[Groups([
         'provision:write', 'provision:read', 'provider:read', 'establishment:write', 'establishment:write:update',
-        'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read', 'employee:write', 'user:provider:read'
+        'establishment:read', 'planningEmployee:read', 'planningDoctor:read', 'provisionEmployee:read',
+        'employee:write', 'user:provider:read', 'user:read', 'establishment:read:full'
     ])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;

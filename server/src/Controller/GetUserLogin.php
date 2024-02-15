@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Symfony\Security\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Auth\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,10 +37,6 @@ class GetUserLogin extends AbstractController
 
         if (!$user) {
             throw new NotFoundHttpException('Compte non existant');
-        }
-
-        if (in_array('ROLE_PROVIDER', $user->getRoles(), true) && !$user->isActive()) {
-            throw new AccessDeniedException('Votre compte est en cours de validation par un administrateur.');
         }
 
         return $user;

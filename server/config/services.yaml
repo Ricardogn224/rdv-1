@@ -37,9 +37,9 @@ services:
         tags:
         - { name: kernel.event_subscriber, event: kernel.view }
 
-    App\EventSubscriber\ApiExceptionSubscriber:
-        tags:
-            - { name: kernel.event_subscriber }
+    # App\EventSubscriber\ApiExceptionSubscriber:
+    #     tags:
+    #         - { name: kernel.event_subscriber }
             
     app.security.authentication_failure_handler:
         class: App\Security\CustomAuthenticationFailureHandler
