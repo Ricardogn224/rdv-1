@@ -105,10 +105,10 @@ function Rdv_page() {
     }, []) */
 
       const navigate = useNavigate();
+        const MedecinRdv = (medecinId) => () => {
+          navigate(`/medecin`);
+        };
 
-      const MedecinRdv = (medecinId) => () => {
-        navigate(`/medecin/${medecinId}`);
-      };
 
 
 

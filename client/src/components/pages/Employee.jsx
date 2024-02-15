@@ -148,6 +148,7 @@ function Employee() {
                     Coordonnées
                   </span>
                   <ul>
+                    <li className="mb-2">{doctor.nom}</li>
                     <li className="mb-2">{doctor.adress}</li>
                   </ul>
                 </div>

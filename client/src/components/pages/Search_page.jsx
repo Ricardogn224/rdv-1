@@ -93,13 +93,11 @@ function Search_page() {
     <>
       <SearchForm />
       <div className="ma-80">
-        <div className="flex space-between mt-40">
-          <div className="map">
+        <div className="flex mt-40 space-between gap-10 w-full">
+          <div className="map w-5/12">
             <Map />
           </div>
-          <div>
-            <DisponibilityForm />
-
+          <div className="w-6/12">
             {/* {medecins && (
             <div>
               {medecins.map((medecin, index) => (
@@ -116,26 +114,39 @@ function Search_page() {
             )} */}
 
             {provisionEmployees && (
-              <div className="mt-4">
+              <div className="grid md:grid-cols-2 gap-8">
                 {provisionEmployees.map((provisionEmployee, index) => (
-                  <div key={index} className="border p-4 rounded-lg mb-4">
-                    <p className="font-bold">
-                      {provisionEmployee.provision.name}
-                    </p>
-                    <p className="text-gray-600">
-                      {provisionEmployee.provision.Establishment.name}
-                    </p>
-                    <p className="text-gray-600">
-                      {provisionEmployee.provision.Establishment.adress}
-                    </p>
-                    <li
-                      onClick={handleNavigate(provisionEmployee)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      {provisionEmployee.employee.firstname}{" "}
-                      {provisionEmployee.employee.lastname}
-                    </li>
-                  </div>
+                  <li
+                    className="bg-white shadow rounded-lg p-6 mb-8 mw-1/3"
+                    key={index}
+                    onClick={handleNavigate(provisionEmployee)}
+                  >
+                    <div className="flex flex-row gap-8">
+                      <div className="flex align-middle">
+                        <img
+                          src="https://randomuser.me/api/portraits/men/94.jpg"
+                          className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                        ></img>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <p className="">
+                          {" "}
+                          Mr/Mme {provisionEmployee.employee.firstname}{" "}
+                          {provisionEmployee.employee.lastname}
+                        </p>
+                        <p className="font-bold">
+                          {provisionEmployee.provision.name}
+                        </p>
+                        <p className="text-gray-600">
+                          {provisionEmployee.provision.Establishment.name}
+                        </p>
+                        <p className="text-gray-600">
+                          {provisionEmployee.provision.Establishment.adress}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
                 ))}
               </div>
             )}
