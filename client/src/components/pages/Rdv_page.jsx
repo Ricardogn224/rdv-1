@@ -4,6 +4,7 @@ import medecinImage from '../../assets/portrait-docteur.jpg';
 import { useNavigate } from 'react-router-dom';
 
 function Rdv_page() {
+
   const token = localStorage.getItem("jwtToken");
 
   const dataCancel = {
@@ -27,8 +28,10 @@ function Rdv_page() {
 
   const [oldrdv, setOldrdv] = useState([]);
   const [rdv, setRdv] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const convertDateStringToDate = (dateString) => {
+
+    const convertDateStringToDate = (dateString) => {
     // Extract the day and abbreviated month from the date string
     const [, day, abbreviatedMonth] = dateString.match(/(\d+)\s([^\s]+)/);
 
@@ -141,11 +144,17 @@ function Rdv_page() {
   };
 
   return (
+     {loading && (
+          <div className="flex justify-center items-center my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
     <div className="flex space-between rdv_list">
       <div className="zone_old_rdv overflow-auto">
         <div className="title ma-20">
           <p>Mes rendez-vous passés</p>
         </div>
+
 
         {oldrdv && oldrdv.map((oldRdv) => (
           <div key={oldRdv.id} className="encadre ma-20">
