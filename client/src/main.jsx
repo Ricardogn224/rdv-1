@@ -72,25 +72,26 @@ const router = createBrowserRouter([
         path: "confirm_page",
         element: <Confirm_page />,
       },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
-      {
-        path: "register_pro",
-        element: <Register_pro />,
-      },
+
       {
         path: "*",
         element: <NotFound />,
       },
     ],
   },
-  
+
+  {
+    path: "login",
+    element: <Login />,
+  },
+  {
+    path: "register",
+    element: <Register />,
+  },
+  {
+    path: "register_pro",
+    element: <Register_pro />,
+  },
 
   {
     path: "/admin",
@@ -98,7 +99,6 @@ const router = createBrowserRouter([
       // <ProtectedRoute requiredRole="ROLE_ADMIN">
       <>
         <HeaderAdmin />
-         
       </>
       // </ProtectedRoute>
     ),

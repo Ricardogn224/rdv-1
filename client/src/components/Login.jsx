@@ -87,6 +87,10 @@ function Login() {
             navigate("/admin");
           } else if (decodedToken.roles.includes('ROLE_USER')) {
             navigate("/search_page");
+          } else if (decodedToken.roles.includes('ROLE_PROVIDER')) {
+            navigate("/provider");
+          } else {
+            navigate("/");
           }
           
         }
