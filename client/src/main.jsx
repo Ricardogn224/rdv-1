@@ -160,6 +160,10 @@ const router = createBrowserRouter([
         element: <EmployeeRdvProvider />,
       },
       {
+        path: "reservation",
+        element: <EmployeeRdvProvider />,
+      },
+      {
         path: "*",
         element: <NotFound />,
       },

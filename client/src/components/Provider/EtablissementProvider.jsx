@@ -56,7 +56,7 @@ function DashboardContenu() {
                 <section>
                     <NavbarProvider />
                 </section>
-                <section className='section_one'>
+                <section className='flex-1 p-4'>
                     <div className="w-1000 mx-auto px-4 py-8">
                         <div className="flex justify-between items-center mb-6">
                             <h1 className="text-xl font-semibold">Établissements</h1>
