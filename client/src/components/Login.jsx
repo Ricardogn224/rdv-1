@@ -30,6 +30,10 @@ function Login() {
     setPasswordError(""); // Réinitialiser l'erreur lors de la modification
   };
 
+    const BackHome = () => {
+      navigate("/");
+    };
+
   // Gérez la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -114,7 +118,7 @@ function Login() {
   return (
     <div className="flex-center flex-column">
       <section className=" flex-column mt-80 form-zone">
-        <br/>
+        <br />
         <div className="flex-center">
           <h1 className="title">J'ai déjà un compte</h1>
         </div>
@@ -146,21 +150,45 @@ function Login() {
               {passwordError}
             </span> */}
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-            <br/>
+            <br />
           </div>
-          <br/>
+          <br />
 
-          <div className="flex-center">
+          <div className=" flex-center">
             <button className="btn-submit" type="submit">
               Se connecter
             </button>
           </div>
-          <div className="flex-center">
-            <li className="field link flex-center cursor-pointer" onClick={redirectRegister}>
+          <div className="flex flex-col flex-center">
+            <li
+              className="link flex-center cursor-pointer"
+              onClick={redirectRegister}
+            >
               S'inscrire
             </li>
+            <br />
+            <div className="flex-center">
+              <li onClick={BackHome} className="flex flex-row">
+                <svg
+                  className="w-5 h-5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                  />
+                </svg>
+                <span>Accueil</span>
+              </li>
+            </div>
           </div>
-          <br/>
+
+          <br />
         </form>
         {loading && (
           <div className="flex justify-center items-center  my-2">
@@ -170,7 +198,11 @@ function Login() {
 
 
       </section>
-      <br/><br/><br/><br/><br/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 

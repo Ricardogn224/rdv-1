@@ -149,42 +149,54 @@ function Rdv_page() {
       <div className="zone_old_rdv overflow-auto">
       {loading && (
           <div className="flex justify-center items-center my-2">
-            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            <svg
+              class="animate-spin h-5 w-5 mr-3  bg-blue-500"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            ></svg>{" "}
+            Chargement...
           </div>
         )}
+
         <div className="title ma-20">
           <p>Mes rendez-vous passés</p>
         </div>
 
-
-        {oldrdv && oldrdv.map((oldRdv) => (
-          <div key={oldRdv.id} className="encadre ma-20">
-            <div className="propositionrdv">
-              <div className="flex flex-row items-center">
-                <img src={medecinImage} alt="" />
-                <div className="text">
-                  <h4>{oldRdv.provisionEmployee.employee.firstname} {oldRdv.provisionEmployee.employee.lastname}</h4>
-                  <p>{oldRdv.provisionEmployee.provision.name}</p>
-                  <p>{oldRdv.motif}</p>
+        {oldrdv &&
+          oldrdv.map((oldRdv) => (
+            <div key={oldRdv.id} className="encadre ma-20">
+              <div className="propositionrdv">
+                <div className="flex flex-row items-center">
+                  <img src={medecinImage} alt="" />
+                  <div className="text">
+                    <h4>
+                      {oldRdv.provisionEmployee.employee.firstname}{" "}
+                      {oldRdv.provisionEmployee.employee.lastname}
+                    </h4>
+                    <p>{oldRdv.provisionEmployee.provision.name}</p>
+                    <p>{oldRdv.motif}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="propositionrdv">
+                <div className="flex flex-row items-center">
+                  <div className="zone-vide "></div>
+                  <div className="text">
+                    <h4>Le détail de votre rendez-vous</h4>
+                    <p>
+                      {oldRdv.planningDoctor.date} à{" "}
+                      {oldRdv.planningDoctor.hour}
+                    </p>
+                  </div>
+                </div>
+                <div className="m-4">
+                  <button onClick={MedecinRdv(oldRdv.provisionEmployee)}>
+                    Reprendre rendez-vous
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="propositionrdv">
-              <div className="flex flex-row items-center">
-                <div className="zone-vide "></div>
-                <div className="text">
-                  <h4>Le détail de votre rendez-vous</h4>
-                  <p>{oldRdv.planningDoctor.date} à {oldRdv.planningDoctor.hour}</p>
-                </div>
-              </div>
-              <div className="m-4">
-                <button onClick={MedecinRdv(oldRdv.provisionEmployee)}>
-                  Reprendre rendez-vous
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       <div className="zone_new_rdv overflow-auto">
@@ -192,36 +204,50 @@ function Rdv_page() {
           <p>Mes rendez-vous à venir</p>
         </div>
 
-        {rdv && rdv.map((rdv) => (
-          <div key={rdv.id} className="encadre ma-20">
-            <div className="propositionrdv">
-              <div className="flex flex-row items-center">
-                <img src={medecinImage} alt="" />
-                <div className="text">
-                  <h4>{rdv.provisionEmployee.employee.firstname} {rdv.provisionEmployee.employee.lastname}</h4>
-                  <p>{rdv.provisionEmployee.provision.name}</p>
-                  <p>{rdv.motif}</p>
+        {rdv &&
+          rdv.map((rdv) => (
+            <div key={rdv.id} className="encadre ma-20">
+              <div className="propositionrdv">
+                <div className="flex flex-row items-center">
+                  <img src={medecinImage} alt="" />
+                  <div className="text">
+                    <h4>
+                      {rdv.provisionEmployee.employee.firstname}{" "}
+                      {rdv.provisionEmployee.employee.lastname}
+                    </h4>
+                    <p>{rdv.provisionEmployee.provision.name}</p>
+                    <p>{rdv.motif}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="propositionrdv">
+                <div className="flex flex-row items-center">
+                  <div className="zone-vide"></div>
+                  <div className="text">
+                    <h4>Le détail de votre rendez-vous</h4>
+                    <p>
+                      {rdv.planningDoctor.date} à {rdv.planningDoctor.hour}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-row">
+                  {rdv.planningDoctor.isCancelled &&
+                  rdv.planningDoctor.isCancelled === true ? (
+                    <p className="m-4 font-bold">Annulé</p>
+                  ) : (
+                    <button
+                      onClick={(event) =>
+                        cancelRdv(event, rdv.planningDoctor.id)
+                      }
+                      className="m-4"
+                    >
+                      Annuler
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="propositionrdv">
-              <div className="flex flex-row items-center">
-                <div className="zone-vide"></div>
-                <div className="text">
-                  <h4>Le détail de votre rendez-vous</h4>
-                  <p>{rdv.planningDoctor.date} à {rdv.planningDoctor.hour}</p>
-                </div>
-              </div>
-              <div className="flex flex-row">
-                {rdv.planningDoctor.isCancelled && rdv.planningDoctor.isCancelled === true ? (
-                  <p className="m-4 font-bold">Annulé</p>
-                ) : (
-                  <button onClick={(event) => cancelRdv(event, rdv.planningDoctor.id)} className="m-4">Annuler</button>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

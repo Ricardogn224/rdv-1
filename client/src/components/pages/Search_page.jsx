@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchForm from "../SearchForm";
 import "../../assets/css/search_page.css";
 import { useNavigate } from "react-router-dom";
+import useApi from "../HookApi";
 import Map from "../Map";
 import DisponibilityForm from "../DisponibilityForm";
 import MedecinList from "../MedecinList";
@@ -96,6 +97,7 @@ function Search_page() {
       );
     };
   };
+
 
   return (
     <>
