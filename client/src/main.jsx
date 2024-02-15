@@ -96,11 +96,11 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      // <ProtectedRoute requiredRole="ROLE_ADMIN">
+    <ProtectedRoute requiredRole="ROLE_ADMIN">
       <>
         <HeaderAdmin />
       </>
-      // </ProtectedRoute>
+    </ProtectedRoute>
     ),
     children: [
       {
