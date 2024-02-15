@@ -89,7 +89,7 @@ function Search_page() {
         `/medecin`,
         {
           state: {
-            provisionEmployees: provisionEmployees,
+            provisionEmployees: provisionEmployees[0],
           },
         },
         { replace: true }

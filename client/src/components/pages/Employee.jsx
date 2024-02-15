@@ -20,9 +20,7 @@ function Employee() {
 
   const token = localStorage.getItem("jwtToken");
 
-  const medecin = provision[0];
-  
-  console.log(medecin);
+  const medecin = provision;
 
   const id = medecin.employee.id;
 
@@ -48,9 +46,9 @@ function Employee() {
       const data = {
         firstname: medecin.employee.firstname,
         lastname: medecin.employee.lastname,
-        adress: medecin.provision.Establishment.adress,
+        adress: medecin.provision.Establishment ? medecin.provision.Establishment.adress : "16 boulevard Merte Paris",
         speciality: medecin.provision.name,
-        nom: medecin.provision.Establishment.name,
+        nom: medecin.provision.Establishment ? medecin.provision.Establishment.name : "Centre cabinet dentaire",
       };
 
       setDoctor(data);
@@ -189,7 +187,7 @@ function Employee() {
                         adresse={""}
                         type={"rdv"}
                         consultationVideo={true}
-                        planning={employee}
+                        provision_employee={medecin}
                       />
                     </div>
                   </div>
