@@ -25,6 +25,15 @@ function Register() {
     plainPassword: ''
   });
 
+    const redirectRegister = () => {
+      navigate("/login");
+    };
+
+    const BackHome = () => {
+      navigate("/");
+    };
+
+
 
   const validateForm = () => {
     let isValid = true;
@@ -122,13 +131,13 @@ function Register() {
 
   return (
     <div className="flex-center flex-column">
-      <div className='mt-80  form-zone'>
-      <br />
+      <div className="mt-80  form-zone">
+        <br />
         <div className="flex-center">
           <h1 className="title"> Créer un compte </h1>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -140,8 +149,10 @@ function Register() {
               value={formValues.firstname}
               onChange={handleInputChange}
             />
-            {formErrors.firstname && <span className="error">{formErrors.firstname}</span>}
-            
+            {formErrors.firstname && (
+              <span className="error">{formErrors.firstname}</span>
+            )}
+
             <input
               className="field"
               type="text"
@@ -151,7 +162,9 @@ function Register() {
               value={formValues.lastname}
               onChange={handleInputChange}
             />
-            {formErrors.lastname && <span className="error">{formErrors.lastname}</span>}
+            {formErrors.lastname && (
+              <span className="error">{formErrors.lastname}</span>
+            )}
 
             <input
               className="field"
@@ -162,7 +175,9 @@ function Register() {
               value={formValues.dateOfBirth}
               onChange={handleInputChange}
             />
-            {formErrors.dateOfBirth && <span className="error">{formErrors.dateOfBirth}</span>}
+            {formErrors.dateOfBirth && (
+              <span className="error">{formErrors.dateOfBirth}</span>
+            )}
 
             <input
               className="field"
@@ -173,7 +188,9 @@ function Register() {
               value={formValues.email}
               onChange={handleInputChange}
             />
-            {formErrors.email && <span className="error">{formErrors.email}</span>}
+            {formErrors.email && (
+              <span className="error">{formErrors.email}</span>
+            )}
 
             <input
               className="field"
@@ -184,23 +201,58 @@ function Register() {
               value={formValues.plainPassword}
               onChange={handleInputChange}
             />
-            {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
-            <br/>
+            {formErrors.plainPassword && (
+              <span className="error">{formErrors.plainPassword}</span>
+            )}
+            <br />
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-            <br/>
+            <br />
           </div>
 
-        
           <div className="flex-center">
             <button className="btn-submit" type="submit">
               S'inscrire
             </button>
           </div>
+          <div className="flex flex-col flex-center">
+            <li
+              className="link flex-center cursor-pointer"
+              onClick={redirectRegister}
+            >
+              Se connecter
+            </li>
+
+
+            <br />
+            <div className='flex-center'>
+              <li onClick={BackHome} className='flex flex-row'>
+                <svg
+                  className="w-5 h-5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                  />
+                </svg>
+                <span>Accueil</span>
+              </li>
+            </div>
+          </div>
           <br />
         </form>
       </div>
-      <br/><br/><br/><br/><br/>
-    </div>   
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+    </div>
   );
 }
 
