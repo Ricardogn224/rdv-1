@@ -133,7 +133,6 @@ function Login() {
             {/* <span id="errorpassword" className="error-message">
               {passwordError}
             </span> */}
-            <br/>
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
             <br/>
           </div>
