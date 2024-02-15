@@ -29,7 +29,7 @@ function NavbarProvider() {
                     </a>
                 </li>
                 <li className="w-full">
-                    <a href="/provider/etablissement" className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300">
+                    <a href="/provider/reservation" className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300">
                         <i className="fas fa-credit-card mr-4"></i>
                         <span>Réservations</span>
                     </a>

@@ -99,8 +99,6 @@ function EmployeeProvider() {
 
     const handleEmployeeClick = (employee) => {
         console.log(employee)
-        // Handle the click event for the selected employee
-        //setSelectedEmployee(employee);
         navigate(`/provider/employee_rdv/${employee.id}`)
     };
 
@@ -150,6 +148,10 @@ function EmployeeProvider() {
                                     <td className="w-1/4 py-3 px-4">{employee.firstname}</td>
                                     <td className="w-1/4 py-3 px-4">{employee.lastname}</td>
                                     <td className="w-1/4 py-3 px-4 flex justify-around">
+                                        <button className="bg-blue-500 hover:bg-detail-700 text-white font-bold py-1 px-3 rounded"
+                                        onClick={() => handleEmployeeClick(employee)}>
+                                            Detail
+                                        </button>
                                         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
                                         onClick={() => handleModifierClick(employee)}>
                                             Modifier
