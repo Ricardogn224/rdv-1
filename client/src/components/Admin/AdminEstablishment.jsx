@@ -23,6 +23,7 @@ function AdminEstablishment() {
     const [providers, setProviders] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -58,6 +59,7 @@ function AdminEstablishment() {
     };
 
     const fetchUsersByRole = async (role) => {
+        setLoading(true); // Afficher le loader
         try {
             const response = await fetch(`http://localhost:8888/api/usersRole?role=${role}`, {
                 method: 'GET',
@@ -76,6 +78,8 @@ function AdminEstablishment() {
         } catch (error) {
             console.error('Error fetching users by role:', error);
             throw error; 
+        } finally {
+            setLoading(false); // Masquer le loader
         }
     };
 
@@ -104,6 +108,7 @@ function AdminEstablishment() {
         });
 
         const fetchData = async () => {
+        setLoading(true); // Afficher le loader
         try {
             const response = await fetch('http://localhost:8888/api/establishments', {
             method: "GET",
@@ -118,7 +123,9 @@ function AdminEstablishment() {
             }
         } catch (error) {
             console.error('Error fetching data:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
         };
 
         if (establishments.length === 0) {
@@ -134,6 +141,7 @@ function AdminEstablishment() {
             console.log(providers[0]);
             selectedEstablishment.provider = providers[0]
         }
+        setLoading(true); // Afficher le loader
         try {
             const url = `http://localhost:8888/api/establishments`;
             const response = await fetch(url, {
@@ -151,12 +159,15 @@ function AdminEstablishment() {
             handleCloseNewModal();
         } catch (error) {
             console.error('Error creating establishment:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
     };
 
     const handleUpdateEstablishment = async (event) => {
         event.preventDefault();
         console.log(selectedEstablishment)
+        setLoading(true); // Afficher le loader
         try {
             const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
             const response = await fetch(url, {
@@ -188,7 +199,9 @@ function AdminEstablishment() {
             setIsEditMode(false);
         } catch (error) {
             console.error('Error updating establishment:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
     };
 
     const handleModifierClick = (establishment) => {
@@ -214,6 +227,11 @@ function AdminEstablishment() {
     return (
 
         <>
+            {loading && (
+            <div className="flex justify-center items-center my-2">
+                <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            </div>
+            )}
             <div className='title-admin-page'>
                 <h1>Gestion etablissements</h1>
             </div>

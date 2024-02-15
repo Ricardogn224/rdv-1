@@ -11,9 +11,12 @@ function Admin() {
 
   const [establishments, setEstablishments] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch("http://localhost:8888/api/users", {
           method: "GET",
@@ -48,12 +51,15 @@ function Admin() {
         setCountNormalUsers(normalUsers.length);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
     fetchData();
 
     const fetchEstablishments = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
           "http://localhost:8888/api/establishments",
@@ -70,12 +76,15 @@ function Admin() {
 
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
     fetchEstablishments();
 
     const fetchAppointments = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
           "http://localhost:8888/api/appointments",
@@ -93,6 +102,8 @@ function Admin() {
 
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     }
 
@@ -101,6 +112,11 @@ function Admin() {
 
   return (
     <>
+    {loading && (
+          <div className="flex justify-center items-center my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       <div className=" mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Statistiques des utilisateurs */}
