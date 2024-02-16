@@ -21,13 +21,42 @@ function EmployeeRdv() {
   const [selectedMotif, setSelectedMotif] = useState('');
   const [medecins, setMedecins] = useState([]);
   const [employeePlanning, setEmployeePlanning] = useState(null);
+
+  const monthsAbbreviationsToFullName = {
+    'january' : 'janv.',
+    'february': 'févr.',
+    'march' : 'mars',
+    'april' : 'avr.',
+    'may' : 'mai',
+    'june' : 'juin',
+    'july' : 'juil',
+    'august' : 'août',
+    'september' : 'sept.',
+    'october' : 'oct.',
+    'november' : 'nov.',
+    'december' : 'déc.',
+  };
+
   // États pour stocker les valeurs du formulaire
   const [formValues, setFormValues] = useState({
     date: '',
     formattedDate: '',
     type: 'morning',
-    employee_id: id
+    employee_id: parseInt(id, 10),
   });
+
+  const formatDateString = (dateString) => {
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    
+    // Get the full month name abbreviation
+    const monthNameAbbreviation = date.toLocaleDateString('en-US', { month: 'long' }).toLowerCase();
+    const fullMonthName = monthsAbbreviationsToFullName[monthNameAbbreviation];
+  
+    // Format the date with the full month name abbreviation
+    const formattedDate = `${parseInt(day)} ${fullMonthName}`;
+    return formattedDate;
+  };
 
   // Fonction pour gérer les changements dans les champs du formulaire
   const handleCongeChange = (e) => {
@@ -36,6 +65,7 @@ function EmployeeRdv() {
 
     if (name === 'formattedDate') {
       // Format the date before updating the state
+      console.log(value)
       const dateString = formatDateString(value);
       setFormValues((prevFormValues) => ({
         ...prevFormValues,
@@ -152,9 +182,9 @@ function EmployeeRdv() {
                 <div className="form-group my-5">
                   <label htmlFor="period">Choisir la période:</label>
                   <select
-                    id="period"
-                    name="period"
-                    value={formValues.period}
+                    id="type"
+                    name="type"
+                    value={formValues.type}
                     onChange={handleCongeChange}
                     required
                   >
