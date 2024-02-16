@@ -9,7 +9,7 @@ Nous avons donc une partie client et server.
 
 - Abraham Ricardo HERNANDEZ SOMPARE  5IW2 - [@Ricardogn224](https://github.com/Ricardogn224)
 - Antoine CHABERNAUD 5IW2 - [@senex127](https://github.com/senex127)
-- N'Fassory DIABY 5IW2 - [@nfassorydiaby](https://github.com/nfassorydiaby)
+- Nfassory DIABY 5IW2 - [@nfassorydiaby](https://github.com/nfassorydiaby)
 - Jerrinald KANIKAINATHAN 5IW2 - [@Jerrinald](https://github.com/Jerrinald)
 
 
