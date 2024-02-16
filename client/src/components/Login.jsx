@@ -47,7 +47,7 @@ function Login() {
 
     setLoading(true); // Afficher le loader
     try {
-      const response = await fetch("https://api.medecin-sur-rdv.fr/api/auth", {
+      const response = await fetch("http://localhost:8888/api/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function Login() {
 
             setLoading(true); // Afficher le loader
             try {
-              const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userLogin?email=${decodedToken.username}`, {
+              const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
