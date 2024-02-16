@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchForm from "../SearchForm";
 import "../../assets/css/search_page.css";
 import { useNavigate } from "react-router-dom";
-import useApi from "../HookApi";
 import Map from "../Map";
-import DisponibilityForm from "../DisponibilityForm";
-import MedecinList from "../MedecinList";
-import medecinsData from "../../assets/sample.json"; // Mettez le bon chemin
 
 function Search_page() {
   // const [medecins, setMedecins] = useState([]);
@@ -18,38 +14,6 @@ function Search_page() {
   const token = localStorage.getItem("jwtToken");
 
   useEffect(() => {
-    // Ici, vous pouvez charger les données JSON et les stocker dans l'état local
-    // Par exemple, si vous chargez les données une fois au chargement de la page :
-
-    // const fetchEmployeePlanning = async () => {
-     // setLoading(true); // Afficher le loader
-    //   try {
-    //     const response = await fetch(`http://localhost:8888/api/userEmployees`, {
-    //       method: 'GET',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`,
-    //         // You may include other headers like authorization if needed
-    //       },
-    //       // You can include other options like credentials, mode, etc.
-    //     });
-
-    //     if (!response.ok) {
-    //       throw new Error('Failed to fetch employees');
-    //     }
-
-    //     const data = await response.json();
-    //     console.log(data['hydra:member'])
-    //     setMedecins(data['hydra:member']);
-    //   } catch (error) {
-    //     console.error('Error fetching employees:', error);
-    //   }
-    //finally {
-    //  setLoading(false); // Masquer le loader
-    //}
-    // };
-
-    // fetchEmployeePlanning();
 
     const fetchProvisionEmployee = async () => {
       setLoading(true); // Afficher le loader
@@ -113,20 +77,7 @@ function Search_page() {
             <Map />
           </div>
           <div className="w-6/12">
-            {/* {medecins && (
-            <div>
-              {medecins.map((medecin, index) => (
-                <MedecinList
-                  key={index}
-                  nom={""}
-                  poste={""}
-                  adresse={""}
-                  consultationVideo={true}
-                  planning={medecin}
-                />
-              ))} 
-            </div>
-            )} */}
+  
 
             {provisionEmployees && (
               <div className="grid md:grid-cols-2 gap-8">

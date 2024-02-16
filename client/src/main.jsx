@@ -6,7 +6,6 @@ import Register_pro from "./components/Register_pro.jsx";
 import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
 import Motif_page from "./components/pages/Motif_page";
-import Confirm_page from "./components/pages/Confirmation_page";
 import DashboardProvider from './components/Provider/Dashboard.jsx'
 import EtablissementProvider from './components/Provider/EtablissementProvider.jsx'
 import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
@@ -65,11 +64,6 @@ const router = createBrowserRouter([
         path: "rdv",
         element: <Motif_page />,
       },
-      {
-        path: "confirm_page",
-        element: <Confirm_page />,
-      },
-
       {
         path: "*",
         element: <NotFound />,
