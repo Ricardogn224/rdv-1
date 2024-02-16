@@ -172,14 +172,16 @@ function EmployeeRdv() {
           {employeePlanning && (
             <div className='planning-container'>
               <div>
-                <MedecinList
-                  key={0}
-                  nom={""}
-                  poste={""}
-                  adresse={""}
-                  consultationVideo={true}
-                  planning={employeePlanning}
-                />
+                  <MedecinList
+                    key={0}
+                    nom={""}
+                    poste={""}
+                    adresse={""}
+                    type={"personnel"}
+                    consultationVideo={true}
+                    planning={employeePlanning}
+                  />
+
               </div>
             </div>
           )}
