@@ -32,7 +32,7 @@ function AjoutEtablissement({ refreshEstablishments }) {
 
 
     try {
-      const url = `http://localhost:8888/api/establishments`;
+      const url = `https://api.medecin-sur-rdv.fr/api/establishments`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -54,7 +54,7 @@ function AjoutEtablissement({ refreshEstablishments }) {
         localStorage.setItem('myProvider', JSON.stringify(updatedProvider));
         refreshEstablishments();
       }
-      
+
       // Close the form after successful creation
       //setAfficherFormulaire(false);
 

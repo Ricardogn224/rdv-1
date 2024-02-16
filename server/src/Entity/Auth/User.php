@@ -145,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $active = null;
 
-    #[Groups(['planningEmployee:read', 'planning:read'])]
+    #[Groups(['planningEmployee:read', 'planning:read', 'provisionEmployee:read'])]
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: PlanningDoctor::class)]
     private Collection $planningDoctors;
 

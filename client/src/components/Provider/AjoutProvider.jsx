@@ -6,39 +6,39 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
   const [establishments, setEstablishments] = useState(myProvider.establishments);
   //ajout d'un Etablissement 
-    const bodyUser = {
-        email: '',
-        lastname: '',
-        firstname: '',
-        dateOfBirth: '',
-        plainPassword: '',
-        establishmentEmployee : {
+  const bodyUser = {
+    email: '',
+    lastname: '',
+    firstname: '',
+    dateOfBirth: '',
+    plainPassword: '',
+    establishmentEmployee: {
 
-        },
-        accountType: "employee",
-    }
+    },
+    accountType: "employee",
+  }
 
-    const [selectedUser, setSelectedUser] = useState(bodyUser);
+  const [selectedUser, setSelectedUser] = useState(bodyUser);
 
-    const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setSelectedUser((prevUser) => ({
-        ...prevUser,
-        [name]: value,
+      ...prevUser,
+      [name]: value,
     }));
   };
 
   const handleEstablishmentSelection = (e) => {
-        const { value } = e.target;
-        const selectedEstablishment = establishments.find(establishment => establishment.name === value);
+    const { value } = e.target;
+    const selectedEstablishment = establishments.find(establishment => establishment.name === value);
 
-        console.log(selectedEstablishment)
-        setSelectedUser(prevNewUser => ({
-            ...prevNewUser,
-            establishmentEmployee: selectedEstablishment || { name: '' } // Set the provider to the selected provider or an empty object if not found
-        }));
-    };
+    console.log(selectedEstablishment)
+    setSelectedUser(prevNewUser => ({
+      ...prevNewUser,
+      establishmentEmployee: selectedEstablishment || { name: '' } // Set the provider to the selected provider or an empty object if not found
+    }));
+  };
 
 
   const handleCreateEmployee = async (event) => {
@@ -47,7 +47,7 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
 
 
     try {
-      const url = `http://localhost:8888/api/usersEmployee`;
+      const url = `https://api.medecin-sur-rdv.fr/api/usersEmployee`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -57,41 +57,41 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
         body: JSON.stringify(selectedUser),
       });
 
-    if (response.ok) {
+      if (response.ok) {
         const data = await response.json();
 
         if (data.length !== 0) {
-            console.log('User created:', data);
+          console.log('User created:', data);
 
-            const id = data.id
+          const id = data.id
 
-            try {
-                const apiUrl =  'http://localhost:8888'; 
+          try {
+            const apiUrl = 'https://api.medecin-sur-rdv.fr';
 
-                const response = await fetch(`${apiUrl}/api/manageRole/${id}`, { 
-                    method: "PATCH",
-                    headers: {
-                    'Content-Type': 'application/merge-patch+json',
-                    'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(selectedUser),
-                });
-                
-                if (response.ok) {
-                    const dataRole = await response.json();
-                    updateEmployeesList(dataRole);
-                    refresh();
-                } else {
-                    console.error('request failed:', await response.text());
-                }
-                } catch (error) {
-                console.error('Error during request:', error);
+            const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
+              method: "PATCH",
+              headers: {
+                'Content-Type': 'application/merge-patch+json',
+                'Authorization': `Bearer ${token}`,
+              },
+              body: JSON.stringify(selectedUser),
+            });
+
+            if (response.ok) {
+              const dataRole = await response.json();
+              updateEmployeesList(dataRole);
+              refresh();
+            } else {
+              console.error('request failed:', await response.text());
             }
+          } catch (error) {
+            console.error('Error during request:', error);
+          }
 
-            
+
         }
-        
-    }
+
+      }
 
     } catch (error) {
       console.error('Error creating establishment:', error);
@@ -101,7 +101,7 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
   return (
     <div className="mt-4">
       <form onSubmit={handleCreateEmployee}>
-      <div className="mb-4">
+        <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
             Email
           </label>
@@ -154,31 +154,31 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
             value={selectedUser.dateOfBirth}
             onChange={handleInputChange}
             className="border border-solid p-2 rounded"
-            />
+          />
         </div>
         <div className="mb-4">
           <label htmlFor="establishment" className="block text-gray-700 text-sm font-bold mb-2">
             Etablissement
           </label>
           <select
-                id="selectedEstablishment"
-                name="establishment"
-                onChange={handleEstablishmentSelection}
-                required
-                // onChange={handleProviderSelection} 
-                className="border border-solid p-2 rounded"
-            >
-                <option value="">Select an establishment</option>
-                {establishments.map(establishment => (
-                    <option 
-                        key={establishment.id} 
-                        className={`bg-white text-black`} // Remove the conditional class for background and text color
-                        value={establishment.name} // Set the value of each option
-                    >
-                        {establishment.name}
-                    </option>
-                ))}
-            </select>
+            id="selectedEstablishment"
+            name="establishment"
+            onChange={handleEstablishmentSelection}
+            required
+            // onChange={handleProviderSelection} 
+            className="border border-solid p-2 rounded"
+          >
+            <option value="">Select an establishment</option>
+            {establishments.map(establishment => (
+              <option
+                key={establishment.id}
+                className={`bg-white text-black`} // Remove the conditional class for background and text color
+                value={establishment.name} // Set the value of each option
+              >
+                {establishment.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-4">
           <label htmlFor="plainPassword" className="block text-gray-700 text-sm font-bold mb-2">
@@ -191,7 +191,7 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
             value={selectedUser.plainPassword}
             onChange={handleInputChange}
             className="border border-solid p-2 rounded"
-            />
+          />
         </div>
         <button
           type="submit"

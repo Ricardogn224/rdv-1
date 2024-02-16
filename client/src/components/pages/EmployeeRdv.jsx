@@ -64,7 +64,7 @@ function EmployeeRdvProvider() {
     try {
 
       // Send a POST request to your API endpoint
-      const response = await fetch('http://localhost:8888/api/planning/conge', {
+      const response = await fetch('https://api.medecin-sur-rdv.fr/api/planning/conge', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function EmployeeRdvProvider() {
 
     const fetchEmployeePlanning = async () => {
       try {
-        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
+        const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

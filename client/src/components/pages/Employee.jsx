@@ -3,17 +3,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MedecinList from "../MedecinList";
 
 function Employee() {
-  
-    const navigate = useNavigate();
-    const props = useLocation();
-    const provision = props.state.provisionEmployees || {};
-    const [doctor, setDoctor] = useState(null);
-    // const [isLoading, setIsLoading] = useState(true);
-    const [username, setUsername] = useState("");
-    // const [newComment, setNewComment] = useState("");
-    // const [comments, setComments] = useState([]);
-    const [employee, setEmployee] = useState(null);
-    const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const props = useLocation();
+  const provision = props.state.provisionEmployees || {};
+  const [doctor, setDoctor] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState("");
+  // const [newComment, setNewComment] = useState("");
+  // const [comments, setComments] = useState([]);
+  const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -21,6 +21,8 @@ function Employee() {
   const token = localStorage.getItem("jwtToken");
 
   const medecin = provision;
+
+  console.log(medecin)
 
   const id = medecin.employee.id;
 
@@ -31,7 +33,7 @@ function Employee() {
     //     // const response = await fetch(`/api/medecins/${id}`);
     //     // if (!response.ok) throw new Error("Réponse réseau non ok");
     //     // const data = await response.json();
-      
+
     //     // setDoctor(data);
     //   } catch (error) {
     //     console.error("Erreur lors du fetch des données du médecin:", error);
@@ -43,20 +45,20 @@ function Employee() {
 
     // fetchDoctorData();
 
-      const data = {
-        firstname: medecin.employee.firstname,
-        lastname: medecin.employee.lastname,
-        adress: medecin.provision.Establishment ? medecin.provision.Establishment.adress : "16 boulevard Merte Paris",
-        speciality: medecin.provision.name,
-        nom: medecin.provision.Establishment ? medecin.provision.Establishment.name : "Centre cabinet dentaire",
-      };
+    const data = {
+      firstname: medecin.employee.firstname,
+      lastname: medecin.employee.lastname,
+      adress: medecin.provision.Establishment ? medecin.provision.Establishment.adress : "16 boulevard Merte Paris",
+      speciality: medecin.provision.name,
+      nom: medecin.provision.Establishment ? medecin.provision.Establishment.name : "Centre cabinet dentaire",
+    };
 
-      setDoctor(data);
+    setDoctor(data);
 
     const fetchEmployeePlanning = async () => {
       setLoading(true); // Afficher le loader
       try {
-        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
+        const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -82,51 +84,51 @@ function Employee() {
 
     fetchEmployeePlanning();
 
-      const username = localStorage.getItem("username");
-        setUsername(username);
+    const username = localStorage.getItem("username");
+    setUsername(username);
 
-          // const fetchComments = async () => {
-          //     setLoading(true); // Afficher le loader  
-          //   try {
-          //     const response = await fetch("/api/comments");
-          //     if (!response.ok) throw new Error("Failed to fetch comments");
-          //     const data = await response.json();
-          //     setComments(data); 
-          //   } catch (error) {
-          //     console.error("Error fetching comments:", error);
-          //   }  finally {
-          //    setLoading(false); // Masquer le loader
-          //  }
-          // };
+    // const fetchComments = async () => {
+    //     setLoading(true); // Afficher le loader  
+    //   try {
+    //     const response = await fetch("/api/comments");
+    //     if (!response.ok) throw new Error("Failed to fetch comments");
+    //     const data = await response.json();
+    //     setComments(data); 
+    //   } catch (error) {
+    //     console.error("Error fetching comments:", error);
+    //   }  finally {
+    //    setLoading(false); // Masquer le loader
+    //  }
+    // };
 
-          // fetchComments();
+    // fetchComments();
 
 
   }, [id, navigate]);
 
 
-    // const handleCommentSubmit = async (event) => {
-    // event.preventDefault();
-    //     setLoading(true); // Afficher le loader  
-    // try {
-    //     const response = await fetch("/api/comments", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ text: newComment, doctorId: id }), 
-    //     });
-    //     if (!response.ok) throw new Error("Failed to post comment");
+  // const handleCommentSubmit = async (event) => {
+  // event.preventDefault();
+  //     setLoading(true); // Afficher le loader  
+  // try {
+  //     const response = await fetch("/api/comments", {
+  //     method: "POST",
+  //     headers: {
+  //         "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ text: newComment, doctorId: id }), 
+  //     });
+  //     if (!response.ok) throw new Error("Failed to post comment");
 
-    //     const createdComment = await response.json(); 
-    //     setComments((prevComments) => [...prevComments, createdComment]); 
-    //     setNewComment(""); 
-    // } catch (error) {
-    //     console.error("Error posting comment:", error);
-    // }  finally {
-    //  setLoading(false); // Masquer le loader
-    //}
-    // };
+  //     const createdComment = await response.json(); 
+  //     setComments((prevComments) => [...prevComments, createdComment]); 
+  //     setNewComment(""); 
+  // } catch (error) {
+  //     console.error("Error posting comment:", error);
+  // }  finally {
+  //  setLoading(false); // Masquer le loader
+  //}
+  // };
 
 
   // const navigatelogin = () => {
@@ -140,11 +142,11 @@ function Employee() {
 
   return (
     <>
-    {loading && (
-          <div className="flex justify-center items-center my-2">
-            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
-          </div>
-        )}
+      {loading && (
+        <div className="flex justify-center items-center my-2">
+          <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+        </div>
+      )}
       <div className="bg-gray-100">
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
@@ -187,6 +189,7 @@ function Employee() {
                         adresse={""}
                         type={"rdv"}
                         consultationVideo={true}
+                        planning={medecin.employee}
                         provision_employee={medecin}
                       />
                     </div>

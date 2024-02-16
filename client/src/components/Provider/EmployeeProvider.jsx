@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NavbarProvider from './NavbarProvider';
-import '../../assets/css/search_page.css' 
-import '../../assets/css/admin.css' 
+import '../../assets/css/search_page.css'
+import '../../assets/css/admin.css'
 import medecinsData from '../../assets/sample.json';
 import MedecinList from '../MedecinList'
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ function EmployeeProvider() {
         firstname: '',
         dateOfBirth: '',
         plainPassword: '',
-        establishmentEmployee : {
+        establishmentEmployee: {
         },
         accountType: "employee",
     }
@@ -48,7 +48,7 @@ function EmployeeProvider() {
             try {
                 const employeesList = [];
                 for (const establishment of establishments) {
-                    const url = `http://localhost:8888/api/establishments/${establishment.id}`;
+                    const url = `https://api.medecin-sur-rdv.fr/api/establishments/${establishment.id}`;
                     const response = await fetch(url, {
                         method: 'GET',
                         headers: {
@@ -80,7 +80,7 @@ function EmployeeProvider() {
     const updateEmployeesListPatch = (updatedEmployee) => {
         // setEmployees(prevEmployees => [...prevEmployees, newEmployee]);
 
-        const updatedEmployees= employees.map(employee => {
+        const updatedEmployees = employees.map(employee => {
             if (employee.id === updatedEmployee.id) {
                 return updatedEmployee; // Replace the old establishment with the updated one
             } else {
@@ -109,71 +109,71 @@ function EmployeeProvider() {
         setAfficherEditForm(true);
     };
 
-  return (
-    
-    <main>
-    <section className="flex">
-        <section>
-            <NavbarProvider />
-        </section>
-        <section className="flex-1 p-4">
-        <div className="flex justify-between items-center mb-6">
-            <h1 className="text-xl font-semibold">Mes employés</h1>
-            <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => setAfficherFormulaire(!afficherFormulaire)}
-            >
-                {afficherFormulaire ? 'Fermer' : 'Ajouter un employé'}
-            </button>
-        </div>
-        {afficherFormulaire && <AjoutProvider updateEmployeesList={updateEmployeesList} refresh={refresh}  />}
+    return (
 
-        {afficherEditForm && <EditionProvider selectedEditEmployee={selectedUser} updateEmployeesList ={updateEmployeesListPatch} refresh={refresh} />}
-            
+        <main>
+            <section className="flex">
+                <section>
+                    <NavbarProvider />
+                </section>
+                <section className="flex-1 p-4">
+                    <div className="flex justify-between items-center mb-6">
+                        <h1 className="text-xl font-semibold">Mes employés</h1>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => setAfficherFormulaire(!afficherFormulaire)}
+                        >
+                            {afficherFormulaire ? 'Fermer' : 'Ajouter un employé'}
+                        </button>
+                    </div>
+                    {afficherFormulaire && <AjoutProvider updateEmployeesList={updateEmployeesList} refresh={refresh} />}
 
-            <div className="overflow-x-auto">
-                <table className="w-full shadow-lg bg-white">
-                    <thead className="bg-gray-800 text-white">
+                    {afficherEditForm && <EditionProvider selectedEditEmployee={selectedUser} updateEmployeesList={updateEmployeesListPatch} refresh={refresh} />}
 
-                        <tr>
-                            <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Nom</th>
-                            <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Prénom</th>
-                            <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-gray-700">
-                        {employees && employees.length > 0 ? (
-                            employees.map((employee, index) => (
-                                <tr key={index}> {/* Use a unique identifier as the key */}
-                                    <td className="w-1/4 py-3 px-4">{employee.firstname}</td>
-                                    <td className="w-1/4 py-3 px-4">{employee.lastname}</td>
-                                    <td className="w-1/4 py-3 px-4 flex justify-around">
-                                        <button className="bg-blue-500 hover:bg-detail-700 text-white font-bold py-1 px-3 rounded"
-                                        onClick={() => handleEmployeeClick(employee)}>
-                                            Detail
-                                        </button>
-                                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
-                                        onClick={() => handleModifierClick(employee)}>
-                                            Modifier
-                                        </button>
-                                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
-                                            Supprimer
-                                        </button>
-                                    </td>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full shadow-lg bg-white">
+                            <thead className="bg-gray-800 text-white">
+
+                                <tr>
+                                    <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Nom</th>
+                                    <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Prénom</th>
+                                    <th className="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Actions</th>
                                 </tr>
-                            ))
-                        ) : (
-                            <p>Aucun employé </p>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </section>       
+                            </thead>
+                            <tbody className="text-gray-700">
+                                {employees && employees.length > 0 ? (
+                                    employees.map((employee, index) => (
+                                        <tr key={index}> {/* Use a unique identifier as the key */}
+                                            <td className="w-1/4 py-3 px-4">{employee.firstname}</td>
+                                            <td className="w-1/4 py-3 px-4">{employee.lastname}</td>
+                                            <td className="w-1/4 py-3 px-4 flex justify-around">
+                                                <button className="bg-blue-500 hover:bg-detail-700 text-white font-bold py-1 px-3 rounded"
+                                                    onClick={() => handleEmployeeClick(employee)}>
+                                                    Detail
+                                                </button>
+                                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
+                                                    onClick={() => handleModifierClick(employee)}>
+                                                    Modifier
+                                                </button>
+                                                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                                    Supprimer
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <p>Aucun employé </p>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
 
-    </main>
+        </main>
 
-  )
+    )
 };
 
 export default EmployeeProvider;

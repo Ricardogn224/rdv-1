@@ -18,7 +18,7 @@ function Admin() {
     const fetchData = async () => {
       setLoading(true); // Afficher le loader
       try {
-        const response = await fetch("http://localhost:8888/api/users", {
+        const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ function Admin() {
       setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
-          "http://localhost:8888/api/establishments",
+          "https://api.medecin-sur-rdv.fr/api/establishments",
           {
             method: "GET",
             headers: {
@@ -87,7 +87,7 @@ function Admin() {
       setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
-          "http://localhost:8888/api/appointments",
+          "https://api.medecin-sur-rdv.fr/api/appointments",
           {
             method: "GET",
             headers: {
@@ -114,7 +114,7 @@ function Admin() {
     <>
     {loading && (
           <div className="flex justify-center items-center my-2">
-            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
           </div>
         )}
       <div className=" mx-auto px-4 py-8">

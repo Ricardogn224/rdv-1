@@ -8,6 +8,7 @@ const navigate = useNavigate();
     const [currentWeekStartDate, setCurrentWeekStartDate] = useState(new Date());
 
     const planningDoctors = planning?.planningDoctors || [];
+    
 
     const handleReservationRdv = (e, jour, date, heure) => {
         e.preventDefault();
@@ -85,14 +86,12 @@ const navigate = useNavigate();
 
     useEffect(() => {
         // Check if planningDoctors has changed and whether currentWeekStartDate is stable
-        if (planningRegular.length == 0) {
-            setPlanningRegular(generatePlanningForWeek(currentWeekStartDate));
-        }
+        setPlanningRegular(generatePlanningForWeek(currentWeekStartDate));
     }, [currentWeekStartDate, planningDoctors]);
 
 
     const isHourBooked = (day, hour) => {
-        return planningDoctors.some(item => item.date === day && item.hour === hour);
+        return planningDoctors.some(item => item.date === day && item.hour === hour && !item.isCancelled);
     };
 
     return (

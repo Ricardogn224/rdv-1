@@ -37,7 +37,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from "./components/Login.jsx";
-import Rdv_page_provider from "./components/Provider/rdv_page_provider.jsx";
+import Rdv_page_provider from "./components/Provider/Rdv_page_provider.jsx";
 
 
 const router = createBrowserRouter([
@@ -97,11 +97,11 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-    <ProtectedRoute requiredRole="ROLE_ADMIN">
-      <>
-        <HeaderAdmin />
-      </>
-    </ProtectedRoute>
+      <ProtectedRoute requiredRole="ROLE_ADMIN">
+        <>
+          <HeaderAdmin />
+        </>
+      </ProtectedRoute>
     ),
     children: [
       {
@@ -198,5 +198,5 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-      <RouterProvider router={router} />
+  <RouterProvider router={router} />
 );

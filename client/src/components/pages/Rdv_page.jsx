@@ -31,7 +31,7 @@ function Rdv_page() {
   const [loading, setLoading] = useState(false);
 
 
-    const convertDateStringToDate = (dateString) => {
+  const convertDateStringToDate = (dateString) => {
     // Extract the day and abbreviated month from the date string
     const [, day, abbreviatedMonth] = dateString.match(/(\d+)\s([^\s]+)/);
 
@@ -144,13 +144,13 @@ function Rdv_page() {
   };
 
   return (
-    
+
     <div className="flex space-between rdv_list">
       <div className="zone_old_rdv overflow-auto">
-      {loading && (
+        {loading && (
           <div className="flex justify-center items-center my-2">
             <svg
-              class="animate-spin h-5 w-5 mr-3  bg-blue-500"
+              className="animate-spin h-5 w-5 mr-3  bg-blue-500"
               viewBox="0 0 24 24"
               fill="currentColor"
             ></svg>{" "}
@@ -232,7 +232,7 @@ function Rdv_page() {
                 </div>
                 <div className="flex flex-row">
                   {rdv.planningDoctor.isCancelled &&
-                  rdv.planningDoctor.isCancelled === true ? (
+                    rdv.planningDoctor.isCancelled === true ? (
                     <p className="m-4 font-bold">Annulé</p>
                   ) : (
                     <button

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import {decodeToken} from "react-jwt";
+import { decodeToken } from "react-jwt";
 
 function Login() {
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ function Login() {
     setPasswordError(""); // Réinitialiser l'erreur lors de la modification
   };
 
-    const BackHome = () => {
-      navigate("/");
-    };
+  const BackHome = () => {
+    navigate("/");
+  };
 
   // Gérez la soumission du formulaire
   const handleSubmit = async (e) => {
@@ -60,7 +60,7 @@ function Login() {
 
       if (response.ok) {
 
-        const  { token}  = await response.json();
+        const { token } = await response.json();
         // Assuming the token is in a field named 'token' in the response
         const decodedToken = decodeToken(token);
 
@@ -68,7 +68,7 @@ function Login() {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
           if (decodedToken.roles.includes('ROLE_PROVIDER')) {
-            
+
             setLoading(true); // Afficher le loader
             try {
               const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
@@ -78,10 +78,10 @@ function Login() {
                   'Authorization': `Bearer ${token}`,
                 },
               });
-        
+
               if (response.ok) {
-        
-                const  data  = await response.json();
+
+                const data = await response.json();
                 localStorage.setItem('myProvider', JSON.stringify(data));
                 navigate("/provider");
               } else {
@@ -102,7 +102,7 @@ function Login() {
           } else {
             navigate("/");
           }
-          
+
         }
       } else {
         setErrorMessage('Échec de la connexion. Identifiant incorrect'); // Utiliser le message d'erreur de l'API
@@ -206,6 +206,6 @@ function Login() {
     </div>
   );
 
-  };
+};
 
 export default Login;
