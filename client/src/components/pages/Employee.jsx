@@ -13,19 +13,20 @@ function Employee() {
   // const [newComment, setNewComment] = useState("");
   // const [comments, setComments] = useState([]);
   const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
 
 
   const token = localStorage.getItem("jwtToken");
 
-  const medecin = provision[0];
-
-  console.log(medecin);
+  const medecin = provision;
 
   const id = medecin.employee.id;
 
   useEffect(() => {
     // const fetchDoctorData = async () => {
+    //     setLoading(true); // Afficher le loader  
     //   try {
     //     // const response = await fetch(`/api/medecins/${id}`);
     //     // if (!response.ok) throw new Error("Réponse réseau non ok");
@@ -45,14 +46,15 @@ function Employee() {
     const data = {
       firstname: medecin.employee.firstname,
       lastname: medecin.employee.lastname,
-      adress: medecin.provision.Establishment.adress,
+      adress: medecin.provision.Establishment ? medecin.provision.Establishment.adress : "16 boulevard Merte Paris",
       speciality: medecin.provision.name,
-      nom: medecin.provision.Establishment.name,
+      nom: medecin.provision.Establishment ? medecin.provision.Establishment.name : "Centre cabinet dentaire",
     };
 
     setDoctor(data);
 
     const fetchEmployeePlanning = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
           method: 'GET',
@@ -73,6 +75,8 @@ function Employee() {
         setEmployee(data);
       } catch (error) {
         console.error('Error fetching employee planning:', error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
@@ -82,6 +86,7 @@ function Employee() {
     setUsername(username);
 
     // const fetchComments = async () => {
+    //     setLoading(true); // Afficher le loader  
     //   try {
     //     const response = await fetch("/api/comments");
     //     if (!response.ok) throw new Error("Failed to fetch comments");
@@ -89,7 +94,9 @@ function Employee() {
     //     setComments(data); 
     //   } catch (error) {
     //     console.error("Error fetching comments:", error);
-    //   }
+    //   }  finally {
+    //    setLoading(false); // Masquer le loader
+    //  }
     // };
 
     // fetchComments();
@@ -100,6 +107,7 @@ function Employee() {
 
   // const handleCommentSubmit = async (event) => {
   // event.preventDefault();
+  //     setLoading(true); // Afficher le loader  
   // try {
   //     const response = await fetch("/api/comments", {
   //     method: "POST",
@@ -115,7 +123,9 @@ function Employee() {
   //     setNewComment(""); 
   // } catch (error) {
   //     console.error("Error posting comment:", error);
-  // }
+  // }  finally {
+  //  setLoading(false); // Masquer le loader
+  //}
   // };
 
 
@@ -130,6 +140,11 @@ function Employee() {
 
   return (
     <>
+      {loading && (
+        <div className="flex justify-center items-center my-2">
+          <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+        </div>
+      )}
       <div className="bg-gray-100">
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
@@ -172,7 +187,7 @@ function Employee() {
                         adresse={""}
                         type={"rdv"}
                         consultationVideo={true}
-                        planning={employee}
+                        provision_employee={medecin}
                       />
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchForm from "../SearchForm";
 import "../../assets/css/search_page.css";
 import { useNavigate } from "react-router-dom";
+import useApi from "../HookApi";
 import Map from "../Map";
 import DisponibilityForm from "../DisponibilityForm";
 import MedecinList from "../MedecinList";
@@ -12,6 +13,7 @@ function Search_page() {
   const navigate = useNavigate();
 
   const [provisionEmployees, setProvisionEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("jwtToken");
 
@@ -20,6 +22,7 @@ function Search_page() {
     // Par exemple, si vous chargez les données une fois au chargement de la page :
 
     // const fetchEmployeePlanning = async () => {
+     // setLoading(true); // Afficher le loader
     //   try {
     //     const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userEmployees`, {
     //       method: 'GET',
@@ -41,11 +44,15 @@ function Search_page() {
     //   } catch (error) {
     //     console.error('Error fetching employees:', error);
     //   }
+    //finally {
+    //  setLoading(false); // Masquer le loader
+    //}
     // };
 
     // fetchEmployeePlanning();
 
     const fetchProvisionEmployee = async () => {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
           `https://api.medecin-sur-rdv.fr/api/provision_employees`,
@@ -69,6 +76,8 @@ function Search_page() {
         setProvisionEmployees(data["hydra:member"]);
       } catch (error) {
         console.error("Error fetching employees:", error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     };
 
@@ -81,7 +90,7 @@ function Search_page() {
         `/medecin`,
         {
           state: {
-            provisionEmployees: provisionEmployees,
+            provisionEmployees: provisionEmployees[0],
           },
         },
         { replace: true }
@@ -89,8 +98,14 @@ function Search_page() {
     };
   };
 
+
   return (
     <>
+      {loading && (
+          <div className="flex justify-center items-center my-2">
+            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       <SearchForm />
       <div className="ma-80">
         <div className="flex mt-40 space-between gap-10 w-full">
@@ -138,7 +153,7 @@ function Search_page() {
                         <p className="font-bold">
                           {provisionEmployee.provision.name}
                         </p>
-                        <p className="text-gray-600">
+                      <p className="text-gray-600">
                           {provisionEmployee.provision.Establishment.name}
                         </p>
                         <p className="text-gray-600">

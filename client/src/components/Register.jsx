@@ -4,6 +4,8 @@ import '../assets/css/register.css';
 
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   // State variables for form values and errors
   const [formValues, setFormValues] = useState({
@@ -24,6 +26,15 @@ function Register() {
     email: '',
     plainPassword: ''
   });
+
+  const redirectRegister = () => {
+    navigate("/login");
+  };
+
+  const BackHome = () => {
+    navigate("/");
+  };
+
 
 
   const validateForm = () => {
@@ -65,6 +76,7 @@ function Register() {
     e.preventDefault();
 
     if (validateForm()) {
+      setLoading(true); // Afficher le loader
       try {
         const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
           method: "POST",
@@ -80,6 +92,7 @@ function Register() {
           const data = await response.json();
           const id = data.id;
 
+          setLoading(true); // Afficher le loader
           try {
             const apiUrl = 'https://api.medecin-sur-rdv.fr';
             const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
@@ -99,6 +112,8 @@ function Register() {
             }
           } catch (error) {
             setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
+          } finally {
+            setLoading(false); // Masquer le loader
           }
         } else {
           const errorBody = await response.json(); // Parse l'erreur retournée par l'API
@@ -107,6 +122,8 @@ function Register() {
         }
       } catch (error) {
         setErrorMessage('Email déjà utiliser', error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     }
   };
@@ -122,7 +139,7 @@ function Register() {
 
   return (
     <div className="flex-center flex-column">
-      <div className='mt-80  form-zone'>
+      <div className="mt-80  form-zone">
         <br />
         <div className="flex-center">
           <h1 className="title"> Créer un compte </h1>
@@ -140,7 +157,9 @@ function Register() {
               value={formValues.firstname}
               onChange={handleInputChange}
             />
-            {formErrors.firstname && <span className="error">{formErrors.firstname}</span>}
+            {formErrors.firstname && (
+              <span className="error">{formErrors.firstname}</span>
+            )}
 
             <input
               className="field"
@@ -151,7 +170,9 @@ function Register() {
               value={formValues.lastname}
               onChange={handleInputChange}
             />
-            {formErrors.lastname && <span className="error">{formErrors.lastname}</span>}
+            {formErrors.lastname && (
+              <span className="error">{formErrors.lastname}</span>
+            )}
 
             <input
               className="field"
@@ -162,7 +183,9 @@ function Register() {
               value={formValues.dateOfBirth}
               onChange={handleInputChange}
             />
-            {formErrors.dateOfBirth && <span className="error">{formErrors.dateOfBirth}</span>}
+            {formErrors.dateOfBirth && (
+              <span className="error">{formErrors.dateOfBirth}</span>
+            )}
 
             <input
               className="field"
@@ -173,7 +196,9 @@ function Register() {
               value={formValues.email}
               onChange={handleInputChange}
             />
-            {formErrors.email && <span className="error">{formErrors.email}</span>}
+            {formErrors.email && (
+              <span className="error">{formErrors.email}</span>
+            )}
 
             <input
               className="field"
@@ -184,22 +209,62 @@ function Register() {
               value={formValues.plainPassword}
               onChange={handleInputChange}
             />
-            {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
+            {formErrors.plainPassword && (
+              <span className="error">{formErrors.plainPassword}</span>
+            )}
             <br />
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
             <br />
           </div>
-
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
               S'inscrire
             </button>
           </div>
+          <div className="flex flex-col flex-center">
+            <li
+              className="link flex-center cursor-pointer"
+              onClick={redirectRegister}
+            >
+              Se connecter
+            </li>
+
+
+            <br />
+            <div className='flex-center'>
+              <li onClick={BackHome} className='flex flex-row'>
+                <svg
+                  className="w-5 h-5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                  />
+                </svg>
+                <span>Accueil</span>
+              </li>
+            </div>
+          </div>
           <br />
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       </div>
-      <br /><br /><br /><br /><br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 }

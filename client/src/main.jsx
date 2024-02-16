@@ -37,6 +37,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from "./components/Login.jsx";
+import Rdv_page_provider from "./components/Provider/rdv_page_provider.jsx";
 
 
 const router = createBrowserRouter([
@@ -96,11 +97,11 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      // <ProtectedRoute requiredRole="ROLE_ADMIN">
+    <ProtectedRoute requiredRole="ROLE_ADMIN">
       <>
         <HeaderAdmin />
       </>
-      // </ProtectedRoute>
+    </ProtectedRoute>
     ),
     children: [
       {
@@ -154,6 +155,10 @@ const router = createBrowserRouter([
       {
         path: "employee",
         element: <EmployeeProvider />,
+      },
+      {
+        path: "reservation",
+        element: <Rdv_page_provider />,
       },
       {
         path: "employee_rdv/:id",

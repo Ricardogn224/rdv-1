@@ -11,6 +11,8 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
 
   // Gérez les modifications des champs d'entrée
@@ -28,6 +30,10 @@ function Login() {
     setPasswordError(""); // Réinitialiser l'erreur lors de la modification
   };
 
+  const BackHome = () => {
+    navigate("/");
+  };
+
   // Gérez la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,6 +45,7 @@ function Login() {
       return;
     }
 
+    setLoading(true); // Afficher le loader
     try {
       const response = await fetch("https://api.medecin-sur-rdv.fr/api/auth", {
         method: "POST",
@@ -62,6 +69,7 @@ function Login() {
           localStorage.setItem('jwtToken', token);
           if (decodedToken.roles.includes('ROLE_PROVIDER')) {
 
+            setLoading(true); // Afficher le loader
             try {
               const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userLogin?email=${decodedToken.username}`, {
                 method: "GET",
@@ -82,6 +90,8 @@ function Login() {
               }
             } catch (error) {
               setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
+            } finally {
+              setLoading(false); // Masquer le loader
             }
           } else if (decodedToken.roles.includes('ROLE_ADMIN')) {
             navigate("/admin");
@@ -99,6 +109,8 @@ function Login() {
       }
     } catch (error) {
       setErrorMessage(error || 'Une erreur est survenue.'); // Utiliser le message d'erreur de l'API
+    } finally {
+      setLoading(false); // Masquer le loader
     }
 
   };
@@ -142,20 +154,55 @@ function Login() {
           </div>
           <br />
 
-          <div className="flex-center">
+          <div className=" flex-center">
             <button className="btn-submit" type="submit">
               Se connecter
             </button>
           </div>
-          <div className="flex-center">
-            <li className="field link flex-center cursor-pointer" onClick={redirectRegister}>
+          <div className="flex flex-col flex-center">
+            <li
+              className="link flex-center cursor-pointer"
+              onClick={redirectRegister}
+            >
               S'inscrire
             </li>
+            <br />
+            <div className="flex-center">
+              <li onClick={BackHome} className="flex flex-row">
+                <svg
+                  className="w-5 h-5 rtl:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                  />
+                </svg>
+                <span>Accueil</span>
+              </li>
+            </div>
           </div>
+
           <br />
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
+
+
       </section>
-      <br /><br /><br /><br /><br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 

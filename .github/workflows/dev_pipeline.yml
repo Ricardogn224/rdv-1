@@ -22,7 +22,7 @@ jobs:
           nohup npm run dev &
 
   run_back_end:
-    name: run_back_end en deploy on ssh server 
+    name: run_back_end 
     runs-on: ubuntu-latest
     env:
       SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
@@ -64,9 +64,6 @@ jobs:
         run: |
           cd server
           docker compose up -d 
-
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
 
       
         

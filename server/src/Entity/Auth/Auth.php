@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
 {
-    #[Groups(['user:read:full', 'user:read', 'establishment:write', 'provisionEmployee:read', 'establishment:read'])]
+    #[Groups(['user:read:full', 'user:read', 'establishment:write', 'provisionEmployee:read', 'establishment:read', 'appointment:read'])]
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
