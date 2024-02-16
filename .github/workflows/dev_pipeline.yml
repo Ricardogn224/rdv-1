@@ -21,52 +21,7 @@ jobs:
           npm i 
           nohup npm run dev &
 
-  run_back_end:
-    name: run_back_end en deploy on ssh server 
-    runs-on: ubuntu-latest
-    env:
-      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-      SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-      SSH_IP: ${{ secrets.SSH_IP }}
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Install Docker CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common -y
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-          sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io -y
-
-      - name: Load .env.test file
-        run: |
-             cd server
-             echo "Loading environment variables from .env.test"
-             set -a
-             [ -f ".env.test" ] && . ".env.test"
-             set +a
-
-      - name: Rename .env.test to .env.local
-        run: mv server/.env.test server/.env.local
-
-      - name: Check server directory contents
-        run: |
-          ls -l server
-          cat server/docker-compose.yml
-
-      - name: Install dependencies
-        run: |
-          cd server
-          docker compose up -d 
-
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+  
 
       
         
