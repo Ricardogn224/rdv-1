@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Put;
 use App\Controller\EmployeeController;
 use App\Controller\GetUserByRoleController;
 use App\Controller\GetUserLogin;
+use App\Controller\MailAdminController;
 use App\Controller\ManageRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
@@ -63,6 +64,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: EmployeeController::class,
         ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]/*, security: 'is_granted("VIEW", object)'*/,),
+        new Get(
+            uriTemplate: '/confirmPro/{id}',
+            controller: MailAdminController::class,
+            read: false,
+        ),
         new Get(
             uriTemplate: '/employeePlanning/{id}',
             normalizationContext: ['groups' => ['planningEmployee:read']],

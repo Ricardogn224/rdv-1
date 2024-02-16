@@ -41,20 +41,17 @@ function NavbarProvider() {
             <span>Salariés</span>
           </div>
         </li>
+        <li className="w-full" onClick={handleNavigate("/provider/reservation")}>
+          <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300">
+            <i className="fas fa-file-alt mr-4"></i>
+            <span>Réservations</span>
+          </div>
+        </li>
         <li className="w-full" onClick={handleNavigate("/provider/planning")}>
           <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300">
             <i className="fas fa-file-alt mr-4"></i>
             <span>Planning</span>
           </div>
-        </li>
-        <li className="w-full">
-          <a
-            href="/provider/etablissement"
-            className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300"
-          >
-            <i className="fas fa-credit-card mr-4"></i>
-            <span>Réservations</span>
-          </a>
         </li>
         <li className="w-full" onClick={handleLogout}>
           <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300">
