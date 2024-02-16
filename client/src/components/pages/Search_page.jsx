@@ -153,12 +153,12 @@ function Search_page() {
                         <p className="font-bold">
                           {provisionEmployee.provision.name}
                         </p>
-                      {/* <p className="text-gray-600">
+                      <p className="text-gray-600">
                           {provisionEmployee.provision.Establishment.name}
                         </p>
                         <p className="text-gray-600">
                           {provisionEmployee.provision.Establishment.adress}
-                        </p>*/}
+                        </p>
                       </div>
                     </div>
                   </li>

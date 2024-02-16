@@ -37,6 +37,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from "./components/Login.jsx";
+import Rdv_page_provider from "./components/Provider/rdv_page_provider.jsx";
 
 
 const router = createBrowserRouter([
@@ -156,11 +157,11 @@ const router = createBrowserRouter([
         element: <EmployeeProvider />,
       },
       {
-        path: "employee_rdv/:id",
-        element: <EmployeeRdvProvider />,
+        path: "reservation",
+        element: <Rdv_page_provider />,
       },
       {
-        path: "reservation",
+        path: "employee_rdv/:id",
         element: <EmployeeRdvProvider />,
       },
       {

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Put;
 use App\Controller\EmployeeController;
 use App\Controller\GetUserByRoleController;
 use App\Controller\GetUserLogin;
+use App\Controller\MailAdminController;
 use App\Controller\ManageRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
@@ -45,7 +46,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(
-            security: "is_granted('ROLE_ADMIN')"
         ),
         new GetCollection(
             uriTemplate: '/usersRole',
@@ -65,6 +65,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]/*, security: 'is_granted("VIEW", object)'*/,),
         new Get(
+            uriTemplate: '/confirmPro/{id}',
+            controller: MailAdminController::class,
+            read: false,
+        ),
+        new Get(
             uriTemplate: '/employeePlanning/{id}',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
@@ -73,7 +78,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: GetUserLogin::class,
             read: false
         ),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update', 'user:admin:write']], /*security: 'is_granted("EDIT", object)',*/),
         new Patch(
             uriTemplate: '/manageRole/{id}',
             denormalizationContext: ['groups' => ['user:write:role']],

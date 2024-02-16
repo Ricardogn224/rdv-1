@@ -24,10 +24,12 @@ function AdminProvider() {
 
         setSelectedStatus(selectedValue);
         
-    
+        console.log(selectedValue)
         // Display an alert if the selected status is not the default value
         if (selectedValue !== (providers[editableIndex]?.active ? 'actif' : 'inactif')) {
+            console.log(selectedValue)
             //alert('You can only change the status from the default value.');
+            console.log('yyeeees')
             setDisplayCancel(true);
         } else {
             // Hide the "Annuler" button
@@ -43,6 +45,7 @@ function AdminProvider() {
           active: selectedStatus === 'actif', // Assuming 'actif' means true and 'inactif' means false
         };
       
+        console.log(selectedStatus)
         console.log(updatedData)
         fetch(url, {
           method: 'PATCH',
@@ -61,6 +64,21 @@ function AdminProvider() {
             const updatedProviders = [...providers]; // Create a copy of the original providers array
             updatedProviders[index] = data; // Replace the provider at the specified index with the updated data
             setProviders(updatedProviders); // Update the state with the modified providers array
+
+            setProviders(prevProvider=> {
+                const updatedProviders = prevProvider.map(provider => {
+                    if (provider.id === data.id) {
+                        return {
+                            ...provider,
+                            ...data 
+                        };
+                    } else {
+                        return provider;
+                    }
+                });
+                return updatedProviders;
+            });
+            console.log(providers);
         })
         .catch(error => {
           // Handle errors
@@ -89,7 +107,12 @@ function AdminProvider() {
                 
                 // Update state only if component is mounted
                 if (data.length !== 0) {
-                    setProviders(data['hydra:member']);
+                    const filteredProviders = data['hydra:member'].filter(provider => provider.roles.includes('ROLE_PROVIDER'));
+
+                    // Update state only if component is mounted
+                    if (filteredProviders.length !== 0) {
+                        setProviders(filteredProviders);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -124,51 +147,46 @@ function AdminProvider() {
 
             
                     {providers && providers.length > 0 ? (
-                        providers
-                        .filter((provider) => provider.roles.includes('ROLE_PROVIDER'))
-                        .map((provider, index) => (
-                        <div className="user-item" key={index}>
-                            <div className="user-info"><p>{provider.email}</p></div>
-                            <div className="user-info"><p>{provider.lastname}</p></div>
-                            <div className="user-info"><p>{provider.firstname}</p></div>
-                            <div className="user-info">
-                                <select value={selectedStatus !== '' && editableIndex === index ? selectedStatus : provider.active ? 'actif' : 'inactif'}
-                                onChange={handleStatusChange}
-                                disabled={editableIndex !== index}>
-                                    <option value="actif">Actif</option>
-                                    <option value="inactif">Inactif</option>
-                                </select>
-                            </div>
-                            <div className="user-info actions">
-                            <a className="edit-user-icon" onClick={() => handleEditClick(index)}>
-                                Modifier
-                            </a>
-                                <a href="#" className="edit-user-icon">Supprimer</a>
-                            </div>
-                            <div className="user-info">
-                                {/* <form style="display:none;"  method="post" className="validate-user-icon" data-user-id="{{ user.id }}" action="{{ path('back_app_users_edit_level', {'id': user.id}) }}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('edit_level' ~ user.id) }}">
-                                    <input type="hidden" name="roleVal" value="">
-                                    <button className="btn valid-button">Valider</button>
-                                </form>*/}
-
-                                {displayCancel && editableIndex === index && (
-                                    <a className="cancel-user-icon cursor-pointer" onClick={() => setDisplayCancel(false)}>
-                                    Annuler
-                                    </a>
-                                )}
-
-
-                                {displayCancel && editableIndex === index && (
-                                    <a className="validate-user-icon cursor-pointer"  onClick={() => handleValidateClick(provider.id, index)}>
-                                    Valider
-                                    </a>
+                        providers.map((provider, index) => (
+                            <div className="user-item" key={index}>
+                                {provider.roles.includes('ROLE_PROVIDER') && (
+                                    <>
+                                        <div className="user-info"><p>{provider.email}</p></div>
+                                        <div className="user-info"><p>{provider.lastname}</p></div>
+                                        <div className="user-info"><p>{provider.firstname}</p></div>
+                                        <div className="user-info">
+                                            <select
+                                                value={selectedStatus !== '' && editableIndex === index ? selectedStatus : provider.active ? 'actif' : 'inactif'}
+                                                onChange={handleStatusChange}
+                                                disabled={editableIndex !== index}
+                                            >
+                                                <option value="actif">Actif</option>
+                                                <option value="inactif">Inactif</option>
+                                            </select>
+                                        </div>
+                                        <div className="user-info actions">
+                                            <a className="edit-user-icon" onClick={() => handleEditClick(index)}>
+                                                Modifier
+                                            </a>
+                                        </div>
+                                        <div className="user-info">
+                                            {displayCancel && editableIndex === index && (
+                                                <a className="cancel-user-icon cursor-pointer" onClick={() => setDisplayCancel(false)}>
+                                                    Annuler
+                                                </a>
+                                            )}
+                                            {displayCancel && editableIndex === index && (
+                                                <a className="validate-user-icon cursor-pointer" onClick={() => handleValidateClick(provider.id, index)}>
+                                                    Valider
+                                                </a>
+                                            )}
+                                        </div>
+                                    </>
                                 )}
                             </div>
-                        </div>
                         ))
                     ) : (
-                        <p>No providers available.</p>
+                        <p>Aucun prestataire</p>
                     )}
                 </div>
             </div>

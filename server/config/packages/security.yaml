@@ -36,6 +36,7 @@ security:
     access_control:
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/manageRole, method: PATCH, roles: PUBLIC_ACCESS }
+        - { path: ^/api/confirmPro, method: GET, roles: PUBLIC_ACCESS }
 
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
