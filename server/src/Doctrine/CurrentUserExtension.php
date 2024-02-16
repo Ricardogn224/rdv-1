@@ -36,8 +36,21 @@ final readonly class CurrentUserExtension implements QueryCollectionExtensionInt
             return;
         }
 
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->andWhere(sprintf('%s.appointmentUser = :current_user', $rootAlias));
-        $queryBuilder->setParameter('current_user', $user->getId());
+        if ($this->security->isGranted('ROLE_PROVIDER')) {
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder
+            ->join(sprintf('%s.provisionEmployee', $rootAlias), 'pe')
+            ->join('pe.provision', 'p')
+            ->join('p.Establishment', 'e')
+            ->andWhere('e.provider = :current_user')
+            ->setParameter('current_user', $user);
+            $queryBuilder->setParameter('current_user', $user->getId());
+        } else {
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.appointmentUser = :current_user', $rootAlias));
+            $queryBuilder->setParameter('current_user', $user->getId());
+        }
+
+        
     }
 }
