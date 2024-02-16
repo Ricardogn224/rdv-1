@@ -24,7 +24,7 @@ function Search_page() {
     // const fetchEmployeePlanning = async () => {
      // setLoading(true); // Afficher le loader
     //   try {
-    //     const response = await fetch(`http://localhost:8888/api/userEmployees`, {
+    //     const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userEmployees`, {
     //       method: 'GET',
     //       headers: {
     //         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ function Search_page() {
       setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
-          `http://localhost:8888/api/provision_employees`,
+          `https://api.medecin-sur-rdv.fr/api/provision_employees`,
           {
             method: "GET",
             headers: {
@@ -103,7 +103,7 @@ function Search_page() {
     <>
       {loading && (
           <div className="flex justify-center items-center my-2">
-            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
           </div>
         )}
       <SearchForm />

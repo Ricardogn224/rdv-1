@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 function EditionProvider({ selectedEditEmployee, updateEmployeesList, refresh }) {
-const [selectedEmployee, setSelectedEmployee] = useState(selectedEditEmployee);
+  const [selectedEmployee, setSelectedEmployee] = useState(selectedEditEmployee);
   const token = localStorage.getItem('jwtToken');
   const myProvider = JSON.parse(localStorage.getItem('myProvider'));
   const [establishments, setEstablishments] = useState(myProvider.establishments);
@@ -14,48 +14,48 @@ const [selectedEmployee, setSelectedEmployee] = useState(selectedEditEmployee);
 
   console.log(selectedEmployee)
 
-    const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(selectedEmployee)
 
-        setSelectedEmployee((prevEmployee) => ({
-            ...prevEmployee,
-            [name]: value,
-        }));
+    setSelectedEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      [name]: value,
+    }));
 
-    };
+  };
 
   const handleUpdateEmployee = async (event) => {
-        event.preventDefault();
-        console.log(selectedEmployee)
+    event.preventDefault();
+    console.log(selectedEmployee)
 
-        try {
-        const url = `http://localhost:8888/api/users/${selectedEmployee.id}`;
-        const response = await fetch(url, {
-            method: 'PATCH',
-            headers: {
-            'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(selectedEmployee),
-        });
+    try {
+      const url = `https://api.medecin-sur-rdv.fr/api/users/${selectedEmployee.id}`;
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/merge-patch+json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(selectedEmployee),
+      });
 
-        if (response.ok) {
-            const updatedData = await response.json();
-            console.log('Update successful', updatedData);
+      if (response.ok) {
+        const updatedData = await response.json();
+        console.log('Update successful', updatedData);
 
-            // Update establishments state
-            updateEmployeesList(updatedData);
-            refresh();
-        }
-        
-        // Close the form after successful creation
-        //setAfficherFormulaire(false);
+        // Update establishments state
+        updateEmployeesList(updatedData);
+        refresh();
+      }
 
-        } catch (error) {
-        console.error('Error updating establishment:', error);
-        }
-    };
+      // Close the form after successful creation
+      //setAfficherFormulaire(false);
+
+    } catch (error) {
+      console.error('Error updating establishment:', error);
+    }
+  };
 
   return (
     <div className="mt-4">

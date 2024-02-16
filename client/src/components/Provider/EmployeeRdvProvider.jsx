@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import '../../assets/css/search_page.css' 
-import '../../assets/css/admin.css' 
+import '../../assets/css/search_page.css'
+import '../../assets/css/admin.css'
 import Footer from '../Footer'
 import NavbarProvider from './NavbarProvider';
 import medecinsData from '../../assets/sample.json';
@@ -14,7 +14,7 @@ function EmployeeRdv() {
 
   const token = localStorage.getItem('jwtToken');
 
-    // State variables to manage form data
+  // State variables to manage form data
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [employeeName, setEmployeeName] = useState('');
@@ -24,7 +24,7 @@ function EmployeeRdv() {
   // États pour stocker les valeurs du formulaire
   const [formValues, setFormValues] = useState({
     date: '',
-    formattedDate : '',
+    formattedDate: '',
     type: 'morning',
     employee_id: id
   });
@@ -33,7 +33,7 @@ function EmployeeRdv() {
   const handleCongeChange = (e) => {
     const { name, value } = e.target;
 
-    
+
     if (name === 'formattedDate') {
       // Format the date before updating the state
       const dateString = formatDateString(value);
@@ -52,19 +52,19 @@ function EmployeeRdv() {
   };
 
 
-  
+
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log(formValues);
-    
+
 
     try {
 
       // Send a POST request to your API endpoint
-      const response = await fetch('http://localhost:8888/api/planning/conge', {
+      const response = await fetch('https://api.medecin-sur-rdv.fr/api/planning/conge', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function EmployeeRdv() {
 
     const fetchEmployeePlanning = async () => {
       try {
-        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
+        const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -124,29 +124,29 @@ function EmployeeRdv() {
 
   return (
     <main>
-        <section className="flex">
-            <section>
-                <NavbarProvider />
-            </section>
-            <section className="flex-1 p-4">
-            <div className='title-admin-page'>
-                <h1>Gestion Planning de</h1>
-            </div>
+      <section className="flex">
+        <section>
+          <NavbarProvider />
+        </section>
+        <section className="flex-1 p-4">
+          <div className='title-admin-page'>
+            <h1>Gestion Planning de</h1>
+          </div>
 
           <div>
             <h2>Ajouter congé</h2>
             <div className="form-container-conge ml-10">
               <form onSubmit={handleSubmit}>
                 <div className="form-group my-5 w-3/6">
-                    <label htmlFor="date">Date:</label>
-                    <input
+                  <label htmlFor="date">Date:</label>
+                  <input
                     type="date"
                     name="formattedDate"
                     id="formattedDate"
                     value={formValues.formattedDate}
                     onChange={handleCongeChange}
                     required
-                    />
+                  />
                 </div>
 
                 <div className="form-group my-5">
@@ -165,7 +165,7 @@ function EmployeeRdv() {
                 </div>
 
                 <button type="submit" className='bg-green-500 text-white px-4 py-2 rounded'>Confirmer congé</button>
-                </form>
+              </form>
             </div>
           </div>
 
@@ -181,11 +181,12 @@ function EmployeeRdv() {
                     consultationVideo={true}
                     planning={employeePlanning}
                   />
+
               </div>
             </div>
           )}
-            </section>
-        </section>                  
+        </section>
+      </section>
     </main>
 
   )
