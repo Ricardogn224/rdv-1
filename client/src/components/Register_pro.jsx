@@ -5,6 +5,8 @@ import '../assets/css/register.css';
 function Register_pro() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
 
   const [formValues, setFormValues] = useState({
@@ -78,8 +80,9 @@ function Register_pro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (validateForm()) {
+      setLoading(true); // Afficher le loader
       try {
         const apiUrl = 'http://localhost:8888';
         const response = await fetch(`${apiUrl}/api/users`, {
@@ -89,40 +92,57 @@ function Register_pro() {
           },
           body: JSON.stringify(formValues),
         });
-
+  
         if (response.ok) {
           console.log('Registration successful');
-
           const data = await response.json();
           const id = data.id;
-
+  
           try {
-            const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
-              method: "PATCH",
+            const responsePro = await fetch(`${apiUrl}/api/confirmPro/${id}`, {
+              method: "GET",
               headers: {
-                'Content-Type': 'application/merge-patch+json',
+                'Content-Type': 'application/json',
               },
-              body: JSON.stringify(formValues),
             });
-
-            if (responsePatch.ok) {
-              console.log('Request successful');
-              navigate("/login");
+  
+            if (responsePro.ok) {
+              console.log('Request p successful');
+  
+              try {
+                const responsePatch = await fetch(`${apiUrl}/api/manageRole/${id}`, {
+                  method: "PATCH",
+                  headers: {
+                    'Content-Type': 'application/merge-patch+json',
+                  },
+                  body: JSON.stringify(formValues),
+                });
+  
+                if (responsePatch.ok) {
+                  console.log('Request successful');
+                  navigate("/login");
+                } else {
+                  const errorBody = await responsePatch.json();
+                  setErrorMessage(errorBody.message);
+                }
+              } catch (error) {
+                setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur." + error);
+              }
             } else {
-              const errorBody = await response.json(); // Parse l'erreur retournée par l'API
+              const errorBody = await responsePro.json();
               setErrorMessage(errorBody.message);
             }
           } catch (error) {
-            setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur.", error);
+            setErrorMessage("Une erreur s'est produite lors de la communication avec le serveur." + error);
           }
-
-          navigate("/login");
         } else {
-          const errorBody = await response.json(); // Parse l'erreur retournée par l'API
-          setErrorMessage('Une erreur est survenue ', errorBody);
+          const errorBody = await response.json();
+          setErrorMessage('Une erreur est survenue ' + errorBody);
         }
       } catch (error) {
-        setErrorMessage('Une erreur est survenue ', error);
+        setErrorMessage('Une erreur est survenue ' + error);
+      } finally {
+        setLoading(false); // Masquer le loader
       }
     }
   };
@@ -216,6 +236,11 @@ function Register_pro() {
           </div>
           <br/>
         </form>
+        {loading && (
+          <div className="flex justify-center items-center  my-2">
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+          </div>
+        )}
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Put;
 use App\Controller\EmployeeController;
 use App\Controller\GetUserByRoleController;
 use App\Controller\GetUserLogin;
+use App\Controller\MailAdminController;
 use App\Controller\ManageRoleController;
 use App\Controller\UserProviderController as ControllerUserProviderController;
 use App\Entity\Appointment;
@@ -40,11 +41,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 //#[isGranted('ROLE_ADMIN')]
 #[ApiResource(
+    forceEager: false,
     denormalizationContext: ['groups' => ['user:write']],
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(
-            security: "is_granted('ROLE_ADMIN')"
         ),
         new GetCollection(
             uriTemplate: '/usersRole',
@@ -64,6 +65,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]/*, security: 'is_granted("VIEW", object)'*/,),
         new Get(
+            uriTemplate: '/confirmPro/{id}',
+            controller: MailAdminController::class,
+            read: false,
+        ),
+        new Get(
             uriTemplate: '/employeePlanning/{id}',
             normalizationContext: ['groups' => ['planningEmployee:read']],
         ),
@@ -72,7 +78,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: GetUserLogin::class,
             read: false
         ),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update', 'user:admin:write']], /*security: 'is_granted("EDIT", object)',*/),
         new Patch(
             uriTemplate: '/manageRole/{id}',
             denormalizationContext: ['groups' => ['user:write:role']],
@@ -97,18 +103,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Publication::class)]
-    private Collection $posts;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
-    private Collection $comments;
-
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'buyers')]
-    private Collection $products;
-
     #[Groups(['user:read', 'user:write', 'user:write:update', 'planningEmployee:read', 'planningDoctor:read',
     'planningRdv:read', 'establishment:read', 'establishment:read:full', 'provisionEmployee:read',
-    'employee:write', 'user:provider:read', 'appointment:read'])]
+    'employee:write', 'user:provider:read', 'appointment:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = '';
 
@@ -155,9 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->active = false;
-        $this->posts = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-        $this->products = new ArrayCollection();
+
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->appointments = new ArrayCollection();
@@ -184,81 +179,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
-    }
-
-    public function getPosts(): Collection
-    {
-        return $this->posts;
-    }
-
-    public function addPost(Publication $post): void
-    {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setAuthor($this);
-        }
-    }
-
-    public function removePost(Publication $post): void
-    {
-        if ($this->posts->removeElement($post)) {
-            if ($post->getAuthor() === $this) {
-                $post->setAuthor(null);
-            }
-        }
-    }
-
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): void
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setAuthor($this);
-        }
-    }
-
-    public function removeComment(Comment $comment): void
-    {
-        if ($this->comments->removeElement($comment)) {
-            if ($comment->getAuthor() === $this) {
-                $comment->setAuthor(null);
-            }
-        }
-    }
-
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): void
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->addBuyer($this);
-        }
-    }
-
-    public function removeProduct(Product $product): void
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removeBuyer($this);
-        }
-    }
-
-    public function hasProduct(Product $object): bool
-    {
-        foreach ($this->products as $product) {
-            if ($product->getId() === $object->getId()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function getFirstname(): ?string

@@ -57,7 +57,7 @@ function HeaderAdmin() {
         <nav
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } top-0 left-0 h-full w-64 bg-teal-500 overflow-x-hidden text-white transition-all duration-500 min-h-screen md:block`}
+          } top-0 left-0 h-full w-64 bg-teal-500 overflow-x-hidden text-white transition-all duration-500 min-h-screen md:block sticky `}
         >
           {" "}
           <ul className="pt-24 flex flex-col">
@@ -85,7 +85,7 @@ function HeaderAdmin() {
             <li className="w-full" onClick={handleNavigate("/admin/provider")}>
               <div className="flex items-center h-12 px-4 hover:bg-gray-100 hover:text-teal-600 transition-colors duration-300 cursor-pointer">
                 <i className="fas fa-credit-card mr-4"></i>
-                <span>Provider</span>
+                <span>Prestataires</span>
               </div>
             </li>
             <li className="w-full" onClick={handleNavigate("/admin/provision")}>

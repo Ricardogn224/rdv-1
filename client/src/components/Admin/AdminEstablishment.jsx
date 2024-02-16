@@ -23,6 +23,7 @@ function AdminEstablishment() {
     const [providers, setProviders] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -55,9 +56,11 @@ function AdminEstablishment() {
             ...prevEstablishment,
             provider: selectedProvider || { email: '' } 
         }));
+
     };
 
     const fetchUsersByRole = async (role) => {
+        setLoading(true); // Afficher le loader
         try {
             const response = await fetch(`http://localhost:8888/api/usersRole?role=${role}`, {
                 method: 'GET',
@@ -76,6 +79,8 @@ function AdminEstablishment() {
         } catch (error) {
             console.error('Error fetching users by role:', error);
             throw error; 
+        } finally {
+            setLoading(false); // Masquer le loader
         }
     };
 
@@ -96,14 +101,15 @@ function AdminEstablishment() {
         fetchUsersByRole('ROLE_EMPLOYEE')
         .then(users => {
             console.log('employees by role:', users);
-            setEmployees(users)
-
+            const filteredEmployees = users.filter(user => !user.establishment || !user.establishment.id);
+            setEmployees(filteredEmployees);
         })
         .catch(error => {
             console.error('Error fetching users by role:', error.message);
         });
 
         const fetchData = async () => {
+        setLoading(true); // Afficher le loader
         try {
             const response = await fetch('http://localhost:8888/api/establishments', {
             method: "GET",
@@ -115,10 +121,13 @@ function AdminEstablishment() {
             console.log(data);
             if (data.length !== 0) {
                 setEstablishments(data['hydra:member']);
+                console.log(establishments)
             }
         } catch (error) {
             console.error('Error fetching data:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
         };
 
         if (establishments.length === 0) {
@@ -134,6 +143,7 @@ function AdminEstablishment() {
             console.log(providers[0]);
             selectedEstablishment.provider = providers[0]
         }
+        setLoading(true); // Afficher le loader
         try {
             const url = `http://localhost:8888/api/establishments`;
             const response = await fetch(url, {
@@ -147,16 +157,23 @@ function AdminEstablishment() {
             const data = await response.json();
             console.log('Creation successful', data);
 
+            if (data.employees && data.employees.length > 0) {
+                setEmployees(prevEmployees => prevEmployees.filter(employee => !data.employees.some(emp => emp.id === employee.id)));
+            }
+
             setEstablishments(prevEstablishments => [...prevEstablishments, data]);
             handleCloseNewModal();
         } catch (error) {
             console.error('Error creating establishment:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
     };
 
     const handleUpdateEstablishment = async (event) => {
         event.preventDefault();
         console.log(selectedEstablishment)
+        setLoading(true); // Afficher le loader
         try {
             const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
             const response = await fetch(url, {
@@ -169,6 +186,10 @@ function AdminEstablishment() {
             });
             const data = await response.json();
             console.log('Update successful', data);
+
+            if (data.employees && data.employees.length > 0) {
+                setEmployees(prevEmployees => prevEmployees.filter(employee => !data.employees.some(emp => emp.id === employee.id)));
+            }
 
             setEstablishments(prevEstablishment=> {
                 const updatedEstablishments = prevEstablishment.map(establishment => {
@@ -188,7 +209,9 @@ function AdminEstablishment() {
             setIsEditMode(false);
         } catch (error) {
             console.error('Error updating establishment:', error);
-        }
+        } finally {
+            setLoading(false); // Masquer le loader
+          }
     };
 
     const handleModifierClick = (establishment) => {
@@ -214,6 +237,11 @@ function AdminEstablishment() {
     return (
 
         <>
+            {loading && (
+            <div className="flex justify-center items-center my-2">
+                <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            </div>
+            )}
             <div className='title-admin-page'>
                 <h1>Gestion etablissements</h1>
             </div>
@@ -289,13 +317,13 @@ function AdminEstablishment() {
                                 </label>
                                 <select
                                     id="selectedUser"
-                                    name="provider"
+                                    name="employee"
                                     value={selectedEstablishment.employees.map(employee => employee.email)} // Set the value of the <select> element to an array of selected employee emails
                                     onChange={handleEmployeeSelection} // Call a separate function to handle employee selection/deselection
                                     multiple
                                     className="border border-solid p-2 rounded"
                                 >
-                                    {employees.map(user => (
+                                    {selectedEstablishment.employees.map(user => (
                                         <option 
                                             key={user.id} 
                                             className={`bg-white text-black`} // Remove the conditional class for background and text color
@@ -304,6 +332,7 @@ function AdminEstablishment() {
                                             {user.firstname} {user.lastname}
                                         </option>
                                     ))}
+                                    
                                 </select>
                             </div>
                 
