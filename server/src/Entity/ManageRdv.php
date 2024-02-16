@@ -9,10 +9,6 @@ use App\Controller\ManagePlanningController;
 
 use App\Dto\RdvResponseDto;
 
-
-/**
- * Mail model.
- */
 #[ApiResource(
     shortName: 'Rdv',
     description: 'Manage rdv',

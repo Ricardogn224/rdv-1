@@ -21,10 +21,6 @@ class EmployeeController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        // if ($request->isMethod('POST')) {
-        //     $employee = new User();
-        // }
-
         if (isset($data['email'])) {
             $employee->setEmail($data['email']);
         }

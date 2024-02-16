@@ -115,9 +115,7 @@ class ManagePlanningController extends AbstractController
         // Get the JSON data from the request body
         $jsonData = $request->getContent();
 
-        // Deserialize the JSON data into the User entity
 
-        // Extract kbis from JSON data
         $data = json_decode($jsonData, true);
 
         $provisionEmployeeId = $data['provision_employee_id'];

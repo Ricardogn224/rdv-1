@@ -22,9 +22,7 @@ class GetUserLogin extends AbstractController
 { 
     public function __invoke(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): User
     {
-        //$data = json_decode($request->getContent(), true);
         $email =  $request->query->get('email');
-        //$email = $data['email'];
 
         
         $email = trim($email);
@@ -38,10 +36,6 @@ class GetUserLogin extends AbstractController
         if (!$user) {
             throw new NotFoundHttpException('Compte non existant');
         }
-
-        // if (in_array('ROLE_PROVIDER', $user->getRoles(), true) && !$user->isActive()) {
-        //     throw new AccessDeniedException('Votre compte est en cours de validation par un administrateur.');
-        // }
 
         return $user;
     }

@@ -14,9 +14,6 @@ use App\Entity\Auth\User;
 use App\State\AddCongeProcessor;
 use App\State\Mail\MailMultipleProcessor;
 
-/**
- * Mail model.
- */
 #[ApiResource(
     shortName: 'Planning',
     description: 'planning conge',

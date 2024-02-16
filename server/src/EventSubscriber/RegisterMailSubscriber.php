@@ -43,13 +43,5 @@ final class RegisterMailSubscriber implements EventSubscriberInterface
         $subject = 'Inscription sur Medecin sur rdv';
 
         $this->emailService->sendVerificationEmail($destinator, $subject, $htlmContent);
-
-        // $message = (new Email())
-        //     ->from('system@example.com')
-        //     ->to('contact@les-tilleuls.coop')
-        //     ->subject('A new book has been added')
-        //     ->text(sprintf('The book #%d has been added.', $book->getId()));
-
-        // $this->mailer->send($message);
     }
 }
