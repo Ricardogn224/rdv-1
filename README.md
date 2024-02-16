@@ -5,6 +5,14 @@ REACT JS et API PLATFORM.
 
 Nous avons donc une partie client et server.
 
+## Contributeurs
+
+- Abraham Ricardo HERNANDEZ SOMPARE  5IW2 - [@Ricardogn224](https://github.com/Ricardogn224)
+- Antoine CHABERNAUD 5IW2 - [@senex127](https://github.com/senex127)
+- N'Fassory DIABY 5IW2 - [@nfassorydiaby](https://github.com/nfassorydiaby)
+- Jerrinald KANIKAINATHAN 5IW2 - [@Jerrinald](https://github.com/Jerrinald)
+
+
 ## Configurer la partie server API PLATFORM
 
 Récupérer le fichier .env
