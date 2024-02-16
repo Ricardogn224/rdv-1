@@ -2,6 +2,8 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Appointment;
+use App\Entity\Establishment;
 use App\Enum\RolesEnum;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -34,11 +36,13 @@ class EstablishmentVoter extends Voter
             return false;
         }
 
+        assert($subject instanceof Establishment);
+
         switch ($attribute) {
             case self::EDIT:
                 // logic to determine if the user can EDIT
                 // return true or false
-                if ($subject->getPro === $user || $this->security->isGranted(RolesEnum::ADMIN)) {
+                if ($subject->getProvider() === $user || $this->security->isGranted(RolesEnum::ADMIN)) {
                     return true;
                 } else {
                     return false;
@@ -48,7 +52,7 @@ class EstablishmentVoter extends Voter
             case self::VIEW:
                 // logic to determine if the user can VIEW
                 // return true or false
-                if ($subject->getUserProvider() === $user || $this->security->isGranted(RolesEnum::ADMIN)) {
+                if ( $this->security->isGranted(RolesEnum::ADMIN)) {
                     return true;
                 } else {
                     return false;
@@ -58,7 +62,7 @@ class EstablishmentVoter extends Voter
             case self::VIEWALL:
                 // logic to determine if the user can VIEW
                 // return true or false
-                if ($subject->getProvider()->getUserProvider() === $user || $this->security->isGranted(RolesEnum::ADMIN)) {
+                if ( $this->security->isGranted(RolesEnum::ADMIN)) {
                     return false;
                 } else {
                     return false;
