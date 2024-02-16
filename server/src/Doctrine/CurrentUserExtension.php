@@ -32,6 +32,11 @@ final readonly class CurrentUserExtension implements QueryCollectionExtensionInt
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            // For ROLE_ADMIN, return all items, so no additional condition needed
+            return;
+        }
+        
         if (Appointment::class !== $resourceClass || null === $user = $this->security->getUser()) {
             return;
         }
