@@ -50,11 +50,11 @@ function PlanningProvider() {
   //           },
   //           // You can include other options like credentials, mode, etc.
   //           });
-    
+
   //           if (!response.ok) {
   //           throw new Error('Failed to fetch employees');
   //           }
-    
+
   //           const data = await response.json();
   //           console.log(data['hydra:member'])
   //           setMedecins(data['hydra:member']);

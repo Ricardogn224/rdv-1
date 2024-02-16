@@ -12,7 +12,7 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
     setSelectedEstablishment(selectedEditEstablishment);
   }, [selectedEditEstablishment]);
 
-    const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setSelectedEstablishment((prevEstablishment) => ({
@@ -23,50 +23,50 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
   };
 
   const handleUpdateEstablishment = async (event) => {
-        event.preventDefault();
-        console.log(selectedEstablishment)
+    event.preventDefault();
+    console.log(selectedEstablishment)
 
-        try {
-        const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
-        const response = await fetch(url, {
-            method: 'PATCH',
-            headers: {
-            'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(selectedEstablishment),
+    try {
+      const url = `https://api.medecin-sur-rdv.fr/api/establishments/${selectedEstablishment.id}`;
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/merge-patch+json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(selectedEstablishment),
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        console.log('Update successful', updatedData);
+
+        // Update establishments state
+        const updatedEstablishments = establishments.map(establishment => {
+          if (establishment.id === updatedData.id) {
+            return updatedData; // Replace the old establishment with the updated one
+          } else {
+            return establishment; // Keep other establishments unchanged
+          }
         });
 
-        if (response.ok) {
-            const updatedData = await response.json();
-            console.log('Update successful', updatedData);
+        setEstablishments(updatedEstablishments);
 
-            // Update establishments state
-            const updatedEstablishments = establishments.map(establishment => {
-                if (establishment.id === updatedData.id) {
-                    return updatedData; // Replace the old establishment with the updated one
-                } else {
-                    return establishment; // Keep other establishments unchanged
-                }
-            });
+        // Update myProvider with the updated establishments
+        const updatedProvider = { ...myProvider, establishments: updatedEstablishments };
+        localStorage.setItem('myProvider', JSON.stringify(updatedProvider));
 
-            setEstablishments(updatedEstablishments);
+        // Refresh the establishments if necessary
+        refreshEstablishments();
+      }
 
-            // Update myProvider with the updated establishments
-            const updatedProvider = { ...myProvider, establishments: updatedEstablishments };
-            localStorage.setItem('myProvider', JSON.stringify(updatedProvider));
+      // Close the form after successful creation
+      //setAfficherFormulaire(false);
 
-            // Refresh the establishments if necessary
-            refreshEstablishments();
-        }
-        
-        // Close the form after successful creation
-        //setAfficherFormulaire(false);
-
-        } catch (error) {
-        console.error('Error updating establishment:', error);
-        }
-    };
+    } catch (error) {
+      console.error('Error updating establishment:', error);
+    }
+  };
 
   return (
     <div className="mt-4">
