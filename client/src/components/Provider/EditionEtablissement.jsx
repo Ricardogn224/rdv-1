@@ -60,9 +60,6 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
         refreshEstablishments();
       }
 
-      // Close the form after successful creation
-      //setAfficherFormulaire(false);
-
     } catch (error) {
       console.error('Error updating establishment:', error);
     }

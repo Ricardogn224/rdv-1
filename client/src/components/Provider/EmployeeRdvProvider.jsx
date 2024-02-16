@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../assets/css/search_page.css'
 import '../../assets/css/admin.css'
-import Footer from '../Footer'
 import NavbarProvider from './NavbarProvider';
 import medecinsData from '../../assets/sample.json';
 import MedecinList from '../MedecinList'

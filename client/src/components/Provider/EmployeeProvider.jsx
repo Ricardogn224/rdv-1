@@ -78,7 +78,6 @@ function EmployeeProvider() {
     };
 
     const updateEmployeesListPatch = (updatedEmployee) => {
-        // setEmployees(prevEmployees => [...prevEmployees, newEmployee]);
 
         const updatedEmployees = employees.map(employee => {
             if (employee.id === updatedEmployee.id) {

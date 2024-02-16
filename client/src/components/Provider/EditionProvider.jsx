@@ -49,9 +49,6 @@ function EditionProvider({ selectedEditEmployee, updateEmployeesList, refresh })
         refresh();
       }
 
-      // Close the form after successful creation
-      //setAfficherFormulaire(false);
-
     } catch (error) {
       console.error('Error updating establishment:', error);
     }

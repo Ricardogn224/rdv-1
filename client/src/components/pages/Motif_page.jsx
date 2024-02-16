@@ -4,9 +4,6 @@ import medecinImage from "../../assets/portrait-docteur.jpg";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
-
-
-
 function Motif_page() {
 
   const navigate = useNavigate();
@@ -38,9 +35,6 @@ function Motif_page() {
 
   var parsedAppointmentDetail = {};
 
-
-  // console.log(storedAppointmentDetail)
-
   if (storedAppointmentDetail) {
     // Parse the stored JSON string to get the object
     parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
@@ -51,8 +45,6 @@ function Motif_page() {
     console.log(parsedAppointmentDetail)
 
   }
-
-
 
   const [formValues, setFormValues] = useState({
     provision_employee_id: provisionEmployee.id,
@@ -69,22 +61,7 @@ function Motif_page() {
     });
   };
 
-
-
   useEffect(() => {
-
-    // const storedAppointmentDetail = localStorage.getItem("reservationDataRdv");
-    // console.log(storedAppointmentDetail)
-
-    // if (storedAppointmentDetail) {
-    //   // Parse the stored JSON string to get the object
-    //   const parsedAppointmentDetail = JSON.parse(storedAppointmentDetail);
-    //   setAppointmentDetail(parsedAppointmentDetail);
-
-    //   const fullDayName = dayAbbreviationsToFullName[parsedAppointmentDetail.jour];
-    //   setDateRdv(fullDayName + ' ' + parsedAppointmentDetail.date + ' à ' + parsedAppointmentDetail.heure)
-
-    // }
 
     const motif = [
       {
@@ -156,13 +133,6 @@ function Motif_page() {
 
 
   };
-
-
-
-
-
-
-
 
   return (
     <>
@@ -299,29 +269,6 @@ function Motif_page() {
                       <p>{selectedMotifName || "Nom non sélectionné"}</p>
                     </div>
                   </div>
-
-                  {/* <div className="flex-column">
-                      <div className="flex-center">
-                        <input
-                          type="email"
-                          name="verif"
-                          id="verif"
-                          placeholder="votre mail"
-                        />
-                        <button>Envoyer le mail</button>
-                      </div>
-                      <br />
-                      <h4>Entrez le code reçu</h4>
-                      <div className="flex-center">
-                        <input
-                          type="text"
-                          name="verif"
-                          id="verif"
-                          placeholder="votre code"
-                        />
-                        <button>Vérifier le code</button>
-                      </div>
-                    </div> */}
                   <br />
                 </div>
               </div>

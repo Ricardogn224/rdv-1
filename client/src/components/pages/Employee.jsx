@@ -27,24 +27,6 @@ function Employee() {
   const id = medecin.employee.id;
 
   useEffect(() => {
-    // const fetchDoctorData = async () => {
-    //     setLoading(true); // Afficher le loader  
-    //   try {
-    //     // const response = await fetch(`/api/medecins/${id}`);
-    //     // if (!response.ok) throw new Error("Réponse réseau non ok");
-    //     // const data = await response.json();
-
-    //     // setDoctor(data);
-    //   } catch (error) {
-    //     console.error("Erreur lors du fetch des données du médecin:", error);
-    //     navigate("/search_page"); 
-    //   } finally {
-    //     setIsLoading(false); 
-    //   }
-    // };
-
-    // fetchDoctorData();
-
     const data = {
       firstname: medecin.employee.firstname,
       lastname: medecin.employee.lastname,
