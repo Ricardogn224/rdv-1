@@ -33,7 +33,7 @@ function Motif_page() {
   const storedAppointmentDetail = location.state.reservationDataRdv;
 
   const provisionEmployee = location.state.provisionEmployee
-
+  
   console.log(storedAppointmentDetail)
 
   var parsedAppointmentDetail = {};
@@ -130,7 +130,7 @@ function Motif_page() {
     event.preventDefault();
     // alert("Votre rendez-vous a bien été pris en compte");
     console.log(formValues);
-
+    
     try {
       const response = await fetch(
         "https://api.medecin-sur-rdv.fr/api/planning/rdv",

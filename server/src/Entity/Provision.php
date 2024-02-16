@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
             write:false
         ),
         new Get(),
-        new Patch(denormalizationContext: ['groups' => ['provision:write:update']]),
+    new Patch(denormalizationContext: ['groups' => ['provision:write:update']], /*security: 'is_granted("EDIT", object)',*/),
     ],
 )]
 #[ORM\Table(name: '`provision`')]

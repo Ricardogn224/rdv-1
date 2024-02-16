@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - production
+
   pull_request:
     branches:
       - production
@@ -61,7 +62,6 @@ jobs:
           cat server/docker-compose.yml
 
 
-
       - name: Install dependencies
         run: |
           cd server
@@ -90,21 +90,6 @@ jobs:
       - name: Deploy code to server
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker-compose up -d" 
-
-
-      - name: Install dependencies
-        run: |
-          cd server
-          docker compose up -d
-
-
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Deploy code to server
-        run: |
-          pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv-1/rdv-1 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
       - name: Deploy front code
         run: |
