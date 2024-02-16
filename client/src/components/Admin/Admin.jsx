@@ -114,7 +114,7 @@ function Admin() {
     <>
     {loading && (
           <div className="flex justify-center items-center my-2">
-            <svg class="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
+            <svg className="animate-spin h-5 w-5 mr-3  bg-blue-500" viewBox="0 0 24 24" fill="currentColor"></svg> Chargement...
           </div>
         )}
       <div className=" mx-auto px-4 py-8">

@@ -11,7 +11,7 @@ function Confirm_page() {
     <>
       <div className="flex-center flex-column rdv_list">
         <div className="encadre w-700 ma-20">
-          <div class="proposition">
+          <div className="proposition">
             <img src={medecinImage} alt="" />
             <div className="text">
               <h4>Sandrine IRIGOYEN</h4>
@@ -33,7 +33,7 @@ function Confirm_page() {
                 d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"
               />
             </svg>
-            <div class="text">
+            <div className="text">
               <h4>Le détail de votre rendez-vous</h4>
               <p>Jeudi 10 Août 2023 : 12h40</p>
             </div>
