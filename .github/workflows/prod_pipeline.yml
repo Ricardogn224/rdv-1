@@ -60,8 +60,6 @@ jobs:
           ls -l server
           cat server/docker-compose.yml
 
-
-
       - name: Install dependencies
         run: |
           cd server
@@ -90,7 +88,6 @@ jobs:
       - name: Deploy code to server
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker-compose up -d" 
-
 
       - name: Install dependencies
         run: |
