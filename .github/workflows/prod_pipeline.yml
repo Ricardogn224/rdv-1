@@ -63,6 +63,8 @@ jobs:
       - name: Install dependencies
         run: |
           cd server
+          ls -l
+          touch .env.local
           docker compose up -d 
 
       - name: Install sshpass
@@ -85,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy code to server
+      - name: Deploy back code to server
         run: |
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd ~/server/rdv-1/server && docker-compose up -d" 
 
@@ -93,15 +95,6 @@ jobs:
         run: |
           cd server
           docker compose up -d
-
-
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Deploy code to server
-        run: |
-          pwd
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r /home/runner/work/rdv-1/rdv-1 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:server
 
       - name: Deploy front code
         run: |
