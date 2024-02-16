@@ -22,6 +22,8 @@ function Employee() {
 
   const medecin = provision;
 
+  console.log(medecin)
+
   const id = medecin.employee.id;
 
   useEffect(() => {
@@ -187,6 +189,7 @@ function Employee() {
                         adresse={""}
                         type={"rdv"}
                         consultationVideo={true}
+                        planning={medecin.employee}
                         provision_employee={medecin}
                       />
                     </div>

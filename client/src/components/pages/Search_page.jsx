@@ -84,13 +84,13 @@ function Search_page() {
     fetchProvisionEmployee();
   }, []);
 
-  const handleNavigate = (id) => {
+  const handleNavigate = (provisionEmployee) => {
     return () => {
       navigate(
         `/medecin`,
         {
           state: {
-            provisionEmployees: provisionEmployees[0],
+            provisionEmployees: provisionEmployee,
           },
         },
         { replace: true }

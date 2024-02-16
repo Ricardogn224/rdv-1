@@ -33,11 +33,11 @@ class PlanningDoctor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read'])]
+    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $date = null;
 
-    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read'])]
+    #[Groups(['planningDoctor:write', 'planningEmployee:read', 'planning:read', 'planningDoctor:read', 'appointment:read', 'provisionEmployee:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $hour = null;
 
@@ -52,7 +52,7 @@ class PlanningDoctor
     #[ORM\OneToOne(inversedBy: 'planningDoctor', cascade: ['persist', 'remove'])]
     private ?Appointment $appointment = null;
 
-    #[Groups(['planningDoctor:write:update', 'appointment:read', 'planningDoctor:read'])]
+    #[Groups(['planningDoctor:write:update', 'appointment:read', 'planningDoctor:read', 'provisionEmployee:read'])]
     #[ORM\Column(nullable: true)]
     private ?bool $isCancelled = null;
 

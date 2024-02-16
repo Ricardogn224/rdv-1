@@ -177,6 +177,7 @@ function EmployeeRdv() {
                     nom={""}
                     poste={""}
                     adresse={""}
+                    type={"personnel"}
                     consultationVideo={true}
                     planning={employeePlanning}
                   />
