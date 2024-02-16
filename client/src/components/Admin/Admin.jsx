@@ -15,7 +15,7 @@ function Admin() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8888/api/users", {
+        const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ function Admin() {
     const fetchEstablishments = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8888/api/establishments",
+          "https://api.medecin-sur-rdv.fr/api/establishments",
           {
             method: "GET",
             headers: {
@@ -78,7 +78,7 @@ function Admin() {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8888/api/appointments",
+          "https://api.medecin-sur-rdv.fr/api/appointments",
           {
             method: "GET",
             headers: {

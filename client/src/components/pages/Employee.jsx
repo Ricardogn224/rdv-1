@@ -3,23 +3,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MedecinList from "../MedecinList";
 
 function Employee() {
-  
-    const navigate = useNavigate();
-    const props = useLocation();
-    const provision = props.state.provisionEmployees || {};
-    const [doctor, setDoctor] = useState(null);
-    // const [isLoading, setIsLoading] = useState(true);
-    const [username, setUsername] = useState("");
-    // const [newComment, setNewComment] = useState("");
-    // const [comments, setComments] = useState([]);
-    const [employee, setEmployee] = useState(null);
+
+  const navigate = useNavigate();
+  const props = useLocation();
+  const provision = props.state.provisionEmployees || {};
+  const [doctor, setDoctor] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState("");
+  // const [newComment, setNewComment] = useState("");
+  // const [comments, setComments] = useState([]);
+  const [employee, setEmployee] = useState(null);
 
 
 
   const token = localStorage.getItem("jwtToken");
 
   const medecin = provision[0];
-  
+
   console.log(medecin);
 
   const id = medecin.employee.id;
@@ -30,7 +30,7 @@ function Employee() {
     //     // const response = await fetch(`/api/medecins/${id}`);
     //     // if (!response.ok) throw new Error("Réponse réseau non ok");
     //     // const data = await response.json();
-      
+
     //     // setDoctor(data);
     //   } catch (error) {
     //     console.error("Erreur lors du fetch des données du médecin:", error);
@@ -42,19 +42,19 @@ function Employee() {
 
     // fetchDoctorData();
 
-      const data = {
-        firstname: medecin.employee.firstname,
-        lastname: medecin.employee.lastname,
-        adress: medecin.provision.Establishment.adress,
-        speciality: medecin.provision.name,
-        nom: medecin.provision.Establishment.name,
-      };
+    const data = {
+      firstname: medecin.employee.firstname,
+      lastname: medecin.employee.lastname,
+      adress: medecin.provision.Establishment.adress,
+      speciality: medecin.provision.name,
+      nom: medecin.provision.Establishment.name,
+    };
 
-      setDoctor(data);
+    setDoctor(data);
 
     const fetchEmployeePlanning = async () => {
       try {
-        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
+        const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -78,45 +78,45 @@ function Employee() {
 
     fetchEmployeePlanning();
 
-      const username = localStorage.getItem("username");
-        setUsername(username);
+    const username = localStorage.getItem("username");
+    setUsername(username);
 
-          // const fetchComments = async () => {
-          //   try {
-          //     const response = await fetch("/api/comments");
-          //     if (!response.ok) throw new Error("Failed to fetch comments");
-          //     const data = await response.json();
-          //     setComments(data); 
-          //   } catch (error) {
-          //     console.error("Error fetching comments:", error);
-          //   }
-          // };
+    // const fetchComments = async () => {
+    //   try {
+    //     const response = await fetch("/api/comments");
+    //     if (!response.ok) throw new Error("Failed to fetch comments");
+    //     const data = await response.json();
+    //     setComments(data); 
+    //   } catch (error) {
+    //     console.error("Error fetching comments:", error);
+    //   }
+    // };
 
-          // fetchComments();
+    // fetchComments();
 
 
   }, [id, navigate]);
 
 
-    // const handleCommentSubmit = async (event) => {
-    // event.preventDefault();
-    // try {
-    //     const response = await fetch("/api/comments", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ text: newComment, doctorId: id }), 
-    //     });
-    //     if (!response.ok) throw new Error("Failed to post comment");
+  // const handleCommentSubmit = async (event) => {
+  // event.preventDefault();
+  // try {
+  //     const response = await fetch("/api/comments", {
+  //     method: "POST",
+  //     headers: {
+  //         "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ text: newComment, doctorId: id }), 
+  //     });
+  //     if (!response.ok) throw new Error("Failed to post comment");
 
-    //     const createdComment = await response.json(); 
-    //     setComments((prevComments) => [...prevComments, createdComment]); 
-    //     setNewComment(""); 
-    // } catch (error) {
-    //     console.error("Error posting comment:", error);
-    // }
-    // };
+  //     const createdComment = await response.json(); 
+  //     setComments((prevComments) => [...prevComments, createdComment]); 
+  //     setNewComment(""); 
+  // } catch (error) {
+  //     console.error("Error posting comment:", error);
+  // }
+  // };
 
 
   // const navigatelogin = () => {

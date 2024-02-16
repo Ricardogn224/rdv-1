@@ -4,7 +4,7 @@ import '../assets/css/register.css';
 
 function Register() {
   const navigate = useNavigate();
-  
+
   // State variables for form values and errors
   const [formValues, setFormValues] = useState({
     firstname: '',
@@ -12,7 +12,7 @@ function Register() {
     dateOfBirth: '',
     email: '',
     plainPassword: '',
-    accountType: 'normal' 
+    accountType: 'normal'
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,7 +51,7 @@ function Register() {
       isValid = false;
     }
 
-   
+
     if (!formValues.plainPassword || formValues.plainPassword.length < 8) {
       errors.plainPassword = 'Password must be at least 8 characters long';
       isValid = false;
@@ -63,25 +63,25 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (validateForm()) {
       try {
-        const response = await fetch("http://localhost:8888/api/users", {
+        const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formValues),
         });
-  
+
         if (response.ok) {
           console.log('Registration successful');
           // Handle successful registration (e.g., redirect to login page)
           const data = await response.json();
           const id = data.id;
-  
+
           try {
-            const apiUrl = 'http://localhost:8888';
+            const apiUrl = 'https://api.medecin-sur-rdv.fr';
             const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",
               headers: {
@@ -89,7 +89,7 @@ function Register() {
               },
               body: JSON.stringify(formValues),
             });
-  
+
             if (response.ok) {
               console.log('Request successful');
               navigate("/");
@@ -123,12 +123,12 @@ function Register() {
   return (
     <div className="flex-center flex-column">
       <div className='mt-80  form-zone'>
-      <br />
+        <br />
         <div className="flex-center">
           <h1 className="title"> Créer un compte </h1>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -141,7 +141,7 @@ function Register() {
               onChange={handleInputChange}
             />
             {formErrors.firstname && <span className="error">{formErrors.firstname}</span>}
-            
+
             <input
               className="field"
               type="text"
@@ -185,12 +185,12 @@ function Register() {
               onChange={handleInputChange}
             />
             {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
-            <br/>
+            <br />
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-            <br/>
+            <br />
           </div>
 
-        
+
           <div className="flex-center">
             <button className="btn-submit" type="submit">
               S'inscrire
@@ -199,8 +199,8 @@ function Register() {
           <br />
         </form>
       </div>
-      <br/><br/><br/><br/><br/>
-    </div>   
+      <br /><br /><br /><br /><br />
+    </div>
   );
 }
 

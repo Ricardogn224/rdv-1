@@ -81,7 +81,7 @@ function Register_pro() {
 
     if (validateForm()) {
       try {
-        const apiUrl = 'http://localhost:8888';
+        const apiUrl = 'https://api.medecin-sur-rdv.fr';
         const response = await fetch(`${apiUrl}/api/users`, {
           method: "POST",
           headers: {
@@ -130,11 +130,11 @@ function Register_pro() {
   return (
     <div className="flex-center flex-column">
       <div className='mt-80 form-zone'>
-        <br/>
+        <br />
         <div className="flex-center">
           <h1 className="title"> Êtes vous un médecin ? </h1>
         </div>
-        <br/>
+        <br />
         <form onSubmit={handleSubmit}>
           <div className="flex-column flex-center">
             <input
@@ -202,11 +202,11 @@ function Register_pro() {
               onChange={handleInputChange}
             />
             {formErrors.plainPassword && <span className="error">{formErrors.plainPassword}</span>}
-            
-            <br/>
+
+            <br />
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-            <br/>
-          
+            <br />
+
           </div>
 
           <div className="flex-center">
@@ -214,7 +214,7 @@ function Register_pro() {
               S'inscrire
             </button>
           </div>
-          <br/>
+          <br />
         </form>
       </div>
     </div>

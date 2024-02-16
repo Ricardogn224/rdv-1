@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import {decodeToken} from "react-jwt";
+import { decodeToken } from "react-jwt";
 
 function Login() {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ function Login() {
     }
 
     try {
-      const response = await fetch("http://localhost:8888/api/auth", {
+      const response = await fetch("https://api.medecin-sur-rdv.fr/api/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function Login() {
 
       if (response.ok) {
 
-        const  { token}  = await response.json();
+        const { token } = await response.json();
         // Assuming the token is in a field named 'token' in the response
         const decodedToken = decodeToken(token);
 
@@ -61,19 +61,19 @@ function Login() {
           localStorage.setItem('username', decodedToken.username);
           localStorage.setItem('jwtToken', token);
           if (decodedToken.roles.includes('ROLE_PROVIDER')) {
-            
+
             try {
-              const response = await fetch(`http://localhost:8888/api/userLogin?email=${decodedToken.username}`, {
+              const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userLogin?email=${decodedToken.username}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
                   'Authorization': `Bearer ${token}`,
                 },
               });
-        
+
               if (response.ok) {
-        
-                const  data  = await response.json();
+
+                const data = await response.json();
                 localStorage.setItem('myProvider', JSON.stringify(data));
                 navigate("/provider");
               } else {
@@ -92,7 +92,7 @@ function Login() {
           } else {
             navigate("/");
           }
-          
+
         }
       } else {
         setErrorMessage('Échec de la connexion. Identifiant incorrect'); // Utiliser le message d'erreur de l'API
@@ -106,7 +106,7 @@ function Login() {
   return (
     <div className="flex-center flex-column">
       <section className=" flex-column mt-80 form-zone">
-        <br/>
+        <br />
         <div className="flex-center">
           <h1 className="title">J'ai déjà un compte</h1>
         </div>
@@ -138,9 +138,9 @@ function Login() {
               {passwordError}
             </span> */}
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-            <br/>
+            <br />
           </div>
-          <br/>
+          <br />
 
           <div className="flex-center">
             <button className="btn-submit" type="submit">
@@ -152,13 +152,13 @@ function Login() {
               S'inscrire
             </li>
           </div>
-          <br/>
+          <br />
         </form>
       </section>
-      <br/><br/><br/><br/><br/>
+      <br /><br /><br /><br /><br />
     </div>
   );
 
-  };
+};
 
 export default Login;

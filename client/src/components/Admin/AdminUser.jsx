@@ -102,7 +102,7 @@ function AdminUser() {
       try {
 
 
-        const response = await fetch('http://localhost:8888/api/users', {
+        const response = await fetch('https://api.medecin-sur-rdv.fr/api/users', {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -128,7 +128,7 @@ function AdminUser() {
     try {
 
 
-      const response = await fetch('http://localhost:8888/api/establishments', {
+      const response = await fetch('https://api.medecin-sur-rdv.fr/api/establishments', {
         method: "GET",
         headers: {
           'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -162,7 +162,7 @@ function AdminUser() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const url = `http://localhost:8888/api/users/${selectedUser.id}`;
+      const url = `https://api.medecin-sur-rdv.fr/api/users/${selectedUser.id}`;
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
@@ -179,7 +179,7 @@ function AdminUser() {
         const id = data.id
 
         try {
-          const apiUrl = 'http://localhost:8888';
+          const apiUrl = 'https://api.medecin-sur-rdv.fr';
           const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
             method: "PATCH",
             headers: {
@@ -238,9 +238,9 @@ function AdminUser() {
       var url = '';
 
       if (newUser.accountType === 'employee') {
-        url = 'http://localhost:8888/api/usersEmployee'
+        url = 'https://api.medecin-sur-rdv.fr/api/usersEmployee'
       } else {
-        url = 'http://localhost:8888/api/users'
+        url = 'https://api.medecin-sur-rdv.fr/api/users'
       }
       console.log(newUser);
       const response = await fetch(url, {
@@ -258,7 +258,7 @@ function AdminUser() {
         const id = data.id
 
         try {
-          const apiUrl = 'http://localhost:8888';
+          const apiUrl = 'https://api.medecin-sur-rdv.fr';
 
           const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
             method: "PATCH",

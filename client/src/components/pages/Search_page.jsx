@@ -21,7 +21,7 @@ function Search_page() {
 
     // const fetchEmployeePlanning = async () => {
     //   try {
-    //     const response = await fetch(`http://localhost:8888/api/userEmployees`, {
+    //     const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userEmployees`, {
     //       method: 'GET',
     //       headers: {
     //         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ function Search_page() {
     const fetchProvisionEmployee = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8888/api/provision_employees`,
+          `https://api.medecin-sur-rdv.fr/api/provision_employees`,
           {
             method: "GET",
             headers: {

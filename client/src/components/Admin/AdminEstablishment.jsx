@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import '../../assets/css/search_page.css' 
-import '../../assets/css/admin.css' 
+import '../../assets/css/search_page.css'
+import '../../assets/css/admin.css'
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -32,7 +32,7 @@ function AdminEstablishment() {
             [name]: value,
         }));
 
-        
+
     };
 
     const handleEmployeeSelection = (e) => {
@@ -40,7 +40,7 @@ function AdminEstablishment() {
         const selectedEmployeeEmails = Array.from(options)
             .filter(option => option.selected)
             .map(option => option.value);
-    
+
         setSelectedEstablishment(prevEstablishment => ({
             ...prevEstablishment,
             employees: employees.filter(employee => selectedEmployeeEmails.includes(employee.email))
@@ -50,32 +50,32 @@ function AdminEstablishment() {
     const handleProviderSelection = (e) => {
         const { value } = e.target;
         const selectedProvider = providers.find(provider => provider.email === value);
-    
+
         setSelectedEstablishment(prevEstablishment => ({
             ...prevEstablishment,
-            provider: selectedProvider || { email: '' } 
+            provider: selectedProvider || { email: '' }
         }));
     };
 
     const fetchUsersByRole = async (role) => {
         try {
-            const response = await fetch(`http://localhost:8888/api/usersRole?role=${role}`, {
+            const response = await fetch(`https://api.medecin-sur-rdv.fr/api/usersRole?role=${role}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to fetch users by role');
             }
-    
+
             const data = await response.json();
             return data;
         } catch (error) {
             console.error('Error fetching users by role:', error);
-            throw error; 
+            throw error;
         }
     };
 
@@ -84,47 +84,47 @@ function AdminEstablishment() {
     useEffect(() => {
 
         fetchUsersByRole('ROLE_PROVIDER')
-        .then(users => {
-            console.log('Users by role:', users);
-            setProviders(users)
-           
-        })
-        .catch(error => {
-            console.error('Error fetching users by role:', error.message);
-        });
+            .then(users => {
+                console.log('Users by role:', users);
+                setProviders(users)
+
+            })
+            .catch(error => {
+                console.error('Error fetching users by role:', error.message);
+            });
 
         fetchUsersByRole('ROLE_EMPLOYEE')
-        .then(users => {
-            console.log('employees by role:', users);
-            setEmployees(users)
+            .then(users => {
+                console.log('employees by role:', users);
+                setEmployees(users)
 
-        })
-        .catch(error => {
-            console.error('Error fetching users by role:', error.message);
-        });
+            })
+            .catch(error => {
+                console.error('Error fetching users by role:', error.message);
+            });
 
         const fetchData = async () => {
-        try {
-            const response = await fetch('http://localhost:8888/api/establishments', {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`, 
-            },
-            });
-            const data = await response.json();
-            console.log(data);
-            if (data.length !== 0) {
-                setEstablishments(data['hydra:member']);
+            try {
+                const response = await fetch('https://api.medecin-sur-rdv.fr/api/establishments', {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                const data = await response.json();
+                console.log(data);
+                if (data.length !== 0) {
+                    setEstablishments(data['hydra:member']);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
         };
 
         if (establishments.length === 0) {
             fetchData();
         }
-        
+
     }, []);
 
     const handleCreateEstablishment = async (event) => {
@@ -135,12 +135,12 @@ function AdminEstablishment() {
             selectedEstablishment.provider = providers[0]
         }
         try {
-            const url = `http://localhost:8888/api/establishments`;
+            const url = `https://api.medecin-sur-rdv.fr/api/establishments`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, 
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(selectedEstablishment),
             });
@@ -158,24 +158,24 @@ function AdminEstablishment() {
         event.preventDefault();
         console.log(selectedEstablishment)
         try {
-            const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
+            const url = `https://api.medecin-sur-rdv.fr/api/establishments/${selectedEstablishment.id}`;
             const response = await fetch(url, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/merge-patch+json',
-                    'Authorization': `Bearer ${token}`, 
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(selectedEstablishment),
             });
             const data = await response.json();
             console.log('Update successful', data);
 
-            setEstablishments(prevEstablishment=> {
+            setEstablishments(prevEstablishment => {
                 const updatedEstablishments = prevEstablishment.map(establishment => {
                     if (establishment.id === selectedEstablishment.id) {
                         return {
                             ...establishment,
-                            ...data 
+                            ...data
                         };
                     } else {
                         return establishment;
@@ -244,7 +244,7 @@ function AdminEstablishment() {
                                     className="border border-solid p-2 rounded"
                                 />
                             </div>
-                
+
                             <div className="flex flex-col">
                                 <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
                                     Nom:
@@ -268,12 +268,12 @@ function AdminEstablishment() {
                                     name="provider"
                                     required
                                     value={selectedEstablishment.provider.email} // Set the value of the <select> element
-                                    onChange={handleProviderSelection} 
+                                    onChange={handleProviderSelection}
                                     className="border border-solid p-2 rounded"
                                 >
                                     {providers.map(user => (
-                                        <option 
-                                            key={user.id} 
+                                        <option
+                                            key={user.id}
                                             className={`bg-white text-black`} // Remove the conditional class for background and text color
                                             value={user.email} // Set the value of each option
                                         >
@@ -296,8 +296,8 @@ function AdminEstablishment() {
                                     className="border border-solid p-2 rounded"
                                 >
                                     {employees.map(user => (
-                                        <option 
-                                            key={user.id} 
+                                        <option
+                                            key={user.id}
                                             className={`bg-white text-black`} // Remove the conditional class for background and text color
                                             value={user.email} // Set the value of each option to the email
                                         >
@@ -306,7 +306,7 @@ function AdminEstablishment() {
                                     ))}
                                 </select>
                             </div>
-                
+
                             <div className="flex space-x-4">
                                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                                     Confirmer
@@ -322,7 +322,7 @@ function AdminEstablishment() {
                         </form>
                     </div>
                 </div>
-                
+
             )}
 
             <div className='admin-container-table'>
@@ -336,25 +336,25 @@ function AdminEstablishment() {
                             <div className="user-info action"><p>Validate</p></div>
                         </div>
 
-                
+
                         {establishments && establishments.length > 0 ? (
                             establishments
-                            .map((establishment, index) => (
-                            <div className="user-item" key={index}>
-                                <div className="user-info"><p>{establishment.name}</p></div>
-                                <div className="user-info"><p>{establishment.adress}</p></div>
-                                <div className="user-info"><p>{establishment.provider.firstname} {establishment.provider.lastname}</p></div>
+                                .map((establishment, index) => (
+                                    <div className="user-item" key={index}>
+                                        <div className="user-info"><p>{establishment.name}</p></div>
+                                        <div className="user-info"><p>{establishment.adress}</p></div>
+                                        <div className="user-info"><p>{establishment.provider.firstname} {establishment.provider.lastname}</p></div>
 
-                                <div className="user-info actions">
-                                <a className="edit-user-icon" onClick={() => handleModifierClick(establishment)}>
-                                    Modifier
-                                </a>
-                                    <a className="edit-user-icon">Supprimer</a>
-                                </div>
-                                <div className="user-info">
-                                </div>
-                            </div>
-                            ))
+                                        <div className="user-info actions">
+                                            <a className="edit-user-icon" onClick={() => handleModifierClick(establishment)}>
+                                                Modifier
+                                            </a>
+                                            <a className="edit-user-icon">Supprimer</a>
+                                        </div>
+                                        <div className="user-info">
+                                        </div>
+                                    </div>
+                                ))
                         ) : (
                             <p>Aucun établissement</p>
                         )}
@@ -371,79 +371,79 @@ function AdminEstablishment() {
                 <div className='w-9/12 bg-white border border-black border-solid rounded-tl-2xl rounded-tr-2xl overflow-x-scroll'>
                     <h2 className='text-xl font-bold mb-4'>Nouvel utilisateur</h2>
                     <form onSubmit={handleCreateEstablishment} className='space-y-4 p-9'>
-                            <div className="flex flex-col">
-                                <label htmlFor="email" className="mb-1 text-sm font-semibold">
-                                    Nom:
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={selectedEstablishment.name}
-                                    onChange={handleInputChange}
-                                    className="border border-solid p-2 rounded"
-                                />
-                            </div>
-                
-                            <div className="flex flex-col">
-                                <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
+                        <div className="flex flex-col">
+                            <label htmlFor="email" className="mb-1 text-sm font-semibold">
+                                Nom:
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={selectedEstablishment.name}
+                                onChange={handleInputChange}
+                                className="border border-solid p-2 rounded"
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
                                 Adresse:
-                                </label>
-                                <input
-                                    type="text"
-                                    id="adress"
-                                    name="adress"
-                                    value={selectedEstablishment.adress}
-                                    onChange={handleInputChange}
-                                    className="border border-solid p-2 rounded"
-                                />
-                            </div>
+                            </label>
+                            <input
+                                type="text"
+                                id="adress"
+                                name="adress"
+                                value={selectedEstablishment.adress}
+                                onChange={handleInputChange}
+                                className="border border-solid p-2 rounded"
+                            />
+                        </div>
 
-                            <div className="flex flex-col">
-                                <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
-                                    Praticien:
-                                </label>
-                                <select
-                                    id="selectedUser"
-                                    name="provider"
-                                    required
-                                    onChange={handleProviderSelection} 
-                                    className="border border-solid p-2 rounded"
-                                >
-                                    {providers.map(user => (
-                                        <option 
-                                            key={user.id} 
-                                            className={`bg-white text-black`} // Remove the conditional class for background and text color
-                                            value={user.email} // Set the value of each option
-                                        >
-                                            {user.firstname} {user.lastname}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
+                                Praticien:
+                            </label>
+                            <select
+                                id="selectedUser"
+                                name="provider"
+                                required
+                                onChange={handleProviderSelection}
+                                className="border border-solid p-2 rounded"
+                            >
+                                {providers.map(user => (
+                                    <option
+                                        key={user.id}
+                                        className={`bg-white text-black`} // Remove the conditional class for background and text color
+                                        value={user.email} // Set the value of each option
+                                    >
+                                        {user.firstname} {user.lastname}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                            <div className="flex flex-col">
-                                <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
-                                    Employés de l'établissement:
-                                </label>
-                                <select
-                                    id="selectedUser"
-                                    name="provider"
-                                    onChange={handleEmployeeSelection} // Call a separate function to handle employee selection/deselection
-                                    multiple
-                                    className="border border-solid p-2 rounded"
-                                >
-                                    {employees.map(user => (
-                                        <option 
-                                            key={user.id} 
-                                            className={`bg-white text-black`} // Remove the conditional class for background and text color
-                                            value={user.email} // Set the value of each option to the email
-                                        >
-                                            {user.firstname} {user.lastname}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="lastname" className="mb-1 text-sm font-semibold">
+                                Employés de l'établissement:
+                            </label>
+                            <select
+                                id="selectedUser"
+                                name="provider"
+                                onChange={handleEmployeeSelection} // Call a separate function to handle employee selection/deselection
+                                multiple
+                                className="border border-solid p-2 rounded"
+                            >
+                                {employees.map(user => (
+                                    <option
+                                        key={user.id}
+                                        className={`bg-white text-black`} // Remove the conditional class for background and text color
+                                        value={user.email} // Set the value of each option to the email
+                                    >
+                                        {user.firstname} {user.lastname}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
                         <div className='flex space-x-4'>
                             <button type='submit' className='bg-blue-500 text-white px-4 py-2 rounded'>
@@ -460,9 +460,9 @@ function AdminEstablishment() {
                     </form>
                 </div>
             </Modal>
-            
+
         </>
-      )
-    };
-    
-    export default AdminEstablishment;
+    )
+};
+
+export default AdminEstablishment;
