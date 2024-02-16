@@ -36,24 +36,6 @@ class ProvisionController extends AbstractController
 
         $entityManager->persist($provision);
 
-        // Retrieve the provider entity based on the email address
-        // if (isset($data['employees']['email'])) {
-        //     $provider = $entityManager->getRepository(User::class)->findOneByEmail($data['provider']['email']);
-        //     if ($provider) {
-        //         $establishment->setProvider($provider);
-        //     } else {
-        //         return new JsonResponse(['error' => 'Provider not found'], JsonResponse::HTTP_NOT_FOUND);
-        //     }
-        // }
-
-        // $currentEmployees = $establishment->getEmployees();
-
-        // if ($currentEmployees) {
-        //     foreach ($currentEmployees as $employee) {
-        //         $establishment->removeEmployee($employee);
-        //     }
-        // }
-
         // Retrieve the employee entities based on their email addresses
         if (isset($data['employees']) && is_array($data['employees'])) {
             $employees = [];
@@ -73,8 +55,6 @@ class ProvisionController extends AbstractController
             }
             
         }
-
-        
 
         $entityManager->flush();
 

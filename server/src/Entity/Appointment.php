@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
         new GetCollection(),
         new Post(),
         new Get(),
-        new Patch(denormalizationContext: ['groups' => ['appointment:write:update']]),
+    new Patch(denormalizationContext: ['groups' => ['appointment:write:update']], /*security: 'is_granted("EDIT", object)',*/),
     ],
 )]
 #[ORM\Table(name: '`appointment`')]

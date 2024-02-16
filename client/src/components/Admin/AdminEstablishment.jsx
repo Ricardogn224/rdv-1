@@ -111,7 +111,7 @@ function AdminEstablishment() {
         const fetchData = async () => {
             setLoading(true); // Afficher le loader
             try {
-                const response = await fetch('http://localhost:8888/api/establishments', {
+                const response = await fetch('https://api.medecin-sur-rdv.fr/api/establishments', {
                     method: "GET",
                     headers: {
                         'Authorization': `Bearer ${token}`,

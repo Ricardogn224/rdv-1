@@ -53,7 +53,7 @@ function Rdv_page() {
   useEffect(() => {
     const fetchRdv = async () => {
       try {
-        const response = await fetch("http://localhost:8888/api/appointments", {
+        const response = await fetch("https://api.medecin-sur-rdv.fr/api/appointments", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ function Rdv_page() {
   const cancelRdv = async (event, id) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8888/api/planning_doctors/${id}`, {
+      const response = await fetch(`https://api.medecin-sur-rdv.fr/api/planning_doctors/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/merge-patch+json',

@@ -39,13 +39,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-//#[isGranted('ROLE_ADMIN')]
 #[ApiResource(
     forceEager: false,
     denormalizationContext: ['groups' => ['user:write']],
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(
+            // security: 'is_granted("USER_VIEWALL", object)',
         ),
         new GetCollection(
             uriTemplate: '/usersRole',
@@ -63,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/usersEmployee',
             controller: EmployeeController::class,
         ),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]/*, security: 'is_granted("VIEW", object)'*/,),
+    new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], /*security: 'is_granted("VIEW", object)',*/),
         new Get(
             uriTemplate: '/confirmPro/{id}',
             controller: MailAdminController::class,
@@ -78,7 +78,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: GetUserLogin::class,
             read: false
         ),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update', 'user:admin:write']], /*security: 'is_granted("EDIT", object)',*/),
+    new Patch(denormalizationContext: ['groups' => ['user:write:update', 'user:admin:write']], /*security: 'is_granted("EDIT", object)',*/),
         new Patch(
             uriTemplate: '/manageRole/{id}',
             denormalizationContext: ['groups' => ['user:write:role']],

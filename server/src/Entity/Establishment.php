@@ -33,7 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(
             denormalizationContext: ['groups' => ['establishment:write:update']],
             normalizationContext: ['groups' => ['establishment:read']],
-            /*security: 'is_granted("EDIT", object)'*/
+            // security: 'is_granted("EDIT", object)',
             controller: EstablishmentController::class,
             read: false
         ),
