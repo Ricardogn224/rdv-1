@@ -11,6 +11,7 @@ function AdminUser() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [establishments, setEstablishments] = useState([]);
+  const [messageError, setMessageError] = useState('');
   
   const bodyUser = {
     email: '',
