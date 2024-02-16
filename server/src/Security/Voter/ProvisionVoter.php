@@ -2,18 +2,20 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Auth\User;
+use App\Entity\Appointment;
+use App\Entity\Establishment;
+use App\Entity\Provision;
 use App\Enum\RolesEnum;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserVoter extends Voter
+class ProvisionVoter extends Voter
 {
-    public const EDIT = 'USER_EDIT';
-    public const VIEW = 'USER_VIEW';
-    public const VIEWALL = 'USER_VIEWALL';
+    public const EDIT = 'PROVISION_EDIT';
+    public const VIEW = 'PROVISION_VIEW';
+    public const VIEWALL = 'PROVISION_VIEWALL';
 
     public function __construct(private Security $security)
     {
@@ -24,7 +26,7 @@ class UserVoter extends Voter
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [self::EDIT, self::VIEW, self::VIEWALL])
-            && $subject instanceof \App\Entity\Auth\User;
+            && $subject instanceof \App\Entity\Provision;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -35,14 +37,13 @@ class UserVoter extends Voter
             return false;
         }
 
-        assert($subject instanceof User);
+        assert($subject instanceof Provision);
 
-        // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
                 // logic to determine if the user can EDIT
                 // return true or false
-                if (( $this->security->isGranted(RolesEnum::PROVIDER) && $subject->getEstablishmentEmployee()->getProvider() === $user) || $this->security->isGranted(RolesEnum::ADMIN)) {
+                if ($subject->getEstablishment()->getProvider() === $user || $this->security->isGranted(RolesEnum::ADMIN)) {
                     return true;
                 } else {
                     return false;
@@ -52,7 +53,7 @@ class UserVoter extends Voter
             case self::VIEW:
                 // logic to determine if the user can VIEW
                 // return true or false
-                if (( $this->security->isGranted(RolesEnum::PROVIDER) && $subject->getEstablishmentEmployee()->getProvider() === $user)  || $this->security->isGranted(RolesEnum::ADMIN)) {
+                if ( $this->security->isGranted(RolesEnum::ADMIN)) {
                     return true;
                 } else {
                     return false;
@@ -62,7 +63,7 @@ class UserVoter extends Voter
             case self::VIEWALL:
                 // logic to determine if the user can VIEW
                 // return true or false
-                if ($this->security->isGranted(RolesEnum::ADMIN)) {
+                if ( $this->security->isGranted(RolesEnum::ADMIN)) {
                     return true;
                 } else {
                     return false;

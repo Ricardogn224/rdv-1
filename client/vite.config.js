@@ -12,7 +12,7 @@ export default defineConfig({
        usePolling: true
      },
       '/api': {
-        target: 'http://localhost:8888', // L'URL de votre serveur API
+        target: 'https://api.medecin-sur-rdv.fr', // L'URL de votre serveur API
         changeOrigin: true, // Nécessaire pour les hôtes virtuels
         secure: false, // Si votre API est en https, vous pouvez vouloir activer cette option
         // rewrite: path => path.replace(/^\/api/, '') // Décommentez si vous voulez enlever /api du path.
