@@ -40,7 +40,7 @@ function AdminProvider() {
     const handleValidateClick = (id, index) => {
         // console.log(id)
         // Perform a PATCH request to update provider.active
-        const url = `https://api.medecin-sur-rdv.fr/api/users/${id}`;
+        const url = `http://localhost:8888/api/users/${id}`;
         const updatedData = {
             active: selectedStatus === 'actif', // Assuming 'actif' means true and 'inactif' means false
         };
@@ -95,7 +95,7 @@ function AdminProvider() {
 
         const fetchData = async () => {
             try {
-                const response = await fetch('https://api.medecin-sur-rdv.fr/api/users', {
+                const response = await fetch('http://localhost:8888/api/users', {
                     method: "GET",
                     headers: {
                         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header

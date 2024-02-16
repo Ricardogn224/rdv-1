@@ -84,7 +84,7 @@ function Register_pro() {
     if (validateForm()) {
       setLoading(true); // Afficher le loader
       try {
-        const apiUrl = 'https://api.medecin-sur-rdv.fr';
+        const apiUrl = 'http://localhost:8888';
         const response = await fetch(`${apiUrl}/api/users`, {
           method: "POST",
           headers: {

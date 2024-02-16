@@ -58,7 +58,7 @@ function Employee() {
     const fetchEmployeePlanning = async () => {
       setLoading(true); // Afficher le loader
       try {
-        const response = await fetch(`https://api.medecin-sur-rdv.fr/api/employeePlanning/${id}`, {
+        const response = await fetch(`http://localhost:8888/api/employeePlanning/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

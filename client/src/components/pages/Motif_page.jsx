@@ -133,7 +133,7 @@ function Motif_page() {
 
     try {
       const response = await fetch(
-        "https://api.medecin-sur-rdv.fr/api/planning/rdv",
+        "http://localhost:8888/api/planning/rdv",
         {
           method: "POST",
           headers: {

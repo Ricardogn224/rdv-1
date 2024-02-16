@@ -18,7 +18,7 @@ function Admin() {
     const fetchData = async () => {
       setLoading(true); // Afficher le loader
       try {
-        const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
+        const response = await fetch("http://localhost:8888/api/users", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ function Admin() {
       setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
-          "https://api.medecin-sur-rdv.fr/api/establishments",
+          "http://localhost:8888/api/establishments",
           {
             method: "GET",
             headers: {
@@ -87,7 +87,7 @@ function Admin() {
       setLoading(true); // Afficher le loader
       try {
         const response = await fetch(
-          "https://api.medecin-sur-rdv.fr/api/appointments",
+          "http://localhost:8888/api/appointments",
           {
             method: "GET",
             headers: {

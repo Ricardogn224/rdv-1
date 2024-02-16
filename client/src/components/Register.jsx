@@ -78,7 +78,7 @@ function Register() {
     if (validateForm()) {
       setLoading(true); // Afficher le loader
       try {
-        const response = await fetch("https://api.medecin-sur-rdv.fr/api/users", {
+        const response = await fetch("http://localhost:8888/api/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -94,7 +94,7 @@ function Register() {
 
           setLoading(true); // Afficher le loader
           try {
-            const apiUrl = 'https://api.medecin-sur-rdv.fr';
+            const apiUrl = 'http://localhost:8888';
             const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",
               headers: {

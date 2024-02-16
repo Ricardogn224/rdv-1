@@ -47,7 +47,7 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
 
 
     try {
-      const url = `https://api.medecin-sur-rdv.fr/api/usersEmployee`;
+      const url = `http://localhost:8888/api/usersEmployee`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -66,7 +66,7 @@ function AjoutProvider({ updateEmployeesList, refresh }) {
           const id = data.id
 
           try {
-            const apiUrl = 'https://api.medecin-sur-rdv.fr';
+            const apiUrl = 'http://localhost:8888';
 
             const response = await fetch(`${apiUrl}/api/manageRole/${id}`, {
               method: "PATCH",

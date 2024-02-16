@@ -62,7 +62,7 @@ function AdminEstablishment() {
     const fetchUsersByRole = async (role) => {
         setLoading(true); // Afficher le loader
         try {
-            const response = await fetch(`https://api.medecin-sur-rdv.fr/api/usersRole?role=${role}`, {
+            const response = await fetch(`http://localhost:8888/api/usersRole?role=${role}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -145,7 +145,7 @@ function AdminEstablishment() {
         }
         setLoading(true); // Afficher le loader
         try {
-            const url = `https://api.medecin-sur-rdv.fr/api/establishments`;
+            const url = `http://localhost:8888/api/establishments`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -175,7 +175,7 @@ function AdminEstablishment() {
         console.log(selectedEstablishment)
         setLoading(true); // Afficher le loader
         try {
-            const url = `https://api.medecin-sur-rdv.fr/api/establishments/${selectedEstablishment.id}`;
+            const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
             const response = await fetch(url, {
                 method: 'PATCH',
                 headers: {

@@ -48,7 +48,7 @@ function EmployeeProvider() {
             try {
                 const employeesList = [];
                 for (const establishment of establishments) {
-                    const url = `https://api.medecin-sur-rdv.fr/api/establishments/${establishment.id}`;
+                    const url = `http://localhost:8888/api/establishments/${establishment.id}`;
                     const response = await fetch(url, {
                         method: 'GET',
                         headers: {

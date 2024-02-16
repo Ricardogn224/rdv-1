@@ -30,7 +30,7 @@ function EditionProvider({ selectedEditEmployee, updateEmployeesList, refresh })
     console.log(selectedEmployee)
 
     try {
-      const url = `https://api.medecin-sur-rdv.fr/api/users/${selectedEmployee.id}`;
+      const url = `http://localhost:8888/api/users/${selectedEmployee.id}`;
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {

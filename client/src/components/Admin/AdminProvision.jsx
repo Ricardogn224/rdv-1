@@ -62,7 +62,7 @@ function AdminProvision() {
         event.preventDefault();
         console.log(selectedProvision)
         try {
-            const url = `https://api.medecin-sur-rdv.fr/api/provisions`;
+            const url = `http://localhost:8888/api/provisions`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -85,7 +85,7 @@ function AdminProvision() {
 
         const fetchEstablishments = async () => {
             try {
-                const response = await fetch('https://api.medecin-sur-rdv.fr/api/establishments', {
+                const response = await fetch('http://localhost:8888/api/establishments', {
                     method: "GET",
                     headers: {
                         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
@@ -108,7 +108,7 @@ function AdminProvision() {
         const fetchData = async () => {
             try {
 
-                const response = await fetch('https://api.medecin-sur-rdv.fr/api/provisions', {
+                const response = await fetch('http://localhost:8888/api/provisions', {
                     method: "GET",
                     headers: {
                         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header

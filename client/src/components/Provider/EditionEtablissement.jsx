@@ -27,7 +27,7 @@ function EditionEtablissement({ selectedEditEstablishment, refreshEstablishments
     console.log(selectedEstablishment)
 
     try {
-      const url = `https://api.medecin-sur-rdv.fr/api/establishments/${selectedEstablishment.id}`;
+      const url = `http://localhost:8888/api/establishments/${selectedEstablishment.id}`;
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {

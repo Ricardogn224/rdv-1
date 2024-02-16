@@ -5,13 +5,10 @@ import Register from "./components/Register.jsx";
 import Register_pro from "./components/Register_pro.jsx";
 import Search_page from "./components/pages/Search_page.jsx";
 import Rdv_page from "./components/pages/Rdv_page.jsx";
-import EmployeeRdv from "./components/pages/EmployeeRdv.jsx";
-import MyEmployees from "./components/pages/MyEmployees.jsx";
 import Motif_page from "./components/pages/Motif_page";
 import Confirm_page from "./components/pages/Confirmation_page";
 import DashboardProvider from './components/Provider/Dashboard.jsx'
 import EtablissementProvider from './components/Provider/EtablissementProvider.jsx'
-import PlanningProvider from './components/Provider/PlanningProvider.jsx'
 import EmployeeProvider from './components/Provider/EmployeeProvider.jsx'
 import EmployeeRdvProvider from './components/Provider/EmployeeRdvProvider.jsx'
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -19,7 +16,6 @@ import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
 import HeaderProvider from './components/Provider/HeaderProvider.jsx';
 import HeaderAdmin from "./components/Admin/HeaderAdmin";
-import NavbarAdmin from "./components/Admin/NavbarAdmin";
 import NotFound from "./components/pages/404";
 
 
@@ -135,7 +131,6 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute requiredRole="ROLE_PROVIDER">
         <HeaderProvider />
-
         <Outlet />
       </ProtectedRoute>
     ),
@@ -147,10 +142,6 @@ const router = createBrowserRouter([
       {
         path: "etablissement",
         element: <EtablissementProvider />,
-      },
-      {
-        path: "planning",
-        element: <PlanningProvider />,
       },
       {
         path: "employee",
@@ -171,30 +162,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  /*  {
-    path: "/employee_rdv/:id",
-    element: <EmployeeRdv />,
-  },
-  {
-    path: "/my_employees",
-    element: <MyEmployees />,
-  },*/
-
-  /*
-  {
-    path: "/toto",
-    element: <div style={{backgroundColor: "green"}}><Navbar></Navbar><Outlet/><Footer/></div>,
-    children: [
-      {
-        path: "test",
-        element: <SearchForm/>,
-      },
-      {
-        path: "*",
-        element: <p>Not found</p>
-      }
-    ]
-  },*/
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
