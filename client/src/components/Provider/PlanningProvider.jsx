@@ -41,7 +41,7 @@ function PlanningProvider() {
 
   //   const fetchEmployeePlanning = async () => {
   //       try {
-  //           const response = await fetch(`http://localhost:8888/api/userEmployees`, {
+  //           const response = await fetch(`https://api.medecin-sur-rdv.fr/api/userEmployees`, {
   //           method: 'GET',
   //           headers: {
   //               'Content-Type': 'application/json',
