@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProvisionEmployee
 {
 
-    #[Groups(['appointment:read'])]
+    #[Groups(['appointment:read', 'provisionEmployee:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
