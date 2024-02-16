@@ -55,6 +55,7 @@ function AdminEstablishment() {
             ...prevEstablishment,
             provider: selectedProvider || { email: '' } 
         }));
+
     };
 
     const fetchUsersByRole = async (role) => {
@@ -96,8 +97,8 @@ function AdminEstablishment() {
         fetchUsersByRole('ROLE_EMPLOYEE')
         .then(users => {
             console.log('employees by role:', users);
-            setEmployees(users)
-
+            const filteredEmployees = users.filter(user => !user.establishment || !user.establishment.id);
+            setEmployees(filteredEmployees);
         })
         .catch(error => {
             console.error('Error fetching users by role:', error.message);
@@ -115,6 +116,7 @@ function AdminEstablishment() {
             console.log(data);
             if (data.length !== 0) {
                 setEstablishments(data['hydra:member']);
+                console.log(establishments)
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -147,6 +149,10 @@ function AdminEstablishment() {
             const data = await response.json();
             console.log('Creation successful', data);
 
+            if (data.employees && data.employees.length > 0) {
+                setEmployees(prevEmployees => prevEmployees.filter(employee => !data.employees.some(emp => emp.id === employee.id)));
+            }
+
             setEstablishments(prevEstablishments => [...prevEstablishments, data]);
             handleCloseNewModal();
         } catch (error) {
@@ -169,6 +175,10 @@ function AdminEstablishment() {
             });
             const data = await response.json();
             console.log('Update successful', data);
+
+            if (data.employees && data.employees.length > 0) {
+                setEmployees(prevEmployees => prevEmployees.filter(employee => !data.employees.some(emp => emp.id === employee.id)));
+            }
 
             setEstablishments(prevEstablishment=> {
                 const updatedEstablishments = prevEstablishment.map(establishment => {
@@ -289,13 +299,13 @@ function AdminEstablishment() {
                                 </label>
                                 <select
                                     id="selectedUser"
-                                    name="provider"
+                                    name="employee"
                                     value={selectedEstablishment.employees.map(employee => employee.email)} // Set the value of the <select> element to an array of selected employee emails
                                     onChange={handleEmployeeSelection} // Call a separate function to handle employee selection/deselection
                                     multiple
                                     className="border border-solid p-2 rounded"
                                 >
-                                    {employees.map(user => (
+                                    {selectedEstablishment.employees.map(user => (
                                         <option 
                                             key={user.id} 
                                             className={`bg-white text-black`} // Remove the conditional class for background and text color
@@ -304,6 +314,7 @@ function AdminEstablishment() {
                                             {user.firstname} {user.lastname}
                                         </option>
                                     ))}
+                                    
                                 </select>
                             </div>
                 
