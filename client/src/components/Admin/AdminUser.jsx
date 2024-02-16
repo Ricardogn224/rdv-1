@@ -185,7 +185,7 @@ function AdminUser() {
               'Content-Type': 'application/merge-patch+json',
               'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(newUser),
+            body: JSON.stringify(selectedUser),
           });
 
           if (response.ok) {

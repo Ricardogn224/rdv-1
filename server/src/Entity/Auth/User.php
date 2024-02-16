@@ -45,7 +45,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['user:read']],
     operations: [
         new GetCollection(
-            security: "is_granted('ROLE_ADMIN')"
         ),
         new GetCollection(
             uriTemplate: '/usersRole',
@@ -73,7 +72,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: GetUserLogin::class,
             read: false
         ),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']], /*security: 'is_granted("EDIT", object)',*/),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update', 'user:admin:write']], /*security: 'is_granted("EDIT", object)',*/),
         new Patch(
             uriTemplate: '/manageRole/{id}',
             denormalizationContext: ['groups' => ['user:write:role']],
