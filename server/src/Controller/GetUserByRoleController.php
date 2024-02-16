@@ -39,7 +39,6 @@ class GetUserByRoleController extends AbstractController
 
     private function serializeUsers(array $users): array
     {
-        // Serialize users as needed (e.g., using Symfony's Serializer component or manually)
         // Example: Convert entities to arrays
         $serializedUsers = [];
         foreach ($users as $user) {
